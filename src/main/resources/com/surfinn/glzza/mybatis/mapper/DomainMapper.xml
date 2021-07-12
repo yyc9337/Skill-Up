@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.surfinn.glzza.mybatis.mapper.DomainMapper">
+
+	<sql id="selectDomainListSql">	
+		SELECT
+			DOMAIN_SEQ,
+			DOMAIN_TYPE_NM,
+			DOMAIN_NM,
+			DOMAIN_DSCRPT,
+			DATA_TYPE,
+			DATA_LEN,
+			DCML_LEN,
+			USE_YN,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM
+			TB_DOMAIN
+		<where>
+			<if test="domainVO.searchType eq 'all'">
+				AND (DOMAIN_TYPE_NM LIKE CONCAT('%', #{domainVO.keyword}, '%')
+				OR	DOMAIN_DSCRPT LIKE CONCAT('%', #{domainVO.keyword}, '%')
+				OR	DOMAIN_NM LIKE CONCAT('%', #{domainVO.keyword}, '%'))
+			</if>
+			<if test="domainVO.searchType eq 'domainTypeNm'">
+				AND DOMAIN_TYPE_NM LIKE CONCAT('%', #{domainVO.keyword}, '%') 
+			</if>
+			<if test="domainVO.searchType eq 'domainDscrpt'">
+				AND DOMAIN_DSCRPT LIKE CONCAT('%', #{domainVO.keyword}, '%')
+			</if>
+			<if test="domainVO.searchType eq 'domainNm'">
+				AND DOMAIN_NM LIKE CONCAT('%', #{domainVO.keyword}, '%')
+			</if>
+			<if test="domainVO.domainSeq != null">
+				AND DOMAIN_SEQ != #{domainVO.domainSeq}
+			</if>		
+				AND USE_YN = 'Y'
+		</where>
+		<if test="domainVO.sorting != null">
+             ORDER BY ${domainVO.sorting}  
+        </if>
+        <if test = "domainVO.sorting != null and domainVO.sSortDir_0 != null" > 
+             ${domainVO.sSortDir_0}  
+        </if>
+		<if test="domainVO.iDisplayStart != null and domainVO.iDisplayLength != null">
+             LIMIT ${domainVO.iDisplayStart} , ${domainVO.iDisplayLength}
+        </if>		
+	</sql>
+    
+    <select id="selectTotalCountDomain" parameterType="com.surfinn.glzza.vo.DomainVO" resultType="Integer">
+		SELECT COUNT(*) AS RECORDS_TOTAL FROM TB_DOMAIN
+		<where>						
+			<if test="searchType eq 'all'">
+				AND DOMAIN_TYPE_NM LIKE CONCAT('%', #{keyword}, '%')
+				OR	DOMAIN_DSCRPT LIKE CONCAT('%', #{keyword}, '%')
+				OR	DOMAIN_NM LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType eq 'domainTypeNm'">
+				AND DOMAIN_TYPE_NM LIKE CONCAT('%', #{keyword}, '%') 
+			</if>
+			<if test="searchType eq 'domainDscrpt'">
+				AND DOMAIN_DSCRPT LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType eq 'domainNm'">
+				AND DOMAIN_NM LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			AND USE_YN = 'Y'
+		</where>	
+	</select>
+
+	<select id="selectDomainList" resultType="com.surfinn.glzza.vo.DomainVO">
+		<include refid="selectDomainListSql"></include>
+	</select>	
+	
+	<select id="duplicationNameCheck" parameterType="com.surfinn.glzza.vo.DomainVO" resultType="int">
+		SELECT 
+			COUNT(DOMAIN_NM) 
+		FROM 
+			TB_DOMAIN
+		WHERE
+			DOMAIN_NM = #{domainNm}
+		AND
+			USE_YN = 'Y'
+	</select>
+	
+	<select id="searchType" parameterType="com.surfinn.glzza.vo.DomainVO" resultType="com.surfinn.glzza.vo.DomainVO">
+		SELECT
+    		COLUMN_NAME,
+    		COLUMN_COMMENT 
+		FROM
+    		information_schema.columns
+		WHERE
+    		table_schema = 'GLZZA' AND table_name = 'TB_DOMAIN'; 
+	</select>
+	
+	<insert id="insertDomain" parameterType="com.surfinn.glzza.vo.DomainVO">
+		INSERT INTO TB_DOMAIN (
+			DOMAIN_SEQ,
+			DATA_TYPE_CD,
+			DOMAIN_TYPE_NM,
+			DOMAIN_NM,
+			DOMAIN_DSCRPT,
+			DATA_TYPE,
+			DATA_LEN,
+			DCML_LEN,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+       ) VALUES (
+       		#{domainSeq},
+       		(SELECT CD_SEQ FROM TB_DOMAIN_CD WHERE CD_NM = #{dataType}),
+       		#{domainTypeNm},
+       		#{domainNm},
+       		#{domainDscrpt},
+       		#{dataType},
+       		#{dataLen},
+       		#{dcmlLen},
+       		#{regId},
+       		NOW(),
+       		#{updId},
+       		NOW()
+       	) ON DUPLICATE KEY UPDATE
+       		DOMAIN_TYPE_NM = #{domainTypeNm},
+       		DATA_TYPE_CD = (SELECT CD_SEQ FROM TB_DOMAIN_CD WHERE CD_NM = #{dataType}),
+       		DOMAIN_NM = #{domainNm},
+       		DOMAIN_DSCRPT = #{domainDscrpt},
+       		DATA_TYPE = #{dataType},
+       		DATA_LEN = #{dataLen},
+       		DCML_LEN = #{dcmlLen},
+       		UPD_ID = #{updId},
+       		UPD_DT = NOW()		
+	</insert>
+	
+	<update id="deleteDomain" parameterType="com.surfinn.glzza.vo.DomainVO">
+		UPDATE TB_DOMAIN
+		SET
+			USE_YN = 'N',
+			UPD_DT = NOW(),
+			UPD_ID = #{updId}			
+		WHERE 
+			DOMAIN_SEQ = #{domainSeq}	
+	</update>
+	
+	<select id="selectDomain" parameterType="com.surfinn.glzza.vo.DomainVO" resultType="com.surfinn.glzza.vo.DomainVO">
+		SELECT
+			DOMAIN_SEQ,
+			DOMAIN_TYPE_NM,
+			DOMAIN_NM,
+			DOMAIN_DSCRPT,
+			DATA_TYPE,
+			DATA_LEN,
+			DCML_LEN,
+			USE_YN
+		FROM
+			TB_DOMAIN
+		<where>
+			<if test="domainSeq != '' and domainSeq != null">
+				AND DOMAIN_SEQ = #{domainSeq}
+			</if>
+			<if test="domainNm != '' and domainNm != null">
+				AND DOMAIN_NM = #{domainNm}
+			</if>
+		</where>
+	</select>
+	
+		<select id="selectDomainDomainName" parameterType="com.surfinn.glzza.vo.DomainVO" resultType="com.surfinn.glzza.vo.DomainVO">
+		SELECT
+			DOMAIN_NM,
+			DOMAIN_SEQ
+		FROM
+			TB_DOMAIN
+		<where>
+			<if test="domainNm != '' and domainNm != null">
+				AND DOMAIN_NM = #{domainNm}
+			</if>
+			AND USE_YN = 'Y'
+		</where>
+	</select>
+	
+	<select id="duplicateDomainTypeName" parameterType="com.surfinn.glzza.vo.DomainVO" resultType="com.surfinn.glzza.vo.DomainVO">
+		SELECT
+			DOMAIN_SEQ,
+			DOMAIN_TYPE_NM,
+			DOMAIN_NM
+		FROM 
+			TB_DOMAIN
+		WHERE
+			DOMAIN_TYPE_NM = #{domainTypeNm}
+		AND
+			USE_YN = 'Y'
+	</select>
+	
+	<update id="updateUseYn" parameterType="com.surfinn.glzza.vo.DomainVO">
+		UPDATE TB_DOMAIN
+		SET
+			DOMAIN_DSCRPT = #{domainDscrpt},
+			USE_YN = 'Y',
+			UPD_DT = NOW(),
+			UPD_ID = #{updId}
+		WHERE 
+			DOMAIN_NM = #{domainNm}	
+	</update>
+
+	<select id="selectAll" resultType="com.surfinn.glzza.vo.DomainVO">
+		SELECT * FROM TB_DOMAIN WHERE USE_YN = 'Y'
+	</select>
+</mapper>

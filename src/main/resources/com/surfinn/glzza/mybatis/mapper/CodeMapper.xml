@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.surfinn.glzza.mybatis.mapper.CodeMapper">
+
+
+	<sql id="selectDomainCodeListSql">
+		SELECT
+			CD_SEQ,
+			CD_NM,
+			CD_DSCRPT,
+			DB_CD,
+			DATA_LEN_YN,
+			DCML_LEN_YN,
+			USE_YN,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+		FROM
+			TB_DOMAIN_CD
+		<where>
+			<if test="domainCodeVO.cdNm != null">
+				AND CD_NM = #{domainCodeVO.cdNm}
+			</if>
+			<if test="domainCodeVO.searchType eq 'all'">
+				AND (CD_NM LIKE CONCAT('%', #{domainCodeVO.keyword}, '%')
+				OR	CD_DSCRPT LIKE CONCAT('%', #{domainCodeVO.keyword}, '%')
+				OR	DB_CD LIKE CONCAT('%', #{domainCodeVO.keyword}, '%'))
+			</if>
+			<if test="domainCodeVO.searchType eq 'cdNm'">
+				AND CD_NM LIKE CONCAT('%', #{domainCodeVO.keyword}, '%') 
+			</if>
+			<if test="domainCodeVO.searchType eq 'cdDscrpt'">
+				AND CD_DSCRPT LIKE CONCAT('%', #{domainCodeVO.keyword}, '%') 
+			</if>
+			<if test="domainCodeVO.searchType eq 'dbCd'">
+				AND DB_CD LIKE CONCAT('%', #{domainCodeVO.keyword}, '%') 
+			</if>
+			AND USE_YN ='Y'
+		</where>
+		<if test="domainCodeVO.sorting != null">
+            ORDER BY ${domainCodeVO.sorting}  
+        </if>
+        <if test="domainCodeVO.sorting != null and domainCodeVO.sSortDir_0 != null" > 
+            ${domainCodeVO.sSortDir_0}  
+        </if>		
+		<if test="domainCodeVO.iDisplayStart != null and domainCodeVO.iDisplayLength != null">
+            LIMIT ${domainCodeVO.iDisplayStart} , ${domainCodeVO.iDisplayLength}
+        </if>
+	</sql>
+	
+	<select id="selectDomainCodeList" parameterType="com.surfinn.glzza.vo.DomainCodeVO" resultType="com.surfinn.glzza.vo.DomainCodeVO">
+		<include refid="selectDomainCodeListSql"></include>
+	</select>
+	
+	<select id="selectDomainCodeListCount" parameterType="com.surfinn.glzza.vo.DomainCodeVO" resultType="Integer">
+		SELECT COUNT(*) AS RECORDS_TOTAL FROM TB_DOMAIN_CD
+		<where>
+			<if test="cdNm != null">
+				AND CD_NM = #{cdNm}
+			</if>
+			<if test="searchType eq 'all'">
+				AND (CD_NM LIKE CONCAT('%', #{keyword}, '%')
+				OR	CD_DSCRPT LIKE CONCAT('%', #{keyword}, '%')
+				OR	DB_CD LIKE CONCAT('%', #{keyword}, '%'))
+			</if>
+			<if test="searchType eq 'cdNm'">
+				AND CD_NM LIKE CONCAT('%', #{keyword}, '%') 
+			</if>
+			<if test="searchType eq 'cdDscrpt'">
+				AND CD_DSCRPT LIKE CONCAT('%', #{keyword}, '%') 
+			</if>
+			<if test="searchType eq 'dbCd'">
+				AND DB_CD LIKE CONCAT('%', #{keyword}, '%') 
+			</if>
+		</where>
+	</select>
+	
+	<select id="searchTypeDomainCode" parameterType="com.surfinn.glzza.vo.DomainCodeVO" resultType="com.surfinn.glzza.vo.DomainCodeVO">
+		SELECT
+    		COLUMN_NAME,
+    		COLUMN_COMMENT 
+		FROM
+    		information_schema.columns
+		WHERE
+    		table_schema = 'GLZZA' AND table_name = 'TB_DOMAIN_CD'; 
+	</select>
+	
+	<insert id="insertDomainCode" parameterType="com.surfinn.glzza.vo.DomainCodeVO">
+		INSERT INTO TB_DOMAIN_CD (
+			CD_SEQ,
+			CD_NM,
+			CD_DSCRPT,
+			DB_CD,
+			DATA_LEN_YN,
+			DCML_LEN_YN,
+			REG_ID,
+			REG_DT,
+			UPD_ID,
+			UPD_DT
+       ) VALUES (
+       		#{cdSeq},
+       		#{cdNm},
+       		#{cdDscrpt},
+       		#{dbCd},
+       		#{dataLenYn},
+       		#{dcmlLenYn},
+       		#{regId},
+       		NOW(),
+       		#{updId},
+       		NOW()
+       	) ON DUPLICATE KEY UPDATE
+       		CD_NM = #{cdNm},
+       		CD_DSCRPT = #{cdDscrpt},
+       		DB_CD = #{dbCd},
+       		DATA_LEN_YN = #{dataLenYn},
+       		DCML_LEN_YN = #{dcmlLenYn},
+       		UPD_ID = #{updId},
+       		UPD_DT = NOW()
+	</insert>
+	
+	<select id="selectDomainCode" parameterType="com.surfinn.glzza.vo.DomainCodeVO" resultType="com.surfinn.glzza.vo.DomainCodeVO">
+		SELECT
+			CD_SEQ,
+			CD_NM,
+			CD_DSCRPT,
+			DB_CD,
+			DATA_LEN_YN,
+			DCML_LEN_YN,
+			USE_YN,
+			REG_DT,
+			REG_ID,
+			UPD_DT,
+			UPD_ID
+		FROM 
+			TB_DOMAIN_CD
+		<where>
+			<if test="cdSeq != null">
+				AND CD_SEQ = #{cdSeq}
+			</if>
+			<if test="cdNm != null">
+				AND CD_NM = #{cdNm}
+			</if>
+			<if test="dataLenYn != null">
+				AND DATA_LEN_YN = #{dataLenYn}
+			</if>
+			<if test="dcmlLenYn != null">
+				AND DCML_LEN_YN = #{dcmlLenYn}
+			</if>
+			<if test="dbCd != null">
+				AND DB_CD = #{dbCd}
+			</if>
+		</where>
+		LIMIT 0, 1
+	</select>
+	
+	<delete id="deleteDomainCode" parameterType="com.surfinn.glzza.vo.DomainCodeVO">
+		UPDATE TB_DOMAIN_CD
+		SET
+			USE_YN = 'N',
+			UPD_ID = #{updId},
+			UPD_DT = NOW()
+		WHERE
+			CD_SEQ = #{cdSeq}
+	</delete>
+	
+	<update id="updateUseYn" parameterType="com.surfinn.glzza.vo.DomainCodeVO">
+		UPDATE TB_DOMAIN_CD
+		SET
+			CD_DSCRPT = #{cdDscrpt},
+			USE_YN = 'Y',
+			UPD_ID = #{updId},
+			UPD_DT = NOW()
+		WHERE
+			CD_SEQ = #{cdSeq}
+	</update>
+</mapper>

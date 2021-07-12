@@ -1,0 +1,81 @@
+package com.surfinn.glzza.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.surfinn.glzza.service.DomainService;
+import com.surfinn.glzza.vo.DomainVO;
+import com.surfinn.glzza.vo.Paging;
+
+
+@RestController
+@RequestMapping("/domain")
+public class DomainController {
+	
+	@Autowired
+	private DomainService domainService;
+	
+	@GetMapping("/searchType")
+    @ResponseBody
+    public List<DomainVO> searchType() {
+        List<DomainVO> list = domainService.searchType();   
+        return list;
+    }
+	
+	@PostMapping("/list")
+    @ResponseBody
+    public Paging selectDomainList(DomainVO domainVO, Paging paging) { 
+        return domainService.selectDomainList(domainVO, paging); 
+    }
+    
+    @PostMapping("/insert")
+    @ResponseBody
+    public int insertDomain(@RequestBody DomainVO domainVO) {
+    	System.out.println("##########insert!!!");
+    	return domainService.insertDomain(domainVO);
+    }
+    
+    @PostMapping("/delete")
+    @ResponseBody
+    public int deleteDomain(@RequestBody DomainVO domainVO) {
+    	return domainService.deleteDomain(domainVO);
+    }
+    
+    @GetMapping("/select")
+    @ResponseBody
+    public DomainVO selectDomain(DomainVO domainVO) {
+    	return domainService.selectDomain(domainVO);
+    }
+    
+    @GetMapping("/duplicationNameCheck")
+    @ResponseBody
+    public int duplicationNameCheck(DomainVO domainVO) {
+    	return domainService.duplicationNameCheck(domainVO);
+    }
+    
+    @GetMapping("/duplicateDomainTypeName")
+    @ResponseBody
+    public List<DomainVO> duplicateDomainTypeName(DomainVO domainVO) {
+    	return domainService.duplicateDomainTypeName(domainVO);
+    }
+    
+    @PostMapping("/updateUseYn")
+    @ResponseBody
+    public int updateUseYn(@RequestBody DomainVO domainVO) {
+    	return domainService.insertDomain(domainVO);
+    }
+
+    @GetMapping("/selectall")
+    @ResponseBody
+    public List<DomainVO> selectAll() {
+	    return domainService.selectAll();
+    }
+   
+}

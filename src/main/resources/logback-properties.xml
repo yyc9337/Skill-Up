@@ -1,0 +1,4 @@
+<included>
+	<!-- <property name="LOG_HOME" value="/tmp"/> -->
+    <property name="LOG_HOME" value="./logs"/>
+</included>

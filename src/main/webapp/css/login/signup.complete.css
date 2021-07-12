@@ -1,0 +1,17 @@
+@charset "EUC-KR";
+
+h3{
+    font-size: 1.8rem;
+    float: left;
+    width: 130px;
+}
+
+p{
+    margin-top: 0;
+    margin-bottom: 1.4rem;
+    font-size: 1.8rem;
+}
+
+#login_form{
+	margin-bottom: 30px;
+}
