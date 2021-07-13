@@ -90,7 +90,7 @@
 		FROM
     		information_schema.columns
 		WHERE
-    		table_schema = 'GLZZA' AND table_name = 'TB_TERM';
+    		table_schema = 'GLZZA' AND table_name = 'TB_TERM' AND COLUMN_COMMENT LIKE '용어%';
 	</select>
 
 	<insert id="insertTerm" parameterType="com.surfinn.glzza.vo.TermVO">
