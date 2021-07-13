@@ -125,10 +125,18 @@ function categorySelect() {
         	if(data.returnCode === "F")
         		return false;
 
-			for(var i = 0; i < data.data.length; i++) {
+			for(var i = 0; i < data.data.length; i++) {       //하드코딩 되어 있는 '단어들을 불러오지 않고 data를 호출함 sql쿼리문에서 용어라는 말이 들어가 있는 부분만 가져옴'
+				if(data.data[i].columnName) {
+						var option  = $("<option>");
+					$(option).val('termNm').text(data.data[i].columnComment);
+					$("#searchType").append($(option));
+				}
+				
+				/*
 				if(data.data[i].columnName == 'TERM_ABBR') {
 					var option  = $("<option>");
-					$(option).val('termAbbr').text('용어영문약어명');
+					$(option).val('termAbbr').text(data.data[i].columnComment);
+				//	$(option).val('termAbbr').text('용어영문약어명');
 					$("#searchType").append($(option));
 				}
 				
@@ -142,7 +150,7 @@ function categorySelect() {
 					var option  = $("<option>");
 					$(option).val('termDscrpt').text('용어 설명');
 					$("#searchType").append($(option));
-				}
+				}*/
 			}
         }
     });
