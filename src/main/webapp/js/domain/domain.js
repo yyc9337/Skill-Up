@@ -330,7 +330,6 @@ function openModal(type, domainSeq) {
 	        data : sendData,
 			async : false,
 	        success : function(data){
-				console.log("data:", data);
 				$("#insert_form input[name=domainTypeNm]").val(data.domainTypeNm);
 				$("#insert_form input[name=domainNm]").val(data.domainNm);
 				$("#insert_form #dataType").val(data.dataType);
@@ -595,8 +594,9 @@ function deleteDomain(domainSeq) {
 //수정 여부
 function updateConfirm() {
 	
+	/* 
 	let duplicateNameCheckData = $("#insert_form").serializeObject();
-	
+
 	if(!insertValidation()) {
 		return;
 	}
@@ -604,7 +604,7 @@ function updateConfirm() {
 	if(!duplicateNameCheck(duplicateNameCheckData)){
 		return;
 	}
-	
+	 */
 	
 	checkConfirm(modalUpdateHeader,updateConfirmMessage,'updateDomain();');
 }
