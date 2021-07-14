@@ -132,12 +132,12 @@ td{
 			<table class="table-bordered-0 table-sm datatable-pagination table-striped table-hover" id="termTable" style="width:100%; font-size: 12px">
 				<thead>
 					<tr style="background-color: #4DB6AC; color: white">
-						<th><spring:message code="term.list"/></th>
-						<th><spring:message code="term.id"/></th>
-						<th><spring:message code="term.wordNM"/></th>
-						<th><spring:message code="term.wordENNM"/></th>
-						<th><spring:message code="term.domain"/></th>
-						<th><spring:message code="term.updDT"/></th>
+						<th>용어 목록</th>
+						<th>ID</th>
+						<th>용어명</th>
+						<th>용어 영문 약어명</th>
+						<th>도메인명</th>
+						<th>UPDDT</th>
 					</tr>
 				</thead>
 			</table>
@@ -179,11 +179,11 @@ td{
 						</div>
 						<div class="form-group row">
 								<div class="col-sm-6">
-									<label><spring:message code="term.nameNM"/></label>
+									<label><spring:message code="term.termNm"/></label>
 									<input type="text" name="termNm" id="termNm" placeholder="" class="form-control">
 								</div>
 								<div class="col-sm-6">
-									<label><spring:message code="term.termENNM"/></label>
+									<label><spring:message code="term.termEnnm"/></label>
 									<input type="text" name="termAbbr" id="termAbbr" placeholder="" class="form-control">
 								</div>
 						</div>
@@ -192,7 +192,7 @@ td{
 								<div class="col-sm-12">
 									<label><spring:message code="domain.domainName"/><text class="text-danger">*</text></label>
 									<select class="form-control" aria-hidden="true" name="domainSeq" id="domainSeq">
-										<option value="nonSelected" selected><spring:message code="domain.domainSelcet"/></option>
+										<option value="nonSelected" selected>도메인 선택</option>
 									</select>
 									<span style="margin-left:6px;" class="form-text text-muted" id="domainDetail"></span>
 								</div>
