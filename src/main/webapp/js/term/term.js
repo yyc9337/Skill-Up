@@ -187,7 +187,7 @@ function searchList(searchType, keyword, orderNumber) {
 	      ],
 		columnDefs: [
 			{ targets:[0], title: 'ID' },
-			{ targets:[1], title: '용어명ㅋㅋ' },
+			{ targets:[1], title: '용어명' },
 			{ targets:[2], title: '용어 영문 약어명' },
 			{ targets:[3], title: '도메인명' },
 			{ targets:[4], title: '용어 설명' },
