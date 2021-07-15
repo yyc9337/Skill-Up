@@ -62,25 +62,12 @@ public class WordController {
     	return new SuccessResponse<>(wordService.updateWord(wordVO));
     }
 
-    // 단어(단어명, 단어영문약어명, 단어영문명, 이음동의어) 중복체크
-    @GetMapping("/duplicationCheck")
-    @ResponseBody
-    public int duplicationCheck(WordVO wordVO) {
-        return wordService.duplicationCheck(wordVO);
-    }
-    
-    // [하늘] 단어 입력 프로세스 1 : 단어명/단어영문명 중복체크
+
+    // [하늘] 단어 입력 프로세스 1 : 단어명/단어영문명/이음동의어 중복체크
     @PostMapping("/nameDuplicationCheck")
     @ResponseBody
     public SuccessResponse<List<WordVO>> nameDuplicationCheck(@RequestBody WordVO wordVO){
         return new SuccessResponse<>(wordService.nameDuplicationCheck(wordVO));
     } 
     
-    // [하늘] 단어 입력 프로세스 2 : 단어영문약어명 중복체크
-    @PostMapping("/abbrDuplicationCheck")
-    @ResponseBody
-    public List<WordVO> abbrDuplicationCheck(@RequestBody WordVO wordVO){
-        List<WordVO> list = wordService.abbrDuplicationCheck(wordVO);
-        return list;
-    }
 }

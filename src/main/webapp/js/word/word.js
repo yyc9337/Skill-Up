@@ -45,7 +45,6 @@ $(window).on('load', function() {
 });
 
 //검색 SelectBox 초기화
-//data.data해야함
 function categorySelect() {
     $.ajax({
         url : contextPath +"/word/searchType",
@@ -53,35 +52,13 @@ function categorySelect() {
         type : "GET",
         success : function(data){         
             for(var i = 0; i < data.data.length; i++) {
-                if(data.data[i].columnName == 'WORD_NM') {
-                    var option  = $("<option>");
-                    $(option).val('wordNm').text('단어명');
-                    $("#searchType").append($(option));
-                }
-
-                if(data.data[i].columnName == 'WORD_ABBR') {
-                    var option  = $("<option>");
-                    $(option).val('wordAbbr').text('단어 영문 약어명');
-                    $("#searchType").append($(option));
-                }
-
-                if(data.data[i].columnName == 'WORD_ENG_NM') {
-                    var option  = $("<option>");
-                    $(option).val('wordEngNm').text('단어 영문명');
-                    $("#searchType").append($(option));
-                }
-
-                if(data.data[i].columnName == 'WORD_DSCRPT') {
-                    var option  = $("<option>");
-                    $(option).val('wordDscrpt').text('단어 설명');
-                    $("#searchType").append($(option));
-                }
-
-                if(data.data[i].columnName == 'SYNM_LIST') {
-                    var option  = $("<option>");
-                    $(option).val('synmList').text('이음동의어');
-                    $("#searchType").append($(option));
-                }
+				var ColumnName = data.data[i].columnName.toLowerCase();
+				var ColumnComment = data.data[i].columnComment;
+				var a = ColumnName.indexOf("_");
+				var ColumnNameOpt = ColumnName.substring(0,a) + ColumnName.toUpperCase().charAt(a+1) + ColumnName.substring(a+1);
+				var option  = $("<option>");
+                $(option).val(ColumnNameOpt).text(ColumnComment);
+                $("#searchType").append($(option));
             }
         }
     });
@@ -294,100 +271,7 @@ function openModal(type, wordSeq) {
     }
 }
 
-
-/*
-// 단어명 및 단어영문명 중복조회 & 단어영문약어명 중복조회
-function duplicationValidation(type){
-
-	let tableId = "";
-	let param = {}
-	
-	if (type == "full") {
-		
-		if($("#wordNm").val().length == 0){
-	        alertMessage("경고!","단어명을 입력해주세요.","warning");
-	        $("#wordNm").focus();
-	        return false;
-	    } else if($("#wordEngNm").val().length == 0){
-	        alertMessage("경고!","단어 영문명을 입력해주세요.","warning");
-	        $("#wordEngNm").focus();
-	        return false;
-	    } else{
-			$("#wordEngShortNm").val("");
-			tableId = "#modalTable1"
-			param = {
-			        "searchType" : type,
-			        "wordNm" : $("#wordNm").val(),
-					"wordEngNm" : $("#wordEngNm").val()
-			    }
-		}
-				
-	} else if (type == "short") {
-		
-		if($('#wordNm').attr('class').split(' ').indexOf('valid') == -1){
-			alertMessage("경고!","단어명과 단어영문명의 중복검사를 먼저 진행해주세요.","danger");
-	        return false;
-		}
-		if($('#wordEngNm').attr('class').split(' ').indexOf('valid') == -1){
-			alertMessage("경고!","단어명과 단어영문명의 중복검사를 먼저 진행해주세요.","danger");
-	        return false;
-		}
-		if($("#wordEngShortNm").val().length == 0){
-	        alertMessage("경고!","단어 영문 약어명을 입력해주세요.","warning");
-	        $("#wordEngShortNm").focus();
-	        return false;
-	    } else {
-			tableId = "#modalTable2"
-			param = {
-			        "searchType" : type,
-			        "wordEngShortNm" : $("#wordEngShortNm").val()
-			    }
-		}
-		
-	} 
-	// 데이터테이블 초기화
-	let dataTable = $(tableId).DataTable();
-    dataTable.destroy();
-	
-	console.log("보내는 쿼리", param);
-	const modalTable = {
-        ele: tableId,
-        table: null,
-        option: {
-            columns: [
-				//{ data: 'wordSeq' },
-                { data: 'wordNm' },
-                { data: 'wordEngShortNm' },
-                { data: 'wordEngNm' },
-                { data: 'wordDscrpt' }, // summaryWordDscrpt
-                { data: 'synmList' }
-
-            ]
-        },
-        init: function () {
-			// 생성하는 동안 가려주기
-			//$(this.ele+'_wrapper').hide()
-            // DataTables 생성
-            this.table = DatatablesCustom.order(this.ele, this.option, 0);
-            this.search();
-        },
-        search: function () {
-            
-            // 조회 조건에 따라 데이터를 조회해서 DataTables에 넣는다.
-            DatatablesCustom.rowsAdd(this.table, contextPath + '/word/nameDuplicationCheck', param, type, true);
-			//$(this.ele+'_wrapper').show();
-        }
-    };
-
-    modalTable.init();
-	$('.'+type).addClass('valid');
-
-}*/
-
-
-
-// 깜빡이 문제 해결중
-function duplicationValidation2(step){
+function duplicationValidation(step){
 
 	let tableId = "";
 	let param = {};
@@ -458,8 +342,6 @@ function duplicationValidation2(step){
 					                { data: 'wordNm' },
 					                { data: 'wordAbbr' },
 					                { data: 'wordEngNm' },
-					                //{ data: 'summaryWordDscrpt' },
-					                //{ data: 'synmList' },
 		                			{ data: 'fatalExist' }
 					            ],
 						columnDefs: [

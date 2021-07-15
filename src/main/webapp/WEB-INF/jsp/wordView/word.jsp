@@ -197,7 +197,7 @@
                                 <div class="col-md-9">
                                     <label style="display:flex"><spring:message code="word.wordENm"/><text class="text-danger">*</text></label>
                                     <input type="text" name="wordEngNm" id="wordEngNm" placeholder="" class="form-control full important">
-                                    <button type="button" id="nmDuplCheck" class="insertOnly btn bg-pink" onclick="duplicationValidation2('full');"><spring:message code="word.wordduplication"/></button>
+                                    <button type="button" id="nmDuplCheck" class="insertOnly btn bg-pink" onclick="duplicationValidation('full');"><spring:message code="word.wordduplication"/></button>
                                     <span class="insertOnly helper" id="stage0Helper"><spring:message code="word.warningwordduplication"/></span>
                                	 </div>
                             </div>
@@ -229,7 +229,7 @@
                                 <div class="col-md-12">
                                     <label style="display:flex"><spring:message code="word.wordAbbr"/><text class="text-danger">*</text> </label>
                                     <input type="text" name="wordAbbr" id="wordAbbr" placeholder="" class="form-control short important">
-                                   	<button type="button" id="abbrDuplCheck" class="insertOnly btn bg-pink" onclick="duplicationValidation2('short');"><spring:message code="word.wordduplication"/></button>
+                                   	<button type="button" id="abbrDuplCheck" class="insertOnly btn bg-pink" onclick="duplicationValidation('short');"><spring:message code="word.wordduplication"/></button>
                                	 	<span id="stage2Helper" class="insertOnly helper"></span>
                                	 </div>
                             </div>

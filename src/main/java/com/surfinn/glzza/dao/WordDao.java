@@ -44,31 +44,11 @@ public class WordDao {
 
     public WordVO selectWord(WordVO wordVO){
         return wordMapper.selectWord(wordVO);
-    }
-
-    // 단어 중복 체크
-    public int duplicationNameCheck(WordVO wordVO) {
-        return wordMapper.duplicationNameCheck(wordVO);
-    }
-    public int duplicationEngShortNameCheck(WordVO wordVO) {
-        return wordMapper.duplicationEngShortNameCheck(wordVO);
-    }
-    public int duplicationEngNameCheck(WordVO wordVO) {
-        return wordMapper.duplicationEngNameCheck(wordVO);
-    }
-    public int duplicationCheck(WordVO wordVO){
-        return wordMapper.duplicationSynmListCheck(wordVO);
-    }
-    
+    }  
 	/* [하늘] 단어 입력 프로세스 */
     
-    // 단어명 및 단어영문명 중복 체크
+    // 단어명 및 단어영문명 및 이음동의어 중복 체크
     public List<WordVO> nameDuplicationCheck(WordVO wordVO) {
         return wordMapper.selectWordDuplicationList(wordVO);
-    }
-    // 단어영문약어명 중복 체크
-    public List<WordVO> abbrDuplicationCheck(WordVO wordVO) {
-        return wordMapper.selectAbbrDuplicationList(wordVO);
-    }
-    
+    }    
 }
