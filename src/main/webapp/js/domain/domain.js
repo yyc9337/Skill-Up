@@ -87,7 +87,7 @@ function readOnlyOption(dataType) {
 	}
 }
 
-//검색 SelectBox 초기화
+//도메인 검색시 사용할 카테고리 목록(셀렉트 박스) 불러오기
 function categorySelect() {
 	
 	$.ajax({
@@ -108,7 +108,7 @@ function categorySelect() {
 	
 }
 
-//데이터 타입 선택 셀렉트 박스 초기화
+//데이터 타입 선택 셀렉트 박스 불러오기
 function dataTypeSelect() {
 	
 	$.ajax({
@@ -129,7 +129,7 @@ function dataTypeSelect() {
     });	
 }
 
-//도메인 목록
+//도메인 목록 조회
 function searchList(searchType, keyword, orderNumber) {
 
 	//Sorting 하기 위한 컬럼들 서버로 가지고감
@@ -185,10 +185,7 @@ function searchList(searchType, keyword, orderNumber) {
 
 		// popover
 		createdRow: function (row, data, dataIndex) {
-			// $(row).find('td:eq(6)').attr('data-toggle', "tooltip");
-
-			// $(row).find('td:eq(6)').attr('title', data["domainDscrpt"]);
-
+			
 			// 설명이 존재할 경우에만 popover 사용
 			if (data["domainDscrpt"] != "-"){
 				$(row).find('td:eq(6)').attr('data-container', 'body');
@@ -213,7 +210,7 @@ function searchList(searchType, keyword, orderNumber) {
 		
 	});
 	
-	// 검색어 분류 변경시 검색어 Input box에 focus on 됨
+	// 검색어 카테고리 변경시 검색어 Input box에 focus on 됨
 	$("#searchType").change(function () {		
 	 	$("#keyword").focus();		
 	});
@@ -224,7 +221,7 @@ function searchList(searchType, keyword, orderNumber) {
 }
 
 
-//도메인 분류명 목록
+//modal2에서 중복인 도메인 리스트 목록 조회
 function searchList2() {
 	
 	let keyword = $("#domainTypeNm").val().trim();
@@ -285,6 +282,7 @@ function resetSearch() {
 	$("#searchType").val('all');
 	$("#keyword").val('');
 	
+	// dataTable도 다시 그려줌
 	let dataTable = $("#domainTable").DataTable();
 	dataTable.destroy();
 	searchList();
@@ -416,7 +414,7 @@ function insertValidation(){
 
 }
 
-//신규 등록 시 도메인명 중복 체크
+//도메인명 중복 검사
 function duplicateNameCheck(sendData) {
 		
 	let flag = true;
@@ -442,7 +440,7 @@ function duplicateNameCheck(sendData) {
 	
 }
 
-//도메인 분류명 검사
+//도메인 분류명 중복검사
 function duplicateDomainTypeName(domainTypeNm, type) {
 	let sendData = {
 		"domainTypeNm" : domainTypeNm
@@ -461,8 +459,10 @@ function duplicateDomainTypeName(domainTypeNm, type) {
 			let table2 = $("#domainTypeTable").DataTable();
 			table2.destroy();
 			
-			//type = 1일경우 신규 등록, 2일경우 수정
-			
+			/**
+			 type = 1 신규 등록
+			 type = 2 수정
+			 */
 			if(data.length == 0) {
 				//중복 된 리스트가 없을 경우
 				if(type == 1) {
@@ -507,7 +507,9 @@ function duplicateDomainTypeName(domainTypeNm, type) {
     });
 }
 
-//저장 여부 Confirm 메세지 도메인 분류명 -> 도메인명 
+// 저장 시 입력값 유효성 검사 및 중복 검사 실행 
+// 중복검사는 도메인명 -> 도메인분류명 순서로 실행됨 
+// 도메인 분류명은 중복 사용 가능
 function checkDoaminTypeNameConfirm(type) {
 	let duplicateNameCheckData = $("#insert_form").serializeObject();
 	
@@ -523,7 +525,7 @@ function checkDoaminTypeNameConfirm(type) {
 	duplicateDomainTypeName(domainTypeName,type);	
 }
 
-// 저장 여부
+// 저장 여부 확인 
 function saveConfirm() {
 	checkConfirm(modalRegistHeader,registConfirmMessage,'insertDomain();');
 }
@@ -557,13 +559,14 @@ function insertDomain() {
     });
 }
 
-//삭제 여부 Confirm 메세지 (Use N)
+//삭제 여부 확인
 function deleteConfirm(domainSeq) {
 	var domainSeq = $("#modal #domainSeq").val().trim();
 	checkConfirm(modalDeleteHeader,deleteConfirmMessage,'deleteDomain('+domainSeq+')');
 }
 
-//삭제 기능 (Use N)
+//삭제 기능
+// 실제로 DB에서 삭제되는게 아니라 USE_YN = "N" 으로 변경됨
 function deleteDomain(domainSeq) {
 	
 	let dataTable = $("#domainTable").DataTable();
@@ -591,7 +594,7 @@ function deleteDomain(domainSeq) {
     });
 }
 
-//수정 여부
+//수정 여부 확인
 function updateConfirm() {
 	checkConfirm(modalUpdateHeader,updateConfirmMessage,'updateDomain();');
 }
@@ -626,6 +629,7 @@ function updateDomain() {
 }
 
 //도메인명 자동 생성
+//도메인명 = 도메인 분류명 + 데이터 타입 + (데이터 길이, 소수점 길이)
 function domainNameAutoCreate(domainTypeNm, dataType, dataLen, dcmlLen){	
 	if(dataType == 'VARCHAR') {
 		dataType = 'VC';
@@ -641,12 +645,14 @@ function domainNameAutoCreate(domainTypeNm, dataType, dataLen, dcmlLen){
 }
 
 
+// excel 다운로드 
 function excelDownload_doc() {
 	let serviceName = 'domainListExcelDownload';
 	let fileName = 'DOMAIN_LIST_DOC';
 	apiRequestExcel(serviceName, fileName, $("#search_form"));
 }
 
+// exerd 다운로드
 function excelDownload_exerd() {
 	let serviceName = 'domainListExcelDownload';
 	let fileName = 'DOMAIN_LIST_EXERD';	
