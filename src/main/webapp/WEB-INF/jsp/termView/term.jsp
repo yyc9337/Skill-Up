@@ -183,7 +183,7 @@ td{
 									<input type="text" name="termNm" id="termNm" placeholder="" class="form-control">
 								</div>
 								<div class="col-sm-6">
-									<label><spring:message code="term.termEnnm"/></label>
+									<label>도메인 분류명</label>
 									<input type="text" name="termAbbr" id="termAbbr" placeholder="" class="form-control">
 								</div>
 						</div>

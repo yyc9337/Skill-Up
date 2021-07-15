@@ -130,7 +130,7 @@ function categorySelect() {   //카테고리를 선택하는 함수
 			for(var i = 0; i < data.data.length; i++) {       //하드코딩 되어 있는 '단어들을 불러오지 않고 data를 호출함 sql쿼리문에서 용어라는 말이 들어가 있는 부분만 가져옴'
 				if(data.data[i].columnName) {
 						var option  = $("<option>");
-					$(option).val('termNm').text(data.data[i].columnComment);
+					$(option).val('termNm').text(data.data[i].columnComment);   //옵션을 하나하나 추가하지 않으면 목록이 제 역할을 못함.
 					$(option).val('termAbbr').text(data.data[i].columnComment);
 					$(option).val('termDscrpt').text(data.data[i].columnComment);
 					$("#searchType").append($(option));
@@ -209,10 +209,10 @@ function searchList(searchType, keyword, orderNumber) {
 			$(row).find('td:eq(4)').attr('data-trigger', "hover");
 		}
 	  });	
-	  
-	 //let dataTableHeight = document.getElementsByClassName('dataTables_scrollBody')[0];
-	 //dataTableHeight.style.minHeight = '580px'; 
-	 //jsp에 존재하지 않음. 필요없는 객체
+	 
+	 //"dataTables_scrollBody"클래스를 가진 div는 플러그인에 의해 자동 생성됩니다. 이 테이블의 높이를 580px로 고정시킴 
+	 let dataTableHeight = document.getElementsByClassName('dataTables_scrollBody')[0];
+	 dataTableHeight.style.minHeight = '580px'; 
 }
 
 function termNameAutoCreate(wordNm, wordAbbr){    //위에서 쓰기위해 함수를 정리해 둠
@@ -245,7 +245,7 @@ function searchTerm() {
 		searchList();
 		return false;
 	}else{
-		if(keyword == '') {
+		if(keyword == '') {   //아무것도 입력하지 않으면,
 			alertMessage("경고!","검색할 키워드를 입력해주세요.","warning");
 			return false;
 		}
@@ -273,25 +273,25 @@ function resetSearch() {
 }
 
 //저장 여부 Confirm 메세지
-function saveConfirm() {
-	let sendData = {
+function saveConfirm() { 
+	let sendData = {   //데이터를 담아서 보냄
 		"termNm" : $("#termNm").val().trim(),
 		"termAbbr" : $("#termAbbr").val().trim(),
 		"domainSeq" : $("#domainSeq").val().trim(),
 		"termDscrpt" : $("#termDscrpt").val().trim(),
 	};
 
-	if(!validationTerm(sendData))
+	if(!validationTerm(sendData))    //validationTerm 함수에 걸리지 않으면, 
 		return false;
 
-	sendData = {
-		"termNm":$("#termNm").val(),
-		"useYn" : "Y"
+	sendData = {  
+		"termNm":$("#termNm").val(), 
+		"useYn" : "Y"   //useYn Y로 전송
 	};
 
 	let content = '용어 신규 등록을 신청하시겠습니까?';
-	if(!duplicateCheck(sendData)){
-		content = "동일한 용어명을 가진 용어가 존재합니다. 계속하시겠습니까?";
+	if(!duplicateCheck(sendData)){    //중복단어체크에 데이터가 담겨 있다면
+		content = "동일한 용어명을 가진 용어가 존재합니다. 계속하시겠습니까?";   //문자 반환
 	}
 
 	checkConfirm('용어 신규 등록', content,'createTerm()');
@@ -328,7 +328,7 @@ function saveConfirm() {
 // 	});
 // }
 
-function loadDomainData(){
+function loadDomainData(){    //모르겠음
 
 	$.ajax({
 		url : contextPath + "/domain/selectall",
@@ -349,25 +349,25 @@ function loadDomainData(){
 	});
 }
 
-function validationTerm(termObject){
+function validationTerm(termObject){       
 	let validated = true;
-	if($("#wordSelectTag").val().length == 0){
+	if($("#wordSelectTag").val().length == 0){      //신규 등록할 때 구성 단어명 칸에 길이가 0일경우
 		alertMessage("경고", "구성 단어명을 선택해주세요.", "warning");
 		return false;
 
 	}
 
-	if(termObject.termNm.length == 0){
+	if(termObject.termNm.length == 0){    //신규 등록할 때 용어명 칸에 길이가 0일경우
 		alertMessage("경고", "용어명을 입력해주세요.","warning");
 		return false;
 	}
 
-	if(termObject.termAbbr.length == 0){
+	if(termObject.termAbbr.length == 0){      //신규 등록할 때 용어 영문 약어명 칸에 길이가 0일경우
 		alertMessage("경고", "용어영문약어명을 입력해주세요.", "warning");
 		return false;
 	}
 
-	if(termObject.domainSeq == "nonSelected"){
+	if(termObject.domainSeq == "nonSelected"){        //신규 등록할 때 도메인 선택을 하지 않을 경우 
 		alertMessage("경고", "도메인을 선택해주세요.", "warning");
 		return false;
 	}
@@ -375,7 +375,7 @@ function validationTerm(termObject){
 	return validated;
 }
 
-function duplicateCheck(termObject){
+function duplicateCheck(termObject){  //중복체크
 	let validated = true;
 	$.ajax({
 		url : contextPath + "/term/duplicateCheck",
@@ -406,11 +406,11 @@ function createTerm() {
 		"useYn" : "Y"
 	};
 
-	if(!duplicateCheck(sendData)){
+	if(!duplicateCheck(sendData)){   //중복체크에서 중복되면 경고메시지
 		alertMessage("경고", "이미 등록된 용어입니다.", "warning");
 		return false;
 	}
-	toggleInputStatus(true);
+	toggleInputStatus(true);   //모르겠음
 
 	$.ajax({
 		url : contextPath + "/term/create",
@@ -427,7 +427,7 @@ function createTerm() {
 			destroyTable();
 			modalOff();
 			toggleInputStatus(false);
-			searchList(undefined,undefined,5);
+			searchList(undefined,undefined,5);    //5개의 행 다시불러옴 
 		}
 	});
 }
@@ -443,7 +443,7 @@ function modalOn(isCreated = true, termData = null){
 		$("#modalConfirmButton").text("저장");
 		$("#modalUpdateButton").css("display","none");
 		$("#domainDetail").text("");
-	}else{
+	}else{   //둘다 꺼짐
 		$("#modalUpdateButton").css("display","block");
 		$("#compositionDiv").css("display","none");
 		let termSeq;
