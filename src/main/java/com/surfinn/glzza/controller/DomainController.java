@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.surfinn.glzza.service.DomainService;
+import com.surfinn.glzza.utility.SuccessResponse;
 import com.surfinn.glzza.vo.DomainVO;
 import com.surfinn.glzza.vo.Paging;
 
@@ -44,8 +45,8 @@ public class DomainController {
     
     @PostMapping("/delete")
     @ResponseBody
-    public int deleteDomain(@RequestBody DomainVO domainVO) {
-    	return domainService.deleteDomain(domainVO);
+    public SuccessResponse<Integer> deleteDomain(@RequestBody DomainVO domainVO) {
+    	return new SuccessResponse<>(domainService.deleteDomain(domainVO));
     }
     
     @GetMapping("/select")

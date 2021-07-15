@@ -92,23 +92,11 @@ function categorySelect() {
         type : "GET",
         success : function(data){
 			for(var i = 0; i < data.length; i++) {
-				if(data[i].columnName == 'DOMAIN_NM') {
-					let option  = $("<option>");
-					$(option).val('domainNm').text(domainNameLang);
-					$("#searchType").append($(option));
-				}
 				
-				if(data[i].columnName == 'DOMAIN_TYPE_NM') {
-					let option  = $("<option>");
-					$(option).val('domainTypeNm').text(domainTypeNameLang);
+					let option = $("<option>");
+					$(option).val('domainNm').text(data[i].columnComment);
 					$("#searchType").append($(option));
-				}
-				
-				if(data[i].columnName == 'DOMAIN_DSCRPT') {
-					let option  = $("<option>");
-					$(option).val('domainDscrpt').text(domainDescriptionLang);
-					$("#searchType").append($(option));
-				}
+	
 			}
         }
 
@@ -578,7 +566,7 @@ function deleteDomain(domainSeq) {
         data : JSON.stringify(sendData),
 		async : false,
         success : function(data){
-			if(data==1) {
+			if(data.data==1) {
 				alertMessage(succ,succDeleteDomain,"success");
 				$("#cancelButton").click();
 				dataTable.destroy();
@@ -593,18 +581,6 @@ function deleteDomain(domainSeq) {
 
 //수정 여부
 function updateConfirm() {
-	
-	/* 
-	let duplicateNameCheckData = $("#insert_form").serializeObject();
-
-	if(!insertValidation()) {
-		return;
-	}
-	
-	if(!duplicateNameCheck(duplicateNameCheckData)){
-		return;
-	}
-	 */
 	
 	checkConfirm(modalUpdateHeader,updateConfirmMessage,'updateDomain();');
 }
