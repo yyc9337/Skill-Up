@@ -17,7 +17,8 @@ public class DomainService {
 	
 	@Autowired
 	private DomainDao domainDao;
-
+	
+	// 도메인 목록 조회 (검색)
 	public BaseVO selectDomainList(DomainVO domainVO, BaseVO baseVO) {
 		
 		if(!CommonUtil.isEmpty(domainVO.getColumns())) {
@@ -51,10 +52,12 @@ public class DomainService {
 		return baseVO;
 	}
 	
+	// 도메인 검색시 사용할 카테고리 목록(셀렉트 박스) 불러오기
 	public List<DomainVO> searchType() {
 		return domainDao.searchType();
 	}
 
+	// 수정, 저장 기능
 	public int insertDomain(DomainVO domainVO) {		
 		domainVO.setRegId(CommonConst.REG_ID);
 		domainVO.setUpdId(CommonConst.UPD_ID);
@@ -78,16 +81,19 @@ public class DomainService {
 		
 		return result;
 	}
-
+	
+	// 삭제 기능
 	public int deleteDomain(DomainVO domainVO) {
 		domainVO.setUpdId(CommonConst.UPD_ID);
 		return domainDao.deleteDomain(domainVO);
 	}
-
+	
+	// 조회 기능
 	public DomainVO selectDomain(DomainVO domainVO) {
 		return domainDao.selectDomain(domainVO);
 	}
-
+	
+	// 도메인 명 중복 검사
 	public int duplicationNameCheck(DomainVO domainVO) {
 		
 		int result = 0;
@@ -103,11 +109,13 @@ public class DomainService {
 
 		return result;
 	}
-
+	
+	// 도메인분류명 중복 검사
 	public List<DomainVO> duplicateDomainTypeName(DomainVO domainVO) {
 		return domainDao.duplicateDomainTypeName(domainVO);
 	}
-
+	
+	// 현재 사용중인(USE_YN='Y') 도메인 전체 선택
 	public List<DomainVO> selectAll(){
 		return domainDao.selectAll();
 	}
