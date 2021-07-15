@@ -5,8 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.surfinn.glzza.vo.DomainVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.BaseVO;
+
 @Mapper
 public interface DomainMapper {
 	

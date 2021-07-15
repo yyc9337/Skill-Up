@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.surfinn.glzza.mybatis.mapper.DomainMapper;
 import com.surfinn.glzza.vo.DomainVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.BaseVO;
 
 @Repository
