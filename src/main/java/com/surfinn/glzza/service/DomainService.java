@@ -11,6 +11,7 @@ import com.surfinn.glzza.dao.DomainDao;
 import com.surfinn.glzza.utility.CommonUtil;
 import com.surfinn.glzza.vo.DomainVO;
 import com.surfinn.glzza.vo.Paging;
+import com.surfinn.glzza.vo.BaseVO;
 
 @Service
 public class DomainService {
@@ -18,12 +19,13 @@ public class DomainService {
 	@Autowired
 	private DomainDao domainDao;
 
-	public Paging selectDomainList(DomainVO domainVO, Paging paging) {
+	public BaseVO selectDomainList(DomainVO domainVO, BaseVO baseVO) {
 		
 		if(!CommonUtil.isEmpty(domainVO.getColumns())) {
 			domainVO.setSorting(domainVO.getColumns()[domainVO.getISortCol_0()]);
 		}
-		List<DomainVO> list = domainDao.selectDomainList(domainVO, paging);
+		
+		List<DomainVO> list = domainDao.selectDomainList(domainVO, baseVO);
 		
 		if(list.size() > 0) {
 			for(int i = 0; i < list.size(); i++) {
@@ -44,10 +46,10 @@ public class DomainService {
 			}
 		}
 		
-		paging.setRecordsTotal(domainDao.selectTotalCountDomain(domainVO));				
-		paging.setRecordsFiltered(list.size());
-		paging.setData(list);
-		return paging;
+		baseVO.setRecordsTotal(domainDao.selectTotalCountDomain(domainVO));				
+		baseVO.setRecordsFiltered(list.size());
+		baseVO.setData(list);
+		return baseVO;
 	}
 	
 	public List<DomainVO> searchType() {

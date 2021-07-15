@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.surfinn.glzza.mybatis.mapper.DomainMapper;
 import com.surfinn.glzza.vo.DomainVO;
 import com.surfinn.glzza.vo.Paging;
+import com.surfinn.glzza.vo.BaseVO;
 
 @Repository
 public class DomainDao {
@@ -19,8 +20,8 @@ public class DomainDao {
 		return domainMapper.selectTotalCountDomain(domainVO);
 	}
 
-	public List<DomainVO> selectDomainList(DomainVO domainVO, Paging paging) {
-		return domainMapper.selectDomainList(domainVO, paging);
+	public List<DomainVO> selectDomainList(DomainVO domainVO, BaseVO baseVO) {
+		return domainMapper.selectDomainList(domainVO, baseVO);
 	}
 
 	public List<DomainVO> searchType() {

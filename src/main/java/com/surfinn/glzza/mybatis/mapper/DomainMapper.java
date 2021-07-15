@@ -6,13 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.surfinn.glzza.vo.DomainVO;
 import com.surfinn.glzza.vo.Paging;
-
+import com.surfinn.glzza.vo.BaseVO;
 @Mapper
 public interface DomainMapper {
 	
 	Integer selectTotalCountDomain(DomainVO domainVO);
 
-	List<DomainVO> selectDomainList(DomainVO domainVO, Paging paging);
+	List<DomainVO> selectDomainList(DomainVO domainVO, BaseVO baseVO);
 
 	List<DomainVO> searchType();
 

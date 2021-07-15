@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.service.DomainService;
 import com.surfinn.glzza.utility.SuccessResponse;
 import com.surfinn.glzza.vo.DomainVO;
@@ -30,12 +31,18 @@ public class DomainController {
         return list;
     }
 	
+//	@PostMapping("/list")
+//    @ResponseBody
+//    public Paging selectDomainList(DomainVO domainVO, Paging paging) { 
+//        return domainService.selectDomainList(domainVO, paging); 
+//    }
+    
 	@PostMapping("/list")
     @ResponseBody
-    public Paging selectDomainList(DomainVO domainVO, Paging paging) { 
-        return domainService.selectDomainList(domainVO, paging); 
+    public BaseVO selectDomainList(DomainVO domainVO, BaseVO baseVO) { 
+        return domainService.selectDomainList(domainVO, baseVO); 
     }
-    
+	
     @PostMapping("/insert")
     @ResponseBody
     public int insertDomain(@RequestBody DomainVO domainVO) {
