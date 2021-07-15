@@ -30,12 +30,6 @@ public class DomainController {
         return list;
     }
 	
-//	@PostMapping("/list")
-//    @ResponseBody
-//    public Paging selectDomainList(DomainVO domainVO, Paging paging) { 
-//        return domainService.selectDomainList(domainVO, paging); 
-//    }
-    
 	@PostMapping("/list")
     @ResponseBody
     public BaseVO selectDomainList(DomainVO domainVO, BaseVO baseVO) { 
@@ -45,7 +39,6 @@ public class DomainController {
     @PostMapping("/insert")
     @ResponseBody
     public int insertDomain(@RequestBody DomainVO domainVO) {
-    	System.out.println("##########insert!!!");
     	return domainService.insertDomain(domainVO);
     }
     

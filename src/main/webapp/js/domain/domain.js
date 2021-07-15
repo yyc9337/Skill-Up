@@ -4,8 +4,8 @@ var replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi;
 
 $(document).ready(function () {
 	
-	categorySelect();
-	searchList();
+	categorySelect(); // 도메인 검색시 사용할 카테고리 목록 불러오기
+	searchList(); // 도메인 목록 조회
 	
 	// ENTER 입력시 searchButton이 click되게 함
 	$("#keyword").keydown(function(key) {
@@ -43,6 +43,11 @@ $('html').click(function(e) {
 
 //데이터 타입 선택 시 데이터 길이 및 소수점 길이 설정
 function readOnlyOption(dataType) {
+	
+	/**
+	데이터 타입을 선택하지 않았을때 : 데이터 길이, 소수점 길이 둘다 readOnly
+	데이터 타입을 선택했을 경우 : TB_DOMAIN_CD 에 저장된 데이터 타입별 옵션에 따라 처리함
+	 */
 	if(dataType == '') {
 		$("#insert_form input[name=dataLen]").attr('readonly', true);
 		$("#insert_form input[name=dcmlLen]").attr('readonly', true);
@@ -57,9 +62,10 @@ function readOnlyOption(dataType) {
 	        contentType : "application/json",
 	        type : "POST",
 			async : false,
-	        success : function(data) {			
+	        success : function(data) {		
+			const {dataLenYn, dcmlLenYn} = data.data[0]	
 				if(data.data.length > 0) {
-					if(data.data[0].dataLenYn == 'N') {
+					if(dataLenYn == 'N') {
 						$("#insert_form input[name=dataLen]").attr('readonly', true);
 						$("#insert_form input[name=dcmlLen]").attr('readonly', true);
 						$("#insert_form input[name=dataLen]").val('');
@@ -67,7 +73,7 @@ function readOnlyOption(dataType) {
 
 						$("#dataLenStar").hide();
 						$("#dcmlLenStar").hide();
-					} else if(data.data[0].dataLenYn == 'Y' && data.data[0].dcmlLenYn == 'N') {
+					} else if(dataLenYn == 'Y' && dcmlLenYn == 'N') {
 						$("#insert_form input[name=dataLen]").attr('readonly', false);
 						$("#insert_form input[name=dcmlLen]").attr('readonly', true);
 						$("#insert_form input[name=dcmlLen]").val('');
@@ -95,7 +101,6 @@ function categorySelect() {
         contentType : "application/json",
         type : "GET",
         success : function(data){
-			//for(var i = 0; i < data.length; i++) {
 			for(let i in data) {
 					let option = $("<option>");
 					$(option).val('domainNm').text(data[i].columnComment);
@@ -118,7 +123,6 @@ function dataTypeSelect() {
 		async : false,
         success : function(data){
 			$('#dataType').children('option:not(:first)').remove();
-			//for(var i = 0; i < data.data.length; i++) {
 			for(let i in data.data) {
 					let option  = $("<option>");
 					$(option).val(data.data[i].cdNm).text(data.data[i].cdNm);
@@ -130,21 +134,26 @@ function dataTypeSelect() {
 }
 
 //도메인 목록 조회
-function searchList(searchType, keyword, orderNumber) {
+function searchList(searchType, keyword, orderNumber = 1) {
 
 	//Sorting 하기 위한 컬럼들 서버로 가지고감
 	let columns = ['DOMAIN_SEQ','DOMAIN_NM','DOMAIN_TYPE_NM','DATA_TYPE', 'DATA_LEN', 'DCML_LEN', 'DOMAIN_DSCRPT', 'UPD_DT'];
-	let order = 'asc';
-	
+//	let order = 'asc';
+	order = orderNumber == 1 ? 'asc' : 'desc';
+
+/*	orderNumber의 기본값 정해줌. 파라미터에 기본값 넣어서 전달하게 수정 (line 137)
 	if(orderNumber == undefined) {
 		orderNumber = 1;
 	}
+	*/
 	
+/*	삼항조건연산자로 수정 (line 142)
 	if(orderNumber == 1) {
 		order = 'asc';
 	} else {
 		order = 'desc'
-	}
+	}*/
+	
 	
 
 	//sAjaxSource 를 사용하면 기본적인 DataTable에 사용되는 옵션들을 객체로 가지고 감. 서버의 DomainVO 객체 확인하기
@@ -260,7 +269,12 @@ function searchDomain() {
 	let searchType = $("#searchType").val();
 	let keyword = $("#keyword").val();
 	let dataTable = $("#domainTable").DataTable();
-  
+ 
+ 	/**
+ 	  키워드 미입력 + 전체 + 검색버튼 클릭 -> 전체 리스트 조회
+ 	  키워드 미입력 + 카테고리 선택(전체 제외) + 검색버튼 클릭 -> warningNoKeywordMessage 출력
+ 	  키워드 입력 + 카테고리 선택 + 검색버튼 클릭 -> 해당 키워드 및 카테고리로 검색
+ 	 */
 	if(keyword == '') {
 		if($("#searchType").val() == 'all') {
 			dataTable.clear().destroy();
@@ -294,9 +308,9 @@ function resetSearch() {
 //모달 초기화
 //신규 등록 및 상세 보기
 function openModal(type, domainSeq) {
-	dataTypeSelect();
-	clearFormData();
-	readOnlyOption('');
+	dataTypeSelect(); // 데이터 타입 셀렉트박스 불러옴
+	clearFormData(); // form안에 입력 내용을 비워줌 (common.js)
+	readOnlyOption(''); // 데이터 타입이 선택되지 않았으므로 데이터 길이 및 소수점 길이 입력 불가 
 	
 	//add = 신규등록 , update = 상세보기
 	if(type == 'add') {
@@ -318,6 +332,7 @@ function openModal(type, domainSeq) {
 			"domainSeq" : domainSeq
 		}
 		
+		// domain/select에 넘겨준 domainSeq로 선택한 도메인 정보를 불러와 화면에 뿌려줌
 		$.ajax({
 	        url : contextPath +"/domain/select",
 	        contentType : "application/json",
@@ -340,11 +355,13 @@ function openModal(type, domainSeq) {
 		
 	}
 	
-	//데이터 타입 선택 시 NUMBER일 경우 소수점 길이 활성화
-	//XML 또는 DATETIME 일 경우 데이터 길이 및 소수점 길이 비활성화
+	
+	// 데이터 타입 변경시 변경된 데이터 타입에 맞게 readOnlyOption 함수 재실행
+	// NUMBER일 경우 소수점 길이 활성화
+	// XML 또는 DATETIME 일 경우 데이터 길이 및 소수점 길이 비활성화
 	$("#dataType").change(function () {		
 	 	let selectDataTypeValue = $("#insert_form #dataType").val().trim();
-		readOnlyOption(selectDataTypeValue);		
+		readOnlyOption(selectDataTypeValue);
 	});
 	
 	$(".autoCreate").on("propertychange change keyup paste input", function(){		
@@ -361,27 +378,32 @@ function openModal(type, domainSeq) {
 function insertValidation(){
 		
 	let result = true;	
-		
+	
+	// 도메인 분류명을 입력하지 않은 경우 
 	if($("#domainTypeNm").val().trim().length == 0){
         alertMessage(warning,warningNoDomainTypeName,"warning");
         $("#domainTypeNm").focus();
 		//$("#cancelButton2").click();
         result = false;
     }
-
+	
+	// 데이터 타입을 입력하지 않은 경우
 	if($("#dataType").val().trim() == ''){
         alertMessage(warning,warningNoDataType,"warning");
         $("#dataType").focus();
 		$("#cancelButton2").click();
         result = false;
     } else {	
+		
+		// 도메인 분류명, 데이터 타입을 모두 입력한 경우
+		// 데이터 타입에 따라 데이터 길이, 소수점 길이 입력 필요 여부 확인
 		$.ajax({
 	        url : contextPath +"/code/domainCodeList?cdNm="+$("#dataType").val().trim(),
 	        contentType : "application/json",
 	        type : "POST",
 			async : false,
 	        success : function(data){	
-				const { dataLenYn, dcmlLenYn } = data.data[0];
+					const { dataLenYn, dcmlLenYn } = data.data[0];
 					if($("#dataLen").val().length == 0 && dataLenYn == 'Y') {
 					alertMessage(warning,warningNoDataLength,"warning");
 					$("#dataLen").focus();
@@ -401,7 +423,8 @@ function insertValidation(){
 	    });					
 	}				
 	
-
+	
+	// 도메인명이 입력되지 않은 경우 
 	if($("#domainNm").val().trim().length == 0){
         alertMessage(warning,warningNoDomainName,"warning");
         $("#doaminNm").focus();
@@ -464,16 +487,16 @@ function duplicateDomainTypeName(domainTypeNm, type) {
 			 type = 2 수정
 			 */
 			if(data.length == 0) {
-				//중복 된 리스트가 없을 경우
+				//중복 된 리스트가 없을 경우 바로 신규 등록, 수정 됨
 				if(type == 1) {
 					saveConfirm();
 				} else if(type == 2) {
 					updateConfirm();
 				}
 			} else if(data.length == 1) {
-				//중복 된 리스트가 한개만 있을경우
-				//신규 등록은 중복 된게 있으므로 중복 안내
-				//업데이트는 해당 데이터 수정 시 입력한 도메인 분류명이 동일한지 확인 후 중복 안내
+				// 중복 된 리스트가 한개만 있을경우
+				// 신규 등록 : 중복안내 및 등록 여부 확인
+				// 업데이트 : 해당 데이터 수정 시 입력한 도메인 분류명이 동일한지 확인 후 중복 안내
 				if(type == 1) {
 					$("#domainTypeNmListTitle").html(modalRegistHeader);
 					$("#domainTypeButton").click();
@@ -513,14 +536,17 @@ function duplicateDomainTypeName(domainTypeNm, type) {
 function checkDoaminTypeNameConfirm(type) {
 	let duplicateNameCheckData = $("#insert_form").serializeObject();
 	
+	// 입력 값 유효성 검사
 	if(!insertValidation()) {
 		return;
 	}
 	
+	// 도메인명 중복 검사	
 	if(!duplicateNameCheck(duplicateNameCheckData)){
 		return;
 	}
 		
+	// 도메인 분류명 중복 검사
 	let domainTypeName = $("#domainTypeNm").val().trim();
 	duplicateDomainTypeName(domainTypeName,type);	
 }
@@ -549,7 +575,7 @@ function insertDomain() {
 				$("#cancelButton").click();
 				$("#cancelButton2").click();
 				dataTable.destroy();
-				searchList('','',7);
+				searchList('','',7); // 방금 저장된 도메인이 최 상단에 나올수 있게 정렬순서 지정
 			} else {
 				alertMessage(danger,dangerInsertDomain,"danger");
 				$("#cancelButton").click();
@@ -617,7 +643,7 @@ function updateDomain() {
 				$("#cancelButton").click();
 				$("#cancelButton2").click();
 				dataTable.destroy();
-				searchList('','',7);
+				searchList('','',7); // 방금 저장된 도메인이 최 상단에 나올수 있게 정렬순서 지정
 			} else {
 				alertMessage(danger,dangerUpdateDomain,"danger");
 				$("#cancelButton").click();
