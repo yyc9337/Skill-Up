@@ -237,5 +237,37 @@ td{
 		</div>
 	</div>
 	<!-- Modal End -->
+	<!-- Modal2 Start -->
+	<div id="modal2" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+					<div class="modal-body">
+                                	<table class="modalTable table no-footer dataTable" id="domainTypeTable" style="width: 100%; font-size: 12px;">
+					                    <thead>
+						                    <tr>
+						                        <th width="10%" id="orderId">ID</th>
+						                        <th width="25%"><spring:message code="domain.domainName"/></th>
+						                        <th width="25%"><spring:message code="domain.domainTypeName"/></th>
+						                        <th width="20%"><spring:message code="domain.dataType"/></th>
+						                        <th width="10%"><spring:message code="domain.dataLength"/></th>
+						                        <th width="10%"><spring:message code="domain.decimalLength"/></th>
+						                    </tr>
+					                    </thead>
+					                </table>
+						<div class="form-group row">
+							<div class="swal2-icon swal2-warning swal2-animate-warning-icon" style="width: 9%; text-align: center;"></div>
+							<h2 class="swal2-title" id="domainTypeNmListTitle" style="width: 100%; text-align: center;">제목1</h2>
+							<div id="swal2-content" style="width: 100%; text-align: center;"><spring:message code="domain.registDupConfirmMessage"/></div>
+						</div>
+					</div>
+					<div class="modal-footer" style="text-align: center; display: block;">
+						<button type="button" id="saveButton2" class="btn bg-teal" onclick="insertDomain();"><spring:message code="common.modalYes"/></button>
+						<button type="button" id="updateButton2" class="btn bg-teal" onclick="updateDomain();"><spring:message code="common.modalYes"/></button>
+						<button type="button" id="cancelButton2" class="btn btn-danger" data-dismiss="modal"><spring:message code="common.modalNo"/></button>
+					</div>
+			</div>
+		</div>
+	</div>   
+	<!-- Modal2 End -->
 
 <!-- /main content -->

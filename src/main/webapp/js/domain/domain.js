@@ -7,13 +7,15 @@ $(document).ready(function () {
 	categorySelect();
 	searchList();
 	
+	// ENTER 입력시 searchButton이 click되게 함
 	$("#keyword").keydown(function(key) {
 		if (key.keyCode == 13) {
 			$("#searchButton").trigger('click');
 		}
 
 	});
-
+	
+	// 미완성 한글 및 특수문자는 입력할 수 없게 함
 	$("#domainTypeNm").on("focusout", function() {
         var x = $(this).val();
         if (x.length > 0) {
@@ -27,8 +29,10 @@ $(document).ready(function () {
     });
 });
 
+
 $('html').click(function(e) {
 	
+	// modal2가 열려있을때 기존에 열려있던 modal의 zIndex 수정을 통해 modal2가 최상단에 보일수 있게 함	
 	if($("#modal2").hasClass("show") === true) {
 		document.getElementById("modal").style.zIndex = 1040;
 	} else {
@@ -91,8 +95,8 @@ function categorySelect() {
         contentType : "application/json",
         type : "GET",
         success : function(data){
-			for(var i = 0; i < data.length; i++) {
-				
+			//for(var i = 0; i < data.length; i++) {
+			for(let i in data) {
 					let option = $("<option>");
 					$(option).val('domainNm').text(data[i].columnComment);
 					$("#searchType").append($(option));
@@ -114,7 +118,8 @@ function dataTypeSelect() {
 		async : false,
         success : function(data){
 			$('#dataType').children('option:not(:first)').remove();
-			for(var i = 0; i < data.data.length; i++) {
+			//for(var i = 0; i < data.data.length; i++) {
+			for(let i in data.data) {
 					let option  = $("<option>");
 					$(option).val(data.data[i].cdNm).text(data.data[i].cdNm);
 					$("#dataType").append($(option));		
@@ -141,7 +146,7 @@ function searchList(searchType, keyword, orderNumber) {
 		order = 'desc'
 	}
 	
-	
+
 	//sAjaxSource 를 사용하면 기본적인 DataTable에 사용되는 옵션들을 객체로 가지고 감. 서버의 DomainVO 객체 확인하기
 	$("#domainTable").DataTable({	
 	  	processing: true, 
@@ -581,7 +586,6 @@ function deleteDomain(domainSeq) {
 
 //수정 여부
 function updateConfirm() {
-	
 	checkConfirm(modalUpdateHeader,updateConfirmMessage,'updateDomain();');
 }
 
@@ -619,6 +623,7 @@ function domainNameAutoCreate(domainTypeNm, dataType, dataLen, dcmlLen){
 	if(dataType == 'VARCHAR') {
 		dataType = 'VC';
 	}
+	
 	
 	if(dataLen == '' && dcmlLen == '') {
 		$("#modal #domainNm").val(domainTypeNm.trim() + dataType);
