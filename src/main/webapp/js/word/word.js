@@ -14,13 +14,11 @@ $(document).ready(function () {
             $(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
         }
     });
-	 $("input[name=wordEngNm]").keyup(function(event){
-		//방향키 입력을 제외하고
-        if (!(event.keyCode >=37 && event.keyCode<=40)) {
-            var inputVal = $(this).val();
-            //자동 공백처리
-            $(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
-        }   
+    //[민년] 단어약어명 자동 입력 기능
+	 $("input[name=wordAbbr]").focus(function(event){
+			var wordENm = $("#wordEngNm").val();
+            $(this).val(wordENm.toUpperCase());
+        
     });
     $("input[name=wordEngNm]").keyup(function(event){
 		//방향키 입력을 제외하고
