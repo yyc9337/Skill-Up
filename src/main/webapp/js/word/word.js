@@ -45,38 +45,39 @@ $(window).on('load', function() {
 });
 
 //검색 SelectBox 초기화
+//data.data해야함
 function categorySelect() {
     $.ajax({
         url : contextPath +"/word/searchType",
         contentType : "application/json",
         type : "GET",
         success : function(data){         
-            for(var i = 0; i < data.length; i++) {
-                if(data[i].columnName == 'WORD_NM') {
+            for(var i = 0; i < data.data.length; i++) {
+                if(data.data[i].columnName == 'WORD_NM') {
                     var option  = $("<option>");
                     $(option).val('wordNm').text('단어명');
                     $("#searchType").append($(option));
                 }
 
-                if(data[i].columnName == 'WORD_ABBR') {
+                if(data.data[i].columnName == 'WORD_ABBR') {
                     var option  = $("<option>");
                     $(option).val('wordAbbr').text('단어 영문 약어명');
                     $("#searchType").append($(option));
                 }
 
-                if(data[i].columnName == 'WORD_ENG_NM') {
+                if(data.data[i].columnName == 'WORD_ENG_NM') {
                     var option  = $("<option>");
                     $(option).val('wordEngNm').text('단어 영문명');
                     $("#searchType").append($(option));
                 }
 
-                if(data[i].columnName == 'WORD_DSCRPT') {
+                if(data.data[i].columnName == 'WORD_DSCRPT') {
                     var option  = $("<option>");
                     $(option).val('wordDscrpt').text('단어 설명');
                     $("#searchType").append($(option));
                 }
 
-                if(data[i].columnName == 'SYNM_LIST') {
+                if(data.data[i].columnName == 'SYNM_LIST') {
                     var option  = $("<option>");
                     $(option).val('synmList').text('이음동의어');
                     $("#searchType").append($(option));
@@ -280,14 +281,14 @@ function openModal(type, wordSeq) {
             data : sendData,
             async : false,
             success : function(data){
-                $("#insert_form #wordSeq").val(data.wordSeq);
-                $("#insert_form #wordNm").val(data.wordNm);
-                $("#insert_form #wordAbbr").val(data.wordAbbr);
-                $("#insert_form #wordEngNm").val(data.wordEngNm);
+                $("#insert_form #wordSeq").val(data.data.wordSeq);
+                $("#insert_form #wordNm").val(data.data.wordNm);
+                $("#insert_form #wordAbbr").val(data.data.wordAbbr);
+                $("#insert_form #wordEngNm").val(data.data.wordEngNm);
                 if(data.wordDscrpt != null) {
-					$("#insert_form #wordDscrpt").val(data.wordDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
+					$("#insert_form #wordDscrpt").val(data.data.wordDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
 				}
-                $("#insert_form #synmList").val(data.synmList);
+                $("#insert_form #synmList").val(data.data.synmList);
             }
         });
     }
@@ -481,8 +482,8 @@ function duplicationValidation2(step){
 	      data: JSON.stringify(param),
 	      contentType: 'application/json; charset=utf-8',
 	      success: function (data) {
-	        insertStatusControl(step, data);
-			if (data.length == 0) {
+	        insertStatusControl(step, data.data);
+			if (data.data.length == 0) {
 				$(tableId).parent().hide()
 			} else {
 				let dataTable = $(tableId).DataTable();
@@ -490,7 +491,7 @@ function duplicationValidation2(step){
 				let modalTable= DatatablesCustom.order(tableId, option, 0);
 				$(tableId).parent().show();
 				modalTable.clear();
-				modalTable.rows.add(data).draw();
+				modalTable.rows.add(data.data).draw();
 			}
 	      },
 	    });
@@ -729,7 +730,7 @@ function insertWord() {
         type : "POST",
         data : JSON.stringify(sendData),
         success : function(data){
-            if(data==1) {
+            if(data.data==1) {
                 alertMessage("성공!","단어 등록 신청이 완료되었습니다.","success");
                 $("#cancelButton").click();
                 dataTable.destroy();
@@ -761,7 +762,7 @@ function updateWord() {
         type : "POST",
         data : JSON.stringify(sendData),
         success : function(data){
-            if(data==1) {
+            if(data.data==1) {
                 alertMessage("성공!","단어 수정이 완료되었습니다.","success");
                 $("#cancelButton").click();
                 dataTable.destroy();
@@ -794,7 +795,7 @@ function deleteWord(wordSeq) {
         data : JSON.stringify(sendData),
         async : false,
         success : function(data){
-            if(data==1) {
+            if(data.data==1) {
                 alertMessage("성공!","해당 단어가 삭제되었습니다.","success");
                 $("#cancelButton").click();
                 dataTable.destroy();

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.surfinn.glzza.service.WordService;
+import com.surfinn.glzza.utility.SuccessResponse;
 import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.WordVO;
 
@@ -30,36 +31,35 @@ public class WordController {
     // 단어 타입 검색
     @GetMapping("/searchType")
     @ResponseBody
-    public List<WordVO> searchType(){
-        List<WordVO> list = wordService.searchType();
-        return list;
+    public SuccessResponse<List<WordVO>> searchType(){
+        return new SuccessResponse<>(wordService.searchType());
     }
 
     // 단어 상세보기
     @GetMapping("/select")
     @ResponseBody
-    public WordVO selectWord(WordVO wordVO) {
-        return wordService.selectWord(wordVO);
+    public SuccessResponse<WordVO> selectWord(WordVO wordVO) {
+        return new SuccessResponse<>(wordService.selectWord(wordVO));
     }
 
     // 단어 등록
     @PostMapping("/insert")
     @ResponseBody
-    public int insertWord(@RequestBody WordVO wordVO){
-        return wordService.insertWord(wordVO);
+    public SuccessResponse<Integer> insertWord(@RequestBody WordVO wordVO){
+        return new SuccessResponse<>(wordService.insertWord(wordVO));
     }
 
     // 단어 삭제
     @PostMapping("/delete")
     @ResponseBody
-    public int deleteWord(@RequestBody WordVO wordVO){
-        return wordService.deleteWord(wordVO);
+    public SuccessResponse<Integer> deleteWord(@RequestBody WordVO wordVO){
+        return new SuccessResponse<>(wordService.deleteWord(wordVO));
     }
     
     @PostMapping("/update")
     @ResponseBody
-    public int updateWord(@RequestBody WordVO wordVO) {
-    	return wordService.updateWord(wordVO);
+    public SuccessResponse<Integer> updateWord(@RequestBody WordVO wordVO) {
+    	return new SuccessResponse<>(wordService.updateWord(wordVO));
     }
 
     // 단어(단어명, 단어영문약어명, 단어영문명, 이음동의어) 중복체크
@@ -72,9 +72,8 @@ public class WordController {
     // [하늘] 단어 입력 프로세스 1 : 단어명/단어영문명 중복체크
     @PostMapping("/nameDuplicationCheck")
     @ResponseBody
-    public List<WordVO> nameDuplicationCheck(@RequestBody WordVO wordVO){
-        List<WordVO> list = wordService.nameDuplicationCheck(wordVO);
-        return list;
+    public SuccessResponse<List<WordVO>> nameDuplicationCheck(@RequestBody WordVO wordVO){
+        return new SuccessResponse<>(wordService.nameDuplicationCheck(wordVO));
     } 
     
     // [하늘] 단어 입력 프로세스 2 : 단어영문약어명 중복체크
