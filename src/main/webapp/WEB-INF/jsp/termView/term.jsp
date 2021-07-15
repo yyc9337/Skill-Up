@@ -192,7 +192,7 @@ td{
 								<div class="col-sm-12">
 									<label><spring:message code="domain.domainName"/><text class="text-danger">*</text></label>
 									<select class="form-control" aria-hidden="true" name="domainSeq" id="domainSeq">
-										<option value="nonSelected" selected>도메인 선택</option>
+										<option value="nonSelected" selected><spring:message code="domain.domainSelect"/></option>
 									</select>
 									<span style="margin-left:6px;" class="form-text text-muted" id="domainDetail"></span>
 								</div>
