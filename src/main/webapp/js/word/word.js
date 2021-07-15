@@ -8,18 +8,29 @@ $(document).ready(function () {
     $("input[name=wordAbbr]").keyup(function(event){
 	//keyCode(ASCII코드) 값 처리
         if (!(event.keyCode >=37 && event.keyCode<=40)) {
+			//입력된값 this
             var inputVal = $(this).val().toUpperCase();
             // toUpperCase 대문자로 변경
             $(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
         }
     });
-
-    $("input[name=wordEngNm]").keyup(function(event){
+	 $("input[name=wordEngNm]").keyup(function(event){
+		//방향키 입력을 제외하고
         if (!(event.keyCode >=37 && event.keyCode<=40)) {
             var inputVal = $(this).val();
+            //자동 공백처리
+            $(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
+        }   
+    });
+    $("input[name=wordEngNm]").keyup(function(event){
+		//방향키 입력을 제외하고
+        if (!(event.keyCode >=37 && event.keyCode<=40)) {
+            var inputVal = $(this).val();
+            //자동 공백처리
             $(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
         }
     });
+    
 });
 
 $(window).on('load', function() {
@@ -53,11 +64,10 @@ function categorySelect() {
         success : function(data){         
             for(var i = 0; i < data.data.length; i++) {
 				var ColumnName = data.data[i].columnName.toLowerCase();
-				var ColumnComment = data.data[i].columnComment;
 				var a = ColumnName.indexOf("_");
-				var ColumnNameOpt = ColumnName.substring(0,a) + ColumnName.toUpperCase().charAt(a+1) + ColumnName.substring(a+1);
+				var ColumnNameOpt = ColumnName.substring(0,a) + ColumnName.toUpperCase().charAt(a+1) + ColumnName.substring(a+2);
 				var option  = $("<option>");
-                $(option).val(ColumnNameOpt).text(ColumnComment);
+                $(option).val(ColumnNameOpt).text(data.data[i].columnComment);
                 $("#searchType").append($(option));
             }
         }
@@ -78,7 +88,7 @@ function searchList(searchType, keyword, orderNumber) {
     
     //Sorting 하기 위한 컬럼들 서버로 가지고감
     var columns = ['WORD_SEQ','WORD_NM','WORD_ABBR','WORD_ENG_NM', 'WORD_DSCRPT', 'SYNM_LIST'];
-
+	//입력 파라미터
     var param = {
 			"searchType" : searchType,
 			"keyword" : keyword
@@ -138,19 +148,21 @@ function searchList(searchType, keyword, orderNumber) {
     $('#wordTable tbody').on('dblclick', 'tr', function () {
 		// table을 DataTable로 생성
         let table = $("#wordTable").DataTable();
-		
+		// table
         var rowData = table.row( this ).data();
 
 		if(rowData != undefined) {
+			//Modal 실행
         	$("#newButton").click();
+        	//실행된 Modal에 update로 변수 전달
         	openModal('update', rowData.wordSeq);
         }
     });
-
+	// 카테고리 변경시 마우스 커서가 keyword창으로 전달됨
     $("#searchType").change(function () {
         $("#keyword").focus();
     });
-    
+    // Table 높이 580px로 고정
     let dataTableHeight = document.getElementsByClassName('dataTables_scrollBody')[0];
 	dataTableHeight.style.minHeight = '580px';
 }
@@ -160,11 +172,12 @@ function searchWord() {
     let searchType = $("#searchType").val();
     let keyword = $("#keyword").val();
     let table = $("#wordTable").DataTable();
-
+	//검색 로직
     if(keyword == '') {
         if($("#searchType").val() == 'all') {
             table.destroy();
             searchList();
+            
         } else {
             alertMessage("경고!","검색할 키워드를 입력해주세요.","warning");
             return false;
@@ -363,8 +376,10 @@ function duplicationValidation(step){
 	      success: function (data) {
 	        insertStatusControl(step, data.data);
 			if (data.data.length == 0) {
+				//tableId 상위 태그 숨기기 
 				$(tableId).parent().hide()
 			} else {
+				//tableId에서 Datatable 생성
 				let dataTable = $(tableId).DataTable();
 			    dataTable.destroy();
 				let modalTable= DatatablesCustom.order(tableId, option, 0);
