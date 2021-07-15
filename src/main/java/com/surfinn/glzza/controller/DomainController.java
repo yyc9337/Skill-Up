@@ -31,6 +31,13 @@ public class DomainController {
         return new SuccessResponse<>(domainService.searchType());
     }
 	
+	@PostMapping("/list")
+    @ResponseBody
+    public Paging selectDomainList(DomainVO domainVO, Paging paging) { 
+        return domainService.selectDomainList(domainVO, paging); 
+    }
+
+	
     @PostMapping("/insert")
     @ResponseBody
     public SuccessResponse<Integer> insertDomain(@RequestBody DomainVO domainVO){
