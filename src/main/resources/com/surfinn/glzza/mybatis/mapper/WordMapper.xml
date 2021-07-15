@@ -205,9 +205,9 @@
         SET
             USE_YN = 'Y',
             UPD_ID = #{updId},
-            UPD_DT = NOW()
+            UPD_DT = NOW(),
             SYNM_LIST = #{synmList},
-			WORD_DSCRPT = #{wordDscrpt},		
+			WORD_DSCRPT = #{wordDscrpt}		
         WHERE
             WORD_SEQ = #{wordSeq}
     </update>
