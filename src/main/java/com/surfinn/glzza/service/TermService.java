@@ -81,7 +81,7 @@ public class TermService {
         validationTermObject(termVO);
         //setUseYn을 N로 변경, Select시 삭제된적이 있는지 확인하기 위함
         termVO.setUseYn("N");
-        //입력된 데이터가 기존에 작성되고 삭제된 데이터가 있는지 확인
+        //입력된 데이터가 기존에 작성되고 삭제된 적이 있는지 확인
         TermVO temp = termDao.recycleCheck(termVO);
         if(temp != null && !CommonUtil.isEmpty(temp.getTermSeq())){//유효성 검사
         	//만약 1이 반환됐다면 DB성공임으로 true를 리턴 아니라며 false
