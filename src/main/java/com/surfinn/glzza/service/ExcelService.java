@@ -51,19 +51,19 @@ public class ExcelService {
 		String fileNameSplit [] = fileName.split("_");
 		String fileType = fileNameSplit[2];
 		
-		BaseVO paging = new BaseVO();
+		BaseVO baseVO = new BaseVO();
 		TermVO termVO = (TermVO) MapToModelUtil.convertMapToObject(map, new TermVO());
 		
-//		termVO.setIDisplayStart(null);
-//		termVO.setIDisplayLength(null);
-//		termVO.setSearchType(null);
-//		termVO.setKeyword(null);
-//			
-//		List<TermVO> list = termDao.selectTermList(termVO, paging);
-//		
-//		for(int i = 0; i < list.size(); i++) {
-//			list.get(i).setTag("X");
-//		}
+		baseVO.setIDisplayStart(null);
+		baseVO.setIDisplayLength(null);
+		termVO.setSearchType(null);
+		termVO.setKeyword(null);
+			
+		List<TermVO> list = termDao.selectTermList(termVO, baseVO);
+		
+		for(int i = 0; i < list.size(); i++) {
+			list.get(i).setTag("X");
+		}
 		
 		StringBuffer sbData = new StringBuffer();
 		StringBuffer sbHeader = new StringBuffer();
@@ -96,7 +96,7 @@ public class ExcelService {
 		
 		excelExporter.writeHeaderRow(String.valueOf(sbHeader));
 		excelExporter.writeDataRow(String.valueOf(sbData));
-//		excelExporter.writeData(list, fileType);
+		excelExporter.writeData(list, fileType);
 		
 	}
 	

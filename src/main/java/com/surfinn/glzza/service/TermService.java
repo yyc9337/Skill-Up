@@ -37,7 +37,7 @@ public class TermService {
 	private ResourceLoader resourceLoader;
 
     public BaseVO selectTermList(TermVO termVO, BaseVO baseVO){    	
-//    	paging.setRecordsTotal(termDao.selectTotalCountTerm(termVO));
+    	baseVO.setRecordsTotal(termDao.selectTotalCountTerm(termVO));
         String[] columns = new String[]{"TERM_SEQ","TERM_NM","TERM_ABBR","DOMAIN_SEQ","TERM_DSCRPT","UPD_DT"};
         baseVO.setSorting(columns[baseVO.getISortCol_0()]);
         if(baseVO.getISortCol_0()==5){
@@ -56,7 +56,7 @@ public class TermService {
         	}
         }
 
-//        paging.setRecordsFiltered(list.size());
+        baseVO.setRecordsFiltered(list.size());
         baseVO.setData(list);
 		return baseVO;
     }

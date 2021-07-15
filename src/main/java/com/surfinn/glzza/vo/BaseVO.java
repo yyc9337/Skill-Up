@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class BaseVO {
+public class BaseVO extends Paging {
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	protected Integer totalCount = 0;
@@ -47,6 +47,5 @@ public class BaseVO {
 	private String iDisplayStart;
 	private String iDisplayLength;
 	
-	List<?> data;
 
 }
