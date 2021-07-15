@@ -383,11 +383,12 @@ function insertValidation(){
 	        type : "POST",
 			async : false,
 	        success : function(data){	
-				if($("#dataLen").val().length == 0 && data.data[0].dataLenYn == 'Y') {
+				const { dataLenYn, dcmlLenYn } = data.data[0];
+					if($("#dataLen").val().length == 0 && dataLenYn == 'Y') {
 					alertMessage(warning,warningNoDataLength,"warning");
 					$("#dataLen").focus();
 					result = false;
-				} else if(data.data[0].dcmlLenYn == 'Y') {
+				} else if(dcmlLenYn == 'Y') {
 					if($("#dcmlLen").val().length == 0) {
 						alertMessage(warning,warningNoDecimalLength,"warning");
 						$("#dataLen").focus();
@@ -522,6 +523,7 @@ function checkDoaminTypeNameConfirm(type) {
 	duplicateDomainTypeName(domainTypeName,type);	
 }
 
+// 저장 여부
 function saveConfirm() {
 	checkConfirm(modalRegistHeader,registConfirmMessage,'insertDomain();');
 }
@@ -628,7 +630,6 @@ function domainNameAutoCreate(domainTypeNm, dataType, dataLen, dcmlLen){
 	if(dataType == 'VARCHAR') {
 		dataType = 'VC';
 	}
-	
 	
 	if(dataLen == '' && dcmlLen == '') {
 		$("#modal #domainNm").val(domainTypeNm.trim() + dataType);
