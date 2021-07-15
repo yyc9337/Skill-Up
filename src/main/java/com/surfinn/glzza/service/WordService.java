@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.surfinn.glzza.core.CommonConst;
 import com.surfinn.glzza.dao.WordDao;
 import com.surfinn.glzza.utility.CommonUtil;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.WordVO;
 
@@ -19,13 +20,13 @@ public class WordService {
     private WordDao wordDao;
 
     // 단어 리스트
-    public Paging selectWordList(WordVO wordVO, Paging paging){
+    public BaseVO selectWordList(WordVO wordVO, BaseVO base){
         if (wordVO.getColumns() != null){
             wordVO.setSorting(wordVO.getColumns()[wordVO.getISortCol_0()]);
         }
 
-    	paging.setRecordsTotal(wordDao.selectTotalCountWord(wordVO));	
-        List<WordVO> list = wordDao.selectWordList(wordVO, paging); // 리스트 생성
+    	base.setRecordsTotal(wordDao.selectTotalCountWord(wordVO));	
+        List<WordVO> list = wordDao.selectWordList(wordVO, base); // 리스트 생성
         
         
         if(list.size() > 0) {
@@ -36,9 +37,9 @@ public class WordService {
         	}
         }
 
-        paging.setRecordsFiltered(list.size());
-		paging.setData(list);
-		return paging;
+        base.setRecordsFiltered(list.size());
+        base.setData(list);
+		return base;
     }
 
     // 단어 리스트 카운트

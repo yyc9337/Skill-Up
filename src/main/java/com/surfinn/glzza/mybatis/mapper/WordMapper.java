@@ -2,8 +2,7 @@ package com.surfinn.glzza.mybatis.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.surfinn.glzza.vo.DomainVO;
-import com.surfinn.glzza.vo.Paging;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.WordVO;
 
 import java.util.List;
@@ -13,7 +12,7 @@ public interface WordMapper {
 	
 	Integer selectTotalCountWord(WordVO wordVO);
 	
-    List<WordVO> selectWordList(WordVO wordVO, Paging paging);
+    List<WordVO> selectWordList(WordVO wordVO, BaseVO base);
 
     int selectWordListCount(WordVO wordVO);
 

@@ -1,11 +1,15 @@
+//onload 하는 중
 $(document).ready(function () {
     categorySelect();
     searchList();
 
     //한글입력 안되게 처리
+    //keydown(누른다)-keypress(입력된다)-keyup(입력끝)
     $("input[name=wordAbbr]").keyup(function(event){
+	//keyCode(ASCII코드) 값 처리
         if (!(event.keyCode >=37 && event.keyCode<=40)) {
             var inputVal = $(this).val().toUpperCase();
+            // toUpperCase 대문자로 변경
             $(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
         }
     });
@@ -19,8 +23,11 @@ $(document).ready(function () {
 });
 
 $(window).on('load', function() {
+	//keyword에서 검색할려고 창에 글을 입력할 때
     $("#keyword").keydown(function(key) {
+	//keyword에서 ketcode == 13 == enter를 입력했을 때
         if (key.keyCode == 13) {
+	//searchButton이 자동으로 눌림
             $("#searchButton").trigger('click');
         }
     });
@@ -34,17 +41,6 @@ $(window).on('load', function() {
 	$('div.modal-body').find('#wordAbbr').change(function(){
 		$('div.modal-body').find('#wordAbbr').removeClass('valid');
 	});
-
-	/*
-	
-	$('#modalTable1').dataTable( {
-		"createdRow": function( row, data, dataIndex){
-                if( data.fatalExist == "T"){
-                    $(row).addClass('redClass');
-                }
-            }
-	});
-	*/
 
 });
 
@@ -95,16 +91,13 @@ function searchList(searchType, keyword, orderNumber) {
 
     let order = 'asc';
 
-    if(orderNumber == undefined) {
-        orderNumber = 1;
-    }
-
-    if (orderNumber == 1){
+    if (orderNumber == undefined || orderNumber == 1){
+		orderNumber = 1;
         order = 'asc';
     } else {
         order = 'desc';
     }
-
+    
     //Sorting 하기 위한 컬럼들 서버로 가지고감
     var columns = ['WORD_SEQ','WORD_NM','WORD_ABBR','WORD_ENG_NM', 'WORD_DSCRPT', 'SYNM_LIST'];
 
@@ -148,19 +141,26 @@ function searchList(searchType, keyword, orderNumber) {
 			// $(row).find('td:eq(4)').attr('data-toggle', "tooltip");
 
 			//$(row).find('td:eq(4)').attr('title', data["wordSeq"]);
+			// body속성 부여
 			$(row).find('td:eq(4)').attr('data-container', 'body');
+			// wordDscrpt 내용 채우기 - 해당 태그에 속성 부여
 			$(row).find('td:eq(4)').attr('data-content', data["wordDscrpt"]);
 			// $(row).find('td:eq(4)').attr('data-placement', "bottom");
+			// pop업창 띄우기 -  해당 태그에 속성 부여
 			$(row).find('td:eq(4)').attr('data-toggle', "popover");
+			//마우스 포인팅작업  - 해당 태그에 속성 부여
 			$(row).find('td:eq(4)').attr('data-trigger', "hover");
+			
+			// 각 행에 대한 하이라이트 작업 공간
+			
 		}
 	});
 
-
+	// tr요소를 더블클릭했을 때 wordTable 생성
     $('#wordTable tbody').on('dblclick', 'tr', function () {
-
+		// table을 DataTable로 생성
         let table = $("#wordTable").DataTable();
-
+		
         var rowData = table.row( this ).data();
 
 		if(rowData != undefined) {

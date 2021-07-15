@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.surfinn.glzza.service.WordService;
-import com.surfinn.glzza.vo.DomainVO;
-import com.surfinn.glzza.vo.Paging;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.WordVO;
 
 @Controller
@@ -24,8 +23,8 @@ public class WordController {
     // 단어 리스트
     @PostMapping("/list")
     @ResponseBody
-    public Paging selectWordList(WordVO wordVO, Paging paging){
-        return  wordService.selectWordList(wordVO, paging);
+    public BaseVO selectWordList(WordVO wordVO, BaseVO base){
+        return wordService.selectWordList(wordVO, base);
     }
 
     // 단어 타입 검색

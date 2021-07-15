@@ -1,8 +1,8 @@
 package com.surfinn.glzza.dao;
 
 import com.surfinn.glzza.mybatis.mapper.WordMapper;
-import com.surfinn.glzza.vo.DomainVO;
-import com.surfinn.glzza.vo.Paging;
+import com.surfinn.glzza.vo.BaseVO;
+
 import com.surfinn.glzza.vo.WordVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ public class WordDao {
     	  return wordMapper.selectTotalCountWord(wordVO);
     }
 
-    public List<WordVO> selectWordList(WordVO wordVO, Paging paging) {
-        return wordMapper.selectWordList(wordVO, paging);
+    public List<WordVO> selectWordList(WordVO wordVO, BaseVO base) {
+        return wordMapper.selectWordList(wordVO, base);
     }
 
     public int selectWordListCount(WordVO wordVO){
