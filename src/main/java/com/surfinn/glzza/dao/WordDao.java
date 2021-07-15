@@ -41,7 +41,10 @@ public class WordDao {
     public int updateWord(WordVO wordVO){
         return wordMapper.updateWord(wordVO);
     }
-
+   
+    public int revivalWord(WordVO wordVO){
+        return wordMapper.revivalWord(wordVO);
+    }
     public WordVO selectWord(WordVO wordVO){
         return wordMapper.selectWord(wordVO);
     }  

@@ -20,7 +20,14 @@
         FROM
             TB_WORD
         <where>
+        <choose>
+        <when test="wordVO.searchType eq 'DeleteList'">
+        	AND USE_YN = 'N'
+        </when>
+        <otherwise>
             AND USE_YN = 'Y'
+        </otherwise>
+        </choose>
             <!-- 전체 -->
 	        <if test="wordVO.searchType eq 'all'">
 	            AND (WORD_ABBR LIKE CONCAT('%', #{wordVO.keyword}, '%')
@@ -66,7 +73,7 @@
     
      <select id="selectTotalCountWord" parameterType="com.surfinn.glzza.vo.WordVO" resultType="Integer">
 		SELECT COUNT(*) AS RECORDS_TOTAL FROM TB_WORD
-		<where>						
+		<where>					
 			 <if test="searchType eq 'all'">
 	            AND (WORD_ABBR LIKE CONCAT('%', #{keyword}, '%')
 	            OR WORD_NM LIKE CONCAT('%', #{keyword}, '%')
@@ -93,7 +100,14 @@
 	        <if test="searchType eq 'synmList'">
 	            AND SYNM_LIST LIKE CONCAT('%', #{keyword}, '%')
 	        </if>
-	        AND USE_YN = 'Y'
+	   		<choose>
+	    	<when test="searchType eq 'DeleteList'">
+        		AND USE_YN = 'N'
+        	</when>
+      		<otherwise>
+        	    AND USE_YN = 'Y'
+        	</otherwise>
+	    	</choose>    
 		</where>	
 	</select>
 	
@@ -128,7 +142,6 @@
         WORD_DSCRPT,
         SYNM_LIST,
         USE_YN
-
         FROM
         TB_WORD
         <where>
@@ -186,6 +199,19 @@
         WHERE
             WORD_SEQ = #{wordSeq}
     </update>
+    
+    <update id="revivalWord" parameterType="com.surfinn.glzza.vo.WordVO">
+        UPDATE TB_WORD
+        SET
+            USE_YN = 'Y',
+            UPD_ID = #{updId},
+            UPD_DT = NOW()
+            SYNM_LIST = #{synmList},
+			WORD_DSCRPT = #{wordDscrpt},		
+        WHERE
+            WORD_SEQ = #{wordSeq}
+    </update>
+    
 
     <!-- 단어명 단어영문명 중복 목록 선택 -->
     <sql id="selectWordDuplicationListSql">

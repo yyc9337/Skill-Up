@@ -153,7 +153,14 @@ function searchList(searchType, keyword, orderNumber) {
 			//Modal 실행
         	$("#newButton").click();
         	//실행된 Modal에 update로 변수 전달
-        	openModal('update', rowData.wordSeq);
+        	if(searchType == "DeleteList") {
+				openModal('revival', rowData.wordSeq);
+			}
+				else {
+					openModal('update', rowData.wordSeq);
+				}
+        	
+        
         }
     });
 	// 카테고리 변경시 마우스 커서가 keyword창으로 전달됨
@@ -175,7 +182,7 @@ function searchWord() {
         if($("#searchType").val() == 'all') {
             table.destroy();
             searchList();
-            
+        
         } else {
             alertMessage("경고!","검색할 키워드를 입력해주세요.","warning");
             return false;
@@ -189,7 +196,13 @@ function searchWord() {
     //조회 조건을 이용하여 단어 리스트 조회
     searchList(searchType, keyword);
 }
-
+function Delete_History() {
+	let searchType = 'DeleteList';
+	let dataTable = $("#wordTable").DataTable();
+	dataTable.destroy();
+	searchList(searchType);
+	
+}
 //검색 초기화 아이콘 클릭 이벤트
 function resetSearch() {
     $("#searchType").val('all');
@@ -208,6 +221,7 @@ function openModal(type, wordSeq) {
 	//add = 신규등록 , update = 상세보기
     if(type == 'add') {
 		// 신규등록 모달 진입 => stage0 보여줌
+		$("#modal #revivalButton").hide();
         $("#modal #saveButton").show();
         $("#modal #updateButton").hide();
         $("#modal #deleteButton").hide();
@@ -231,7 +245,7 @@ function openModal(type, wordSeq) {
 		$("#wordEngNm").attr('readonly', false);
 		$("#wordAbbr").attr('readonly', false);
 
-    } else if (type == 'update'){
+    } else if (type == 'update' || type == "revival"){
 		
 		$('div.modal-body').children().show();
 		
@@ -242,9 +256,18 @@ function openModal(type, wordSeq) {
 		$('#stage2Helper').hide();
 		$('div.insertWord').hide();
 		
+		//[민년] 복원 기능 추가
 		//버튼 관리
-        $("#modal #deleteButton").show();
-		$("#modal #updateButton").show();
+		if(type == "revival"){
+			$("#modal #revivalButton").show();
+        	$("#modal #deleteButton").hide();
+			$("#modal #updateButton").hide();
+		}
+		else{
+			$("#modal #revivalButton").hide();
+        	$("#modal #deleteButton").show();
+			$("#modal #updateButton").show();
+		}
         $("#modal #saveButton").hide();
         $("#modal .modal-title").html('단어 상세보기');
         $("#insert_form input[name=wordSeq]").val(wordSeq);
@@ -260,7 +283,8 @@ function openModal(type, wordSeq) {
 
         let sendData = {
             "wordSeq" : wordSeq
-        }
+    }
+        
 
         $.ajax({
             url : contextPath +"/word/select",
@@ -590,6 +614,42 @@ function updateConfirm() {
         return;
     }
 	checkConfirm('단어 수정', '단어의 수정사항을 저장하시겠습니까??', 'updateWord();');
+}
+//[민년] 복원 여부 Confirm 메세지
+function revivalConfirm() {
+    if (!insertValidation()){
+        return;
+    }
+	checkConfirm('단어 복원', '단어를 재사용하시겠습니까??', 'revivalWord();');
+}
+
+//[민년] 복원 기능 추가
+function revivalWord() {
+
+    let sendData = {
+        "wordSeq" : $("#wordSeq").val(),
+        "synmList" : $("#synmList").val(),
+        "wordDscrpt" : $("#wordDscrpt").val()
+    };
+    let dataTable = $("#wordTable").DataTable();   
+
+    $.ajax({
+        url : contextPath +"/word/revival",
+        contentType : "application/json",
+        type : "POST",
+        data : JSON.stringify(sendData),
+        success : function(data){
+            if(data.data==1) {
+                alertMessage("성공!","단어 복원이 완료되었습니다.","success");
+                $("#cancelButton").click();
+                dataTable.destroy();
+                searchList('','',0);
+            } else {
+                alertMessage("경고!","실패하였습니다. 관리자에게 문의해주세요.","danger");
+                $("#cancelButton").click();
+            }
+        }
+    });
 }
 
 

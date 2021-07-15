@@ -61,9 +61,14 @@ public class WordController {
     public SuccessResponse<Integer> updateWord(@RequestBody WordVO wordVO) {
     	return new SuccessResponse<>(wordService.updateWord(wordVO));
     }
+    
+    @PostMapping("/revival")
+    @ResponseBody
+    public SuccessResponse<Integer> revivalWord(@RequestBody WordVO wordVO) {
+    	return new SuccessResponse<>(wordService.revivalWord(wordVO));
+    }
 
-
-    // [하늘] 단어 입력 프로세스 1 : 단어명/단어영문명/이음동의어 중복체크
+    // [하늘] 단어 입력 프로세스 : 단어명/단어영문명/이음동의어 중복체크
     @PostMapping("/nameDuplicationCheck")
     @ResponseBody
     public SuccessResponse<List<WordVO>> nameDuplicationCheck(@RequestBody WordVO wordVO){

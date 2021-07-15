@@ -148,8 +148,10 @@
 								</span>
 							</div>
 						</div>
+						
 						<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="button" onclick="excelDownload_doc();" style="margin-left: auto; margin-right: 5px;"><spring:message code="common.excelButton"/></button>
 <%--					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="" onclick="excelDownload_exerd();" style="margin-right: 5px;"><spring:message code="common.exerdButton"/></button>  --%>
+						<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="historyButton" onclick="Delete_History();" style="margin-right: 5px;"><spring:message code="word.wordDeleteList"/></button>
 						<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" data-toggle="modal" data-target="#modal" id="newButton" onclick="openModal('add');" style="margin-right: 30px;"><spring:message code="word.modalRegistHeader"/></button>
 						<!--  -->
 				</div>
@@ -278,6 +280,7 @@
                     <!-- 버튼 영역 -->
                     <div class="modal-footer">
                         <button type="button" id="saveButton" class="btn bg-teal" onclick="saveConfirm();"><spring:message code="word.wordsave"/></button>
+                        <button type="button" id="revivalButton" class="btn bg-teal" onclick="revivalConfirm();"><spring:message code="word.wordrevival"/></button>
                         <button type="button" id="updateButton" class="btn bg-teal" onclick="updateConfirm();"><spring:message code="word.wordupdate"/></button>
                         <button type="button" id="deleteButton" class="btn btn-danger" onclick="deleteConfirm();"><spring:message code="word.worddelete"/></button>
                         <button type="button" id="cancelButton" class="btn btn-outline" data-dismiss="modal"><spring:message code="word.wordcancel"/></button>

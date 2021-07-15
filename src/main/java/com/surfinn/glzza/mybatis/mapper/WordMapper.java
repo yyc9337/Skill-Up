@@ -27,6 +27,9 @@ public interface WordMapper {
     
     // 단어 업데이트
     int updateWord(WordVO wordVO);
+    
+   
+    int revivalWord(WordVO wordVO);
 
     // 상세보기 찾기
     WordVO selectWord(WordVO wordVO);

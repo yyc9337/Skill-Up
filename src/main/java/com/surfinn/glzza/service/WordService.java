@@ -78,6 +78,11 @@ public class WordService {
         return wordDao.updateWord(wordVO);
     }
     
+    public int revivalWord(WordVO wordVO){
+        wordVO.setUpdId(CommonConst.UPD_ID);
+        return wordDao.revivalWord(wordVO);
+    }
+    
     public WordVO selectWord(WordVO wordVO){
         return wordDao.selectWord(wordVO);
     }
