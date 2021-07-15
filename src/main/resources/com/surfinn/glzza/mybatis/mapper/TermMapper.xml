@@ -36,14 +36,14 @@
 			<if test="termVO.searchType eq 'termDscrpt'">
 				AND TERM_DSCRPT LIKE CONCAT('%', #{termVO.keyword}, '%')
 			</if>
-			<if test="termVO.sorting != null">
-				ORDER BY ${termVO.sorting}
+			<if test="baseVO.sorting != null">
+				ORDER BY ${baseVO.sorting}
 			</if>
-			<if test = "termVO.sorting != null and termVO.sSortDir_0 != null" >
-				${termVO.sSortDir_0}
+			<if test = "baseVO.sorting != null and baseVO.sSortDir_0 != null" >
+				${baseVO.sSortDir_0}
 			</if>
-			<if test="termVO.iDisplayStart != null and termVO.iDisplayLength != null">
-				LIMIT ${termVO.iDisplayStart} , ${termVO.iDisplayLength}
+			<if test="baseVO.iDisplayStart != null and baseVO.iDisplayLength != null">
+				LIMIT ${baseVO.iDisplayStart} , ${baseVO.iDisplayLength}
 			</if>
 		</where>
 		

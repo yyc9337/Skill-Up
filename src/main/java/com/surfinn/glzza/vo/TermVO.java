@@ -3,7 +3,7 @@ package com.surfinn.glzza.vo;
 import lombok.Data;
 
 @Data
-public class TermVO extends BaseVO {
+public class TermVO {
     private int termSeq;
     private int domainSeq;
     private String termNm;

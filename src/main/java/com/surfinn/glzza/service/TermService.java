@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.surfinn.glzza.dao.TermDao;
 import com.surfinn.glzza.exception.GlzzaBadRequestException;
 import com.surfinn.glzza.utility.CommonUtil;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
@@ -35,17 +36,17 @@ public class TermService {
     @Autowired
 	private ResourceLoader resourceLoader;
 
-    public Paging selectTermList(TermVO termVO, Paging paging){    	
-    	paging.setRecordsTotal(termDao.selectTotalCountTerm(termVO));
+    public BaseVO selectTermList(TermVO termVO, BaseVO baseVO){    	
+//    	paging.setRecordsTotal(termDao.selectTotalCountTerm(termVO));
         String[] columns = new String[]{"TERM_SEQ","TERM_NM","TERM_ABBR","DOMAIN_SEQ","TERM_DSCRPT","UPD_DT"};
-        termVO.setSorting(columns[termVO.getISortCol_0()]);
-        if(termVO.getISortCol_0()==5){
-            termVO.setSSortDir_0("DESC");
+        baseVO.setSorting(columns[baseVO.getISortCol_0()]);
+        if(baseVO.getISortCol_0()==5){
+        	baseVO.setSSortDir_0("DESC");
         }else{
-            termVO.setSSortDir_0(termVO.getSSortDir_0().toUpperCase());
+        	baseVO.setSSortDir_0(baseVO.getSSortDir_0().toUpperCase());
         }
 
-        List<TermVO> list = termDao.selectTermList(termVO, paging);
+        List<TermVO> list = termDao.selectTermList(termVO, baseVO);
         
         if(list.size() > 0) {
         	for(int i = 0; i < list.size(); i++) {
@@ -55,9 +56,9 @@ public class TermService {
         	}
         }
 
-        paging.setRecordsFiltered(list.size());
-		paging.setData(list);
-		return paging;
+//        paging.setRecordsFiltered(list.size());
+        baseVO.setData(list);
+		return baseVO;
     }
 
     public List<TermVO> selectSearchType(){

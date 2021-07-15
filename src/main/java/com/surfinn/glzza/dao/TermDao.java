@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.surfinn.glzza.mybatis.mapper.TermMapper;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
@@ -19,8 +20,8 @@ public class TermDao {
 	   return termMapper.selectTotalCountTerm(termVO);
    }
 
-    public List<TermVO> selectTermList(TermVO termVO, Paging paging){
-        return termMapper.selectTermList(termVO, paging);
+    public List<TermVO> selectTermList(TermVO termVO, BaseVO baseVO){
+        return termMapper.selectTermList(termVO, baseVO);
     }
 
     public List<TermVO> selectSearchType(){

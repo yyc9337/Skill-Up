@@ -2,6 +2,7 @@ package com.surfinn.glzza.controller;
 
 import com.surfinn.glzza.service.TermService;
 import com.surfinn.glzza.utility.SuccessResponse;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
@@ -23,8 +24,8 @@ public class TermController {
     TermService termService;
 
     @PostMapping("/list")
-    public Paging selectTermList(TermVO termVO, Paging paging){
-        return termService.selectTermList(termVO, paging);
+    public BaseVO selectTermList(TermVO termVO, BaseVO baseVO){
+        return termService.selectTermList(termVO, baseVO);
   }
 
 //    public SuccessResponse<List<TermVO>> selectTermList(@RequestBody TermVO termVO, Paging paging){

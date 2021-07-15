@@ -1,5 +1,7 @@
 package com.surfinn.glzza.vo;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -44,5 +46,7 @@ public class BaseVO {
 	private String sorting;
 	private String iDisplayStart;
 	private String iDisplayLength;
+	
+	List<?> data;
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
@@ -11,7 +12,7 @@ import com.surfinn.glzza.vo.TermVO;
 public interface TermMapper {
     Integer selectTotalCountTerm(TermVO termVO);
 
-    List<TermVO> selectTermList(TermVO termVO, Paging paging);
+    List<TermVO> selectTermList(TermVO termVO, BaseVO baseVO);
 
     List<TermVO> selectSearchType();
 

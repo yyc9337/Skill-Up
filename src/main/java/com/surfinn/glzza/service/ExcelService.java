@@ -12,6 +12,7 @@ import com.surfinn.glzza.dao.TermDao;
 import com.surfinn.glzza.dao.WordDao;
 import com.surfinn.glzza.utility.CommonUtil;
 import com.surfinn.glzza.utility.MapToModelUtil;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.DomainVO;
 import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
@@ -50,19 +51,19 @@ public class ExcelService {
 		String fileNameSplit [] = fileName.split("_");
 		String fileType = fileNameSplit[2];
 		
-		Paging paging = new Paging();
+		BaseVO paging = new BaseVO();
 		TermVO termVO = (TermVO) MapToModelUtil.convertMapToObject(map, new TermVO());
 		
-		termVO.setIDisplayStart(null);
-		termVO.setIDisplayLength(null);
-		termVO.setSearchType(null);
-		termVO.setKeyword(null);
-			
-		List<TermVO> list = termDao.selectTermList(termVO, paging);
-		
-		for(int i = 0; i < list.size(); i++) {
-			list.get(i).setTag("X");
-		}
+//		termVO.setIDisplayStart(null);
+//		termVO.setIDisplayLength(null);
+//		termVO.setSearchType(null);
+//		termVO.setKeyword(null);
+//			
+//		List<TermVO> list = termDao.selectTermList(termVO, paging);
+//		
+//		for(int i = 0; i < list.size(); i++) {
+//			list.get(i).setTag("X");
+//		}
 		
 		StringBuffer sbData = new StringBuffer();
 		StringBuffer sbHeader = new StringBuffer();
@@ -95,7 +96,7 @@ public class ExcelService {
 		
 		excelExporter.writeHeaderRow(String.valueOf(sbHeader));
 		excelExporter.writeDataRow(String.valueOf(sbData));
-		excelExporter.writeData(list, fileType);
+//		excelExporter.writeData(list, fileType);
 		
 	}
 	
