@@ -32,31 +32,37 @@ public class TermController {
 //        return new SuccessResponse<>(termService.selectTermList(termVO, paging));
 //    }
 
+    //카테고리 타입 검색 후 리스트로 반환
     @GetMapping("/searchType")
     public SuccessResponse<List<TermVO>> selectSearchType(){
         return new SuccessResponse<>(termService.selectSearchType());
     }
 
+    //용어 생성
     @PostMapping("/create")
     public SuccessResponse<Boolean> insertTerm(@RequestBody TermVO termVO){
         return new SuccessResponse<>(termService.insertTerm(termVO));
     }
 
+    //유효성 검사
     @PostMapping("/duplicateCheck")
     public SuccessResponse<Boolean> duplicateCheck(@RequestBody TermVO termVO){
         return new SuccessResponse<>(termService.duplicateCheck(termVO));
     }
 
+    //검색
     @PostMapping("/search")
     public SuccessResponse<TermVO> searchTermBySeq(@RequestBody TermVO termVO){
         return new SuccessResponse<>(termService.searchTermBySeq(termVO));
     }
 
+    //삭제
     @DeleteMapping("/delete")
     public SuccessResponse<Boolean> deleteTerm(@RequestBody TermVO termVO){
         return new SuccessResponse<>(termService.deleteTerm(termVO));
     }
 
+    //업데이트
     @PutMapping("/update")
     public SuccessResponse<Boolean> updateTerm(@RequestBody TermVO termVO){
         return new SuccessResponse<>(termService.updateTerm(termVO));
