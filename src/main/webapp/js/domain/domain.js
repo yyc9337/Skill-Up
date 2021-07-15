@@ -91,20 +91,20 @@ function categorySelect() {
         contentType : "application/json",
         type : "GET",
         success : function(data){
-			for(var i = 0; i < data.length; i++) {
-				if(data[i].columnName == 'DOMAIN_NM') {
+			for(var i = 0; i < data.data.length; i++) {
+				if(data.data[i].columnName == 'DOMAIN_NM') {
 					let option  = $("<option>");
 					$(option).val('domainNm').text(domainNameLang);
 					$("#searchType").append($(option));
 				}
 				
-				if(data[i].columnName == 'DOMAIN_TYPE_NM') {
+				if(data.data[i].columnName == 'DOMAIN_TYPE_NM') {
 					let option  = $("<option>");
 					$(option).val('domainTypeNm').text(domainTypeNameLang);
 					$("#searchType").append($(option));
 				}
 				
-				if(data[i].columnName == 'DOMAIN_DSCRPT') {
+				if(data.data[i].columnName == 'DOMAIN_DSCRPT') {
 					let option  = $("<option>");
 					$(option).val('domainDscrpt').text(domainDescriptionLang);
 					$("#searchType").append($(option));
@@ -330,16 +330,15 @@ function openModal(type, domainSeq) {
 	        data : sendData,
 			async : false,
 	        success : function(data){
-				console.log("data:", data);
-				$("#insert_form input[name=domainTypeNm]").val(data.domainTypeNm);
-				$("#insert_form input[name=domainNm]").val(data.domainNm);
-				$("#insert_form #dataType").val(data.dataType);
-				$("#insert_form input[name=dataLen]").val(data.dataLen);
-				if(data.domainDscrpt != null) {
-					$("#insert_form #domainDscrpt").val(data.domainDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
+				$("#insert_form input[name=domainTypeNm]").val(data.data.domainTypeNm);
+				$("#insert_form input[name=domainNm]").val(data.data.domainNm);
+				$("#insert_form #dataType").val(data.data.dataType);
+				$("#insert_form input[name=dataLen]").val(data.data.dataLen);
+				if(data.data.domainDscrpt != null) {
+					$("#insert_form #domainDscrpt").val(data.data.domainDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
 				}
-				$("#insert_form input[name=dcmlLen]").val(data.dcmlLen);
-				readOnlyOption(data.dataType);
+				$("#insert_form input[name=dcmlLen]").val(data.data.dcmlLen);
+				readOnlyOption(data.data.dataType);
 	        }
 	    });
 		
@@ -430,7 +429,7 @@ function duplicateNameCheck(sendData) {
         data : sendData,
 		async : false,
         success : function(data){
-			if(data >= 1) {
+			if(data.data >= 1) {
 				alertMessage(warning,warningExistDomainName,"warning");
 				//$("#cancelButton2").click();
 				$("#modal2").removeClass("show");
@@ -465,14 +464,14 @@ function duplicateDomainTypeName(domainTypeNm, type) {
 			
 			//type = 1일경우 신규 등록, 2일경우 수정
 			
-			if(data.length == 0) {
+			if(data.data.length == 0) {
 				//중복 된 리스트가 없을 경우
 				if(type == 1) {
 					saveConfirm();
 				} else if(type == 2) {
 					updateConfirm();
 				}
-			} else if(data.length == 1) {
+			} else if(data.data.length == 1) {
 				//중복 된 리스트가 한개만 있을경우
 				//신규 등록은 중복 된게 있으므로 중복 안내
 				//업데이트는 해당 데이터 수정 시 입력한 도메인 분류명이 동일한지 확인 후 중복 안내
@@ -491,7 +490,7 @@ function duplicateDomainTypeName(domainTypeNm, type) {
 						$("#updateButton2").show();
 					}
 				}
-			} else if(data.length >= 2) {
+			} else if(data.data.length >= 2) {
 				//중복 된 리스트가 2개 이상일 경우 모두 중복 안내
 				if(type == 1) {
 					$("#domainTypeNmListTitle").html(modalRegistHeader);
@@ -543,7 +542,7 @@ function insertDomain() {
         data : JSON.stringify(sendData),
 		async : false,
         success : function(data){
-			if(data==1) {
+			if(data.data==1) {
 				alertMessage(succ,succInsertDomain,"success");
 				$("#cancelButton").click();
 				$("#cancelButton2").click();
@@ -579,7 +578,7 @@ function deleteDomain(domainSeq) {
         data : JSON.stringify(sendData),
 		async : false,
         success : function(data){
-			if(data==1) {
+			if(data.data==1) {
 				alertMessage(succ,succDeleteDomain,"success");
 				$("#cancelButton").click();
 				dataTable.destroy();
@@ -622,7 +621,7 @@ function updateDomain() {
         data : JSON.stringify(sendData),
 		async : false,
         success : function(data){
-			if(data==2) {
+			if(data.data==2) {
 				alertMessage(succ,succUpdateDomain,"success");
 				$("#cancelButton").click();
 				$("#cancelButton2").click();
