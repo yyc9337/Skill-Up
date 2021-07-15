@@ -68,7 +68,7 @@ function categorySelect() {
 function searchList(searchType, keyword, orderNumber) {
 
     let order = 'asc';
-
+	//병합
     if (orderNumber == undefined || orderNumber == 1){
 		orderNumber = 1;
         order = 'asc';
@@ -318,15 +318,12 @@ function duplicationValidation(step){
 		}
 				
 	} else if (step == "short") {
-		
-		if($('#wordNm').attr('class').split(' ').indexOf('valid') == -1){
+		//병합
+		if($('#wordNm').attr('class').split(' ').indexOf('valid') == -1 || $('#wordEngNm').attr('class').split(' ').indexOf('valid') == -1){
 			alertMessage("경고!","단어명과 단어영문명의 중복검사를 먼저 진행해주세요.","danger");
 	        return false;
 		}
-		if($('#wordEngNm').attr('class').split(' ').indexOf('valid') == -1){
-			alertMessage("경고!","단어명과 단어영문명의 중복검사를 먼저 진행해주세요.","danger");
-	        return false;
-		}
+
 		if($("#wordAbbr").val().length == 0){
 	        alertMessage("경고!","단어 영문 약어명을 입력해주세요.","warning");
 	        $("#wordAbbr").focus();
@@ -391,7 +388,7 @@ function insertStatusControl(step, data){
 	
 	if (step == 'full'){			// 단어명,단어영문명 중복조회
 		let fatalExistFlag = false;
-		let abbrExistFlag = false;
+		let engnmExistFlag = false;
 		
 					
 		data.forEach(function(e){
@@ -399,16 +396,16 @@ function insertStatusControl(step, data){
 				fatalExistFlag = true;
 				dataset['fatalExist'] = e;
 			}
-			if(e.abbrExist){
-				abbrExistFlag = true;
-				dataset['abbrExist'] = e;
+			if(e.engnmExist){
+				engnmExistFlag = true;
+				dataset['engnmExist'] = e;
 			}
 		});
 		
 		if(fatalExistFlag){
 			// 치명중복 존재 (case1)
 			flag = "reject"
-		} else if (!fatalExistFlag && abbrExistFlag){
+		} else if (!fatalExistFlag && engnmExistFlag){
 			// 치명중복 x, 사전 등록 약어 o (case2)
 			flag = "accept"
 		} else {
@@ -533,17 +530,6 @@ function insertModalControl(step, flag, dataset){
 	
 }
 
-/*
-// 단어 등록 프로세스 헬퍼메세지 관리
-function insertHelperionControl() {
-	const stage0Flag = {'default':'단어명 및 단어영문명의 중복 여부를 확인해주세요.'}
-	
-}
-*/
-
-
-
-
 
 
 // 유효성 검사 - 필수 입력칸 체크
@@ -630,9 +616,6 @@ function updateWord() {
 
     let sendData = {
         "wordSeq" : $("#wordSeq").val(),
-        //"wordNm" : $("#wordNm").val(),
-        //"wordAbbr" : $("#wordAbbr").val(),
-        //"wordEngNm" : $("#wordEngNm").val(),
         "synmList" : $("#synmList").val(),
         "wordDscrpt" : $("#wordDscrpt").val()
     };
@@ -751,6 +734,7 @@ const DatatablesCustom = {
 
     return table;
   },
+  
   // 데이터 추가
   rowsAdd: function (table, url, param, step) {
     table.clear();
@@ -776,3 +760,4 @@ const DatatablesCustom = {
     table.rows.add(data).draw();
   }
 };
+	

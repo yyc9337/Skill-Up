@@ -187,47 +187,6 @@
             WORD_SEQ = #{wordSeq}
     </update>
 
-    <!-- 단어명 중복 체크 -->
-    <select id="duplicationNameCheck" parameterType="com.surfinn.glzza.vo.WordVO" resultType="int">
-        SELECT
-            COUNT(WORD_NM)
-        FROM
-            TB_WORD
-        WHERE
-            WORD_NM = #{wordNm}
-    </select>
-
-    <!-- 단어 영문 약어명 중복 체크 -->
-    <select id="duplicationEngShortNameCheck" parameterType="com.surfinn.glzza.vo.WordVO" resultType="int">
-        SELECT
-            COUNT(WORD_ABBR)
-        FROM
-            TB_WORD
-        WHERE
-            WORD_ABBR = #{wordAbbr}
-    </select>
-
-    <!-- 단어 영문명 중복 체크 -->
-    <select id="duplicationEngNameCheck" parameterType="com.surfinn.glzza.vo.WordVO" resultType="int">
-        SELECT
-            COUNT(WORD_ENG_NM)
-        FROM
-            TB_WORD
-        WHERE
-            WORD_ENG_NM = #{wordEngNm}
-    </select>
-
-    <!-- 이음동의어 중복 체크 -->
-    <select id="duplicationSynmListCheck" parameterType="com.surfinn.glzza.vo.WordVO" resultType="int">
-        SELECT
-            COUNT(SYNM_LIST)
-        FROM
-            TB_WORD
-        WHERE
-            SYNM_LIST = #{synmList}
-            And NOT SYNM_LIST IN('')
-    </select>
-    
     <!-- 단어명 단어영문명 중복 목록 선택 -->
     <sql id="selectWordDuplicationListSql">
         SELECT A.WORD_SEQ,
@@ -236,9 +195,17 @@
 	            A.WORD_ENG_NM,
 	            A.WORD_DSCRPT,
 	            A.SYNM_LIST, 
-        		FATAL_EXIST, 
+        		FATAL_EXIST,
+        <choose>
+        <when test="searchType eq 'full'">
+        		ENGNM_EXIST
+        </when>
+        <otherwise>
         		ABBR_EXIST
+        </otherwise>
+        </choose>
 		FROM TB_WORD A
+
 		<if test="searchType eq 'full'">
 			LEFT OUTER JOIN (
 								SELECT WORD_SEQ, 'T' AS FATAL_EXIST
@@ -249,7 +216,7 @@
 							) B ON A.WORD_SEQ = B.WORD_SEQ
 							
 			LEFT OUTER JOIN (
-								SELECT WORD_SEQ, 'T' AS ABBR_EXIST
+								SELECT WORD_SEQ, 'T' AS ENGNM_EXIST
 								FROM GLZZA.TB_WORD 
 								WHERE NOT (USE_YN = 'N') 
 									AND WORD_ENG_NM = #{wordEngNm}
@@ -274,32 +241,7 @@
     <select id="selectWordDuplicationList" parameterType="com.surfinn.glzza.vo.WordVO" resultType="com.surfinn.glzza.vo.WordVO">
         <include refid="selectWordDuplicationListSql"></include>
     </select>
-    
-    <!-- 단어명 단어영문명 중복 목록 선택 -->
-    <sql id="selectAbbrDuplicationListSql">
-        SELECT A.WORD_SEQ,
-				A.WORD_NM,
-				A.WORD_ABBR,
-				A.WORD_ENG_NM,
-				A.WORD_DSCRPT,
-		        A.SYNM_LIST,
-		        B.FATAL_EXIST
-		FROM TB_WORD A
-		LEFT OUTER JOIN (
-							SELECT WORD_SEQ, WORD_ABBR, 'T' AS FATAL_EXIST
-							FROM TB_WORD
-							WHERE WORD_ABBR = #{wordAbbr}
-						) B
-				ON A.WORD_SEQ = B.WORD_SEQ
-		WHERE NOT A.USE_YN = 'N'
-			AND A.WORD_ABBR LIKE CONCAT('%', #{wordAbbr} ,'%')
-    </sql>
-    
-    <!-- 단어명 단어영문명 중복 목록 선택 -->
-    <select id="selectAbbrDuplicationList" parameterType="com.surfinn.glzza.vo.WordVO" resultType="com.surfinn.glzza.vo.WordVO">
-        <include refid="selectAbbrDuplicationListSql"></include>
-    </select>
-    
+   
     <!-- 단어 업데이트 -->
     <update id="updateWord" parameterType="com.surfinn.glzza.vo.WordVO">
 		UPDATE TB_WORD
