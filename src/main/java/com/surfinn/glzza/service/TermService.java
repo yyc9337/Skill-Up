@@ -65,14 +65,19 @@ public class TermService {
     }
 
     public boolean insertTerm(TermVO termVO){
+    	//유효성 체크
         validationTermObject(termVO);
+        //신규등록할 데이터가 기존의 DB에 존재하나 사용하지 않는 경우 부활 시켜준다.
+        //기존의 DB에 존재하나 사용되지 않는(UseYN = N) 데이터가 있는지 체크. 
         termVO.setUseYn("N");
-        TermVO temp = termDao.recycleCheck(termVO);
+        TermVO temp = termDao.recycleCheck(termVO);   
+        //기존 데이터 부활
         if(temp != null && !CommonUtil.isEmpty(temp.getTermSeq())){
             return termDao.recycleTerm(temp) == 1 ? true : false;
-        }
+        }     
+        //기존데이터가 없으므로 신규등록 
         termVO.setUseYn("Y");
-        return termDao.insertTerm(termVO) == 1 ? true : false;
+            return termDao.insertTerm(termVO) == 1 ? true : false;
     }
 
     public boolean duplicateCheck(TermVO termVO){
@@ -93,7 +98,7 @@ public class TermService {
         }
         if(termVO.getTermSeq() == 0){
             throw new GlzzaBadRequestException("Term Seq is Valid");
-        }
+        } 
 
         return termDao.deleteTerm(termVO) == 1 ? true : false;
     }
