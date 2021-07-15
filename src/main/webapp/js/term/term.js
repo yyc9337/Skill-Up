@@ -6,7 +6,7 @@ $(window).on('load', function() {
 		}
 	});
 	
-//용어 신규 등록)) 구성 단어명 선택을 입력했을시 selectBox에 "keyword" : term.term, "searchType" : "wordNm" 형식으로 데이트를 생성함
+//용어 신규 등록)) 구성 단어명 선택을 입력했을시 selectBox에 "keyword" : term.term, "searchType" : "wordNm" 형식으로 데이터를 생성함  //스크롤로 나옴
 	$("#wordSelectTag").select2({
 		ajax: {
 			url : contextPath + "/word/list",
@@ -40,7 +40,7 @@ $(window).on('load', function() {
 		templateSelection : function(data){    //배열 데이터 소스 또는 ajax 데이터 소스 등에서 오는 입력을 받아들입니다
 			return data.wordNm;
 		},
-		language: {
+		language: {            //Ajax에 내장되어 있는 함수들  
 			inputTooShort: function () {
 				return "1글자 이상 입력하세요.";
 			},
@@ -54,22 +54,22 @@ $(window).on('load', function() {
 	});
 
 
-	$("#wordSelectTag").on("select2:select",function(e){
+	$("#wordSelectTag").on("select2:select",function(e){ //글자를 입력하면 자동으로 박스가 생성됨
 		termNameAutoCreate(e.params.data.wordNm, e.params.data.wordAbbr);
 	});
-	$("#wordSelectTag").on("select2:unselect",function(e){
+	$("#wordSelectTag").on("select2:unselect",function(e){  //글자가 0이되면 자동으로 사라짐
 		e.params.data.text = '';
 		termNameAutoRemover(e.params.data.wordNm, e.params.data.wordAbbr);
 	});
 
-	$("#domainSeq").on("change",function(e){
+	$("#domainSeq").on("change",function(e){  //도메인 명을 클릭하면 자동으로 selectDamain에 있는 value 값이 생성됨
 		selectDoamin(this.value);
 	})
 	categorySelect();
 	loadDomainData();
 	searchList();
 
-	$('#termTable tbody').on( 'dblclick', 'tr', function (event) {
+	$('#termTable tbody').on( 'dblclick', 'tr', function (event) {    //더블클릭하면 모달이 생성됨
 		let table = $("#termTable").DataTable();
 		let tr = table.row($(this).closest('tr'));
 		let row = table.row(tr);
@@ -101,14 +101,14 @@ $(window).on('load', function() {
 // 	return item.wordNm;
 // }
 
-function selectDoamin(domainSeq){
+function selectDoamin(domainSeq){  
 	// ID domainDetail
 	$.ajax({
 		url : contextPath + "/domain/select?domainSeq="+domainSeq,
 		type : "GET",
 		contentType : "application/json",
 		success : function(data){
-			if(data.dataType == "NUMBER")
+			if(data.dataType == "NUMBER")  //타입이 NUMBER이면 소수점 길이가 생성되고 아니면 생성되지 않음.
 				$("#domainDetail").text("도메인 분류명 : " + data.domainTypeNm+", 데이터 타입 : "+data.dataType+", 데이터 길이 : "+data.dataLen+", 소수점 길이 : "+data.dcmlLen);
 			else
 				$("#domainDetail").text("도메인 분류명 : " + data.domainTypeNm+", 데이터 타입 : "+data.dataType+", 데이터 길이 : "+data.dataLen);
@@ -118,7 +118,7 @@ function selectDoamin(domainSeq){
 }
 
 //검색 SelectBox 초기화ㅋ
-function categorySelect() {
+function categorySelect() {   //카테고리를 선택하는 함수
 	$.ajax({
         url : contextPath +"/term/searchType",
         contentType : "application/json",
@@ -131,6 +131,8 @@ function categorySelect() {
 				if(data.data[i].columnName) {
 						var option  = $("<option>");
 					$(option).val('termNm').text(data.data[i].columnComment);
+					$(option).val('termAbbr').text(data.data[i].columnComment);
+					$(option).val('termDscrpt').text(data.data[i].columnComment);
 					$("#searchType").append($(option));
 				}
 				
@@ -165,21 +167,21 @@ function searchList(searchType, keyword, orderNumber) {
 		orderNumber = 1;
 	}
 
-	$("#termTable").DataTable({
-	  	processing: true,
+	$("#termTable").DataTable({   //데이터 테이블 생성
+	  	processing: true,    //테이블을 생성한 후 어떠한 기능들을 허용하겠다는 기능을 갖고 있는데 정확히 무엇인지 파악 중 
 	  	serverSide: true,
 		responsive: true,
-		autoWidth: true,
+		autoWidth: true,  
 		sAjaxSource : contextPath + '/term/list?keyword=' + keyword + '&searchType=' + searchType,
 	  	sServerMethod: "POST",
 
 		// popover
-		"drawCallback": function (settings, json) {
+		"drawCallback": function (settings, json) {     //마우스를 가져다 대면 팝업 방식으로 용어 설명란에 설명 팝업이생김
 			//$('[data-toggle="tooltip"]').tooltip('update');
 			$('[data-toggle="popover"]').popover('update');
 		},
 
-		columns: [
+		columns: [    //테이블에 생성될 데이터 목록들
 		    { data: 'termSeq', width: "10%"},
 			{ data: 'termNm'},
 			{ data: 'termAbbr'},
@@ -187,7 +189,7 @@ function searchList(searchType, keyword, orderNumber) {
 	      	{ data: 'summaryTermDscrpt'},
 			{ data: 'updDt'}
 	      ],
-		columnDefs: [
+		columnDefs: [  //목록들을(targets은 위에있는 data들) title로 한글로 변경
 			{ targets:[0], title: 'ID' },
 			{ targets:[1], title: '용어명' },
 			{ targets:[2], title: '용어 영문 약어명' },
@@ -195,7 +197,7 @@ function searchList(searchType, keyword, orderNumber) {
 			{ targets:[4], title: '용어 설명' },
 			{ targets:[5], title: '수정 날짜', visible: false }
 		],
-		order: [[orderNumber, 'asc']],
+		order: [[orderNumber, 'asc']],  //오름차순
 
 		// popover
 		createdRow: function (row, data, dataIndex) {
@@ -208,18 +210,19 @@ function searchList(searchType, keyword, orderNumber) {
 		}
 	  });	
 	  
-	  let dataTableHeight = document.getElementsByClassName('dataTables_scrollBody')[0];
-	  dataTableHeight.style.minHeight = '580px';
+	 //let dataTableHeight = document.getElementsByClassName('dataTables_scrollBody')[0];
+	 //dataTableHeight.style.minHeight = '580px'; 
+	 //jsp에 존재하지 않음. 필요없는 객체
 }
 
-function termNameAutoCreate(wordNm, wordAbbr){
+function termNameAutoCreate(wordNm, wordAbbr){    //위에서 쓰기위해 함수를 정리해 둠
 	let termNm = $("#wordSelectTag").val().length == 1 ? wordNm : $("#termNm").val() + wordNm;
 	let termAbbr = $("#wordSelectTag").val().length == 1 ? wordAbbr : $("#termAbbr").val() + "_" + wordAbbr;
 	$("#termNm").val(termNm);
 	$("#termAbbr").val(termAbbr);
 }
 
-function termNameAutoRemover(wordNm, wordAbbr){
+function termNameAutoRemover(wordNm, wordAbbr){   //위에서 쓰기위해 함수를 정리해 둠
 	let termNm = $("#termNm").val().replace(wordNm,"");
 	let termAbbr = $("#wordSelectTag").val().length == 0 ? "" : $("#termAbbr").val().replace("_" + wordAbbr, "");
 	$("#termNm").val(termNm);
@@ -229,15 +232,15 @@ function termNameAutoRemover(wordNm, wordAbbr){
 //검색 버튼 클릭 이벤트
 function searchTerm() {
 	
-	let searchType = $("#searchType").val();
-	let keyword = $("#keyword").val();
+	let searchType = $("#searchType").val();   //목록
+	let keyword = $("#keyword").val();  //검색창
 
 	if(searchType =="all"){
-		if(keyword != ''){
+		if(keyword != ''){     //목록을 전체로 해두고 어떠한 글자를 입력했을 시 원래있던 테이블이 사라지고 검색된 테이블을 찾음
 			destroyTable();
 			searchList(searchType,keyword);
 			return false;
-		}
+		}     
 		destroyTable();
 		searchList();
 		return false;
