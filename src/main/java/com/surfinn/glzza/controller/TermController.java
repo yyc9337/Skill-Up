@@ -23,6 +23,7 @@ public class TermController {
     @Autowired
     TermService termService;
 
+  //검색 - 카테고리와 페이징기능
     @PostMapping("/list")
     public BaseVO selectTermList(TermVO termVO, BaseVO baseVO){
         return termService.selectTermList(termVO, baseVO);
