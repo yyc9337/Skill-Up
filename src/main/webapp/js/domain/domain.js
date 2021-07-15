@@ -200,6 +200,7 @@ function searchList(searchType, keyword, orderNumber) {
 		}
 	  });
 
+	// 테이블의 tr태그 더블클릭시 update modal 열림
 	$('#domainTable tbody').on('dblclick', 'tr', function () {
 		
 		let table = $("#domainTable").DataTable();
@@ -212,10 +213,12 @@ function searchList(searchType, keyword, orderNumber) {
 		
 	});
 	
+	// 검색어 분류 변경시 검색어 Input box에 focus on 됨
 	$("#searchType").change(function () {		
 	 	$("#keyword").focus();		
 	});
 	
+	// 검색 결과가 바뀌어도 dataTable의 최소 높이를 580px로 고정
 	let dataTableHeight = document.getElementsByClassName('dataTables_scrollBody')[0];
 	dataTableHeight.style.minHeight = '580px';
 }
@@ -278,6 +281,7 @@ function searchDomain() {
 //검색 초기화 아이콘 클릭 이벤트
 function resetSearch() {
 	
+	// 검색어 분류는 전체로, 검색어는 비워줌
 	$("#searchType").val('all');
 	$("#keyword").val('');
 	
@@ -312,7 +316,7 @@ function openModal(type, domainSeq) {
 		$("#insert_form input[name=domainSeq]").val(domainSeq);
 		
 		
-		let sendData = {
+		let sendData = { 
 			"domainSeq" : domainSeq
 		}
 		
@@ -323,15 +327,16 @@ function openModal(type, domainSeq) {
 	        data : sendData,
 			async : false,
 	        success : function(data){
-				$("#insert_form input[name=domainTypeNm]").val(data.domainTypeNm);
-				$("#insert_form input[name=domainNm]").val(data.domainNm);
-				$("#insert_form #dataType").val(data.dataType);
-				$("#insert_form input[name=dataLen]").val(data.dataLen);
-				if(data.domainDscrpt != null) {
-					$("#insert_form #domainDscrpt").val(data.domainDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
+				const {domainTypeNm, domainNm, dataType, dataLen, domainDscrpt, dcmlLen} = data;
+				$("#insert_form input[name=domainTypeNm]").val(domainTypeNm);
+				$("#insert_form input[name=domainNm]").val(domainNm);
+				$("#insert_form #dataType").val(dataType);
+				$("#insert_form input[name=dataLen]").val(dataLen);
+				if(domainDscrpt != null) {
+					$("#insert_form #domainDscrpt").val(domainDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
 				}
-				$("#insert_form input[name=dcmlLen]").val(data.dcmlLen);
-				readOnlyOption(data.dataType);
+				$("#insert_form input[name=dcmlLen]").val(dcmlLen);
+				readOnlyOption(dataType);
 	        }
 	    });
 		
