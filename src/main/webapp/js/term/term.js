@@ -1,10 +1,12 @@
 $(window).on('load', function() {
+	
 	$("#keyword").keydown(function(key) {
 		if (key.keyCode == 13) {
 			$("#searchButton").trigger('click');
 		}
 	});
-
+	
+//용어 신규 등록)) 구성 단어명 선택을 입력했을시 selectBox에 "keyword" : term.term, "searchType" : "wordNm" 형식으로 데이트를 생성함
 	$("#wordSelectTag").select2({
 		ajax: {
 			url : contextPath + "/word/list",
@@ -21,9 +23,9 @@ $(window).on('load', function() {
 			processResults: function (data, params) {
 				$.each(data.data,function(index,item){
 					data.data[index]["id"]=item.wordSeq;
-					if(item.synmList == null){
+					if(item.synmList == null){ //synmList가 없을 경우 불러오지 않음.
 						data.data[index]["text"]=item.wordNm + "    [영어명 : "+item.wordEngNm+", 약어명 : "+item.wordAbbr+"]";
-					}else{
+					}else{ //동의어가 있을 경우 item.synmList를 불러옴
 						data.data[index]["text"]=item.wordNm + "    [영어명 : "+item.wordEngNm+", 약어명 : "+item.wordAbbr+", 동의어 : "+item.synmList+"]";
 					}
 				});
@@ -35,7 +37,7 @@ $(window).on('load', function() {
 		},
 		placeholder: 'Search a Word',
 		minimumInputLength: 1,
-		templateSelection : function(data){
+		templateSelection : function(data){    //배열 데이터 소스 또는 ajax 데이터 소스 등에서 오는 입력을 받아들입니다
 			return data.wordNm;
 		},
 		language: {
@@ -394,7 +396,7 @@ function createTerm() {
 	$("#termDscrpt").val($("#termDscrpt").val().replace(/(?:\r\n|\r|\n)/g, '<br>'));
 	
 	let sendData = {
-		"termNm" : $("#termNm").val(),
+		"termNm" : $("#termrecNm").val(),
 		"termAbbr" : $("#termAbbr").val(),
 		"domainSeq" : $("#domainSeq").val(),
 		"termDscrpt" : $("#termDscrpt").val().trim(),
