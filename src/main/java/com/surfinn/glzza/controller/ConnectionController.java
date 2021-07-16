@@ -3,9 +3,10 @@ package com.surfinn.glzza.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+//페이지 연결 컨트롤러 
 @Controller
 public class ConnectionController {
-	
+
     @RequestMapping("/domain/info")
     public String connectionMailInfoView(){
         return "domainView/domain";
