@@ -16,6 +16,7 @@ import com.surfinn.glzza.vo.Paging;
 
 @RestController
 @RequestMapping("/code")
+//코드테이블 데이터 통신 컨트롤러 
 public class CodeController {
 	
 	@Autowired
