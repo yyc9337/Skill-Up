@@ -109,9 +109,9 @@ function selectDoamin(domainSeq){
 		contentType : "application/json",
 		success : function(data){
 			if(data.dataType == "NUMBER")  //타입이 NUMBER이면 소수점 길이가 생성되고 아니면 생성되지 않음.
-				$("#domainDetail").text("도메인 분류명 : " + data.domainTypeNm+", 데이터 타입 : "+data.dataType+", 데이터 길이 : "+data.dataLen+", 소수점 길이 : "+data.dcmlLen);
+				$("#domainDetail").text("도메인 분류명 : " + data.data.domainTypeNm+", 데이터 타입 : "+data.data.dataType+", 데이터 길이 : "+data.data.dataLen+", 소수점 길이 : "+data.data.dcmlLen);
 			else
-				$("#domainDetail").text("도메인 분류명 : " + data.domainTypeNm+", 데이터 타입 : "+data.dataType+", 데이터 길이 : "+data.dataLen);
+				$("#domainDetail").text("도메인 분류명 : " + data.data.domainTypeNm+", 데이터 타입 : "+data.data.dataType+", 데이터 길이 : "+data.data.dataLen);
 		}
 	});
 

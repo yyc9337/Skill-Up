@@ -237,7 +237,6 @@ td{
 		</div>
 	</div>
 	<!-- Modal End -->
-
 	<!-- Modal2 Start -->
 	<div id="modal2" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
@@ -270,6 +269,5 @@ td{
 		</div>
 	</div>   
 	<!-- Modal2 End -->
-
 
 <!-- /main content -->

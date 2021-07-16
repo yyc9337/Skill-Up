@@ -93,7 +93,7 @@
 		FROM
     		information_schema.columns
 		WHERE
-    		table_schema = 'GLZZA' AND table_name = 'TB_DOMAIN'; 
+    		table_schema = 'GLZZA' AND table_name = 'TB_DOMAIN' AND COLUMN_COMMENT LIKE '도메인%';
 	</select>
 	
 	<insert id="insertDomain" parameterType="com.surfinn.glzza.vo.DomainVO">

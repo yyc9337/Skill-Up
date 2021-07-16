@@ -17,6 +17,7 @@ import com.surfinn.glzza.vo.DomainVO;
 import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 import com.surfinn.glzza.vo.WordVO;
+import com.surfinn.glzza.vo.BaseVO;
 
 @Service
 public class ExcelService {
@@ -105,16 +106,17 @@ public class ExcelService {
 		String fileNameSplit [] = fileName.split("_");
 		String fileType = fileNameSplit[2];
 		
-		Paging paging = new Paging();
+		// Paging paging = new Paging();
 		DomainVO domainVO = (DomainVO) MapToModelUtil.convertMapToObject(map, new DomainVO());
+		BaseVO baseVO = new BaseVO();
 		
 		domainVO.setIDisplayStart(null);
 		domainVO.setIDisplayLength(null);
 		domainVO.setSearchType(null);
 		domainVO.setKeyword(null);
+
+		List<DomainVO> list = domainDao.selectDomainList(domainVO, baseVO);
 		
-		
-		List<DomainVO> list = domainDao.selectDomainList(domainVO, paging);
 		StringBuffer sbData = new StringBuffer();
 		StringBuffer sbHeader = new StringBuffer();
 		
