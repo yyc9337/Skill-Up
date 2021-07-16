@@ -1,7 +1,6 @@
 package com.surfinn.glzza.vo;
 
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -46,11 +45,11 @@ public class BaseVO {
 	private String sorting;
 	private String iDisplayStart;
 	private String iDisplayLength;
-    Integer recordsTotal; // 필터링 전 전체 데이터 수
-	Integer recordsFiltered; // 필터링 후 전체 데이터 수
-	List<?> data;
 	
+	List<?> data;
+	Integer recordsTotal; // 필터링 전 전체 데이터 수
+	Integer recordsFiltered; // 필터링 후 전체 데이터 수
 	public Integer getRecordsFiltered() {		
 		return recordsTotal;
 	}
-	}
+}

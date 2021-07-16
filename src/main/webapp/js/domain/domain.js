@@ -84,48 +84,9 @@ function readOnlyOption(dataType) {
             $("#insert_form input[name=dataLen]").attr("readonly", false);
             $("#insert_form input[name=dcmlLen]").attr("readonly", false);
 
-<<<<<<< HEAD
-						$("#dataLenStar").show();
-						$("#dcmlLenStar").show();
-					}
-				}
-			}
-	    });
-	}
-}
-
-//검색 SelectBox 초기화
-function categorySelect() {
-	
-	$.ajax({
-        url : contextPath +"/domain/searchType",
-        contentType : "application/json",
-        type : "GET",
-        success : function(data){
-			for(var i = 0; i < data.data.length; i++) {
-				if(data.data[i].columnName == 'DOMAIN_NM') {
-					let option  = $("<option>");
-					$(option).val('domainNm').text(domainNameLang);
-					$("#searchType").append($(option));
-				}
-				
-				if(data.data[i].columnName == 'DOMAIN_TYPE_NM') {
-					let option  = $("<option>");
-					$(option).val('domainTypeNm').text(domainTypeNameLang);
-					$("#searchType").append($(option));
-				}
-				
-				if(data.data[i].columnName == 'DOMAIN_DSCRPT') {
-					let option  = $("<option>");
-					$(option).val('domainDscrpt').text(domainDescriptionLang);
-					$("#searchType").append($(option));
-				}
-			}
-=======
             $("#dataLenStar").show();
             $("#dcmlLenStar").show();
           }
->>>>>>> refs/remotes/origin/domain_kmj
         }
       },
     });
@@ -353,55 +314,6 @@ function openModal(type, domainSeq) {
   clearFormData(); // form안에 입력 내용을 비워줌 (common.js)
   readOnlyOption(""); // 데이터 타입이 선택되지 않았으므로 데이터 길이 및 소수점 길이 입력 불가
 
-<<<<<<< HEAD
-		$("#modal #saveButton").hide();
-		$("#modal #updateButton").show();
-		$("#modal #deleteButton").show();
-		$("#modal .modal-title").html(modalUpdateHeader);
-		
-		$("#insert_form input[name=domainSeq]").val(domainSeq);
-		
-		
-		let sendData = {
-			"domainSeq" : domainSeq
-		}
-		
-		$.ajax({
-	        url : contextPath +"/domain/select",
-	        contentType : "application/json",
-	        type : "GET",
-	        data : sendData,
-			async : false,
-	        success : function(data){
-				console.log("data:", data.data);
-				$("#insert_form input[name=domainTypeNm]").val(data.data.domainTypeNm);
-				$("#insert_form input[name=domainNm]").val(data.data.domainNm);
-				$("#insert_form #dataType").val(data.data.dataType);
-				$("#insert_form input[name=dataLen]").val(data.data.dataLen);
-				if(data.data.domainDscrpt != null) {
-					$("#insert_form #domainDscrpt").val(data.data.domainDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
-				}
-				$("#insert_form input[name=dcmlLen]").val(data.data.dcmlLen);
-				readOnlyOption(data.data.dataType);
-	        }
-	    });
-		
-	}
-	
-	//데이터 타입 선택 시 NUMBER일 경우 소수점 길이 활성화
-	//XML 또는 DATETIME 일 경우 데이터 길이 및 소수점 길이 비활성화
-	$("#dataType").change(function () {		
-	 	let selectDataTypeValue = $("#insert_form #dataType").val().trim();
-		readOnlyOption(selectDataTypeValue);		
-	});
-	
-	$(".autoCreate").on("propertychange change keyup paste input", function(){		
-		domainNameAutoCreate($("#domainTypeNm").val(), 
-									$("#dataType").val(), 
-									$("#dataLen").val(), 
-									$("#dcmlLen").val());
-	});
-=======
   //add = 신규등록 , update = 상세보기
   if (type == "add") {
     $("#modal #saveButton").show();
@@ -413,7 +325,6 @@ function openModal(type, domainSeq) {
     $("#modal #updateButton").show();
     $("#modal #deleteButton").show();
     $("#modal .modal-title").html(modalUpdateHeader);
->>>>>>> refs/remotes/origin/domain_kmj
 
     $("#insert_form input[name=domainSeq]").val(domainSeq);
 
@@ -511,79 +422,7 @@ function insertValidation() {
             result = false;
           }
         }
-<<<<<<< HEAD
-
-    });	
-
-	return flag;
-	
-}
-
-//도메인 분류명 검사
-function duplicateDomainTypeName(domainTypeNm, type) {
-	let sendData = {
-		"domainTypeNm" : domainTypeNm
-	}
-	
-	let domainSeq = $("#domainSeq").val();
-	
-	$.ajax({
-        url : contextPath +"/domain/duplicateDomainTypeName",
-        contentType : "application/json",
-        type : "GET",
-        data : sendData,
-		async : false,
-        success : function(data){
-			
-			let table2 = $("#domainTypeTable").DataTable();
-			table2.destroy();
-			
-			//type = 1일경우 신규 등록, 2일경우 수정
-			
-			if(data.data.length == 0) {
-				//중복 된 리스트가 없을 경우
-				if(type == 1) {
-					saveConfirm();
-				} else if(type == 2) {
-					updateConfirm();
-				}
-			} else if(data.data.length == 1) {
-				//중복 된 리스트가 한개만 있을경우
-				//신규 등록은 중복 된게 있으므로 중복 안내
-				//업데이트는 해당 데이터 수정 시 입력한 도메인 분류명이 동일한지 확인 후 중복 안내
-				if(type == 1) {
-					$("#domainTypeNmListTitle").html(modalRegistHeader);
-					$("#domainTypeButton").click();
-					$("#saveButton2").show();
-					$("#updateButton2").hide();
-				} else if(type == 2) {		
-					if(data.data[0].domainSeq == domainSeq) {
-						updateConfirm();
-					} else {
-						$("#domainTypeNmListTitle").html(modalUpdateHeader);
-						$("#domainTypeButton").click();
-						$("#saveButton2").hide();
-						$("#updateButton2").show();
-					}
-				}
-			} else if(data.data.length >= 2) {
-				//중복 된 리스트가 2개 이상일 경우 모두 중복 안내
-				if(type == 1) {
-					$("#domainTypeNmListTitle").html(modalRegistHeader);
-					$("#domainTypeButton").click();
-					$("#saveButton2").show();
-					$("#updateButton2").hide();
-				} else if(type == 2) {		
-					$("#domainTypeNmListTitle").html(modalUpdateHeader);
-					$("#domainTypeButton").click();
-					$("#saveButton2").hide();
-					$("#updateButton2").show();
-				}
-			}			
-        }
-=======
       },
->>>>>>> refs/remotes/origin/domain_kmj
     });
   }
 
@@ -849,13 +688,7 @@ function excelDownload_doc() {
 
 // exerd 다운로드
 function excelDownload_exerd() {
-<<<<<<< HEAD
-	let serviceName = 'domainListExcelDownload';
-	let fileName = 'DOMAIN_LIST_EXERD';	
-	apiRequestExcel(serviceName, fileName, $("#search_form"));
-=======
   let serviceName = "domainListExcelDownload";
   let fileName = "DOMAIN_LIST_EXERD";
   apiRequestExcel(serviceName, fileName, $("#search_form"));
->>>>>>> refs/remotes/origin/domain_kmj
 }

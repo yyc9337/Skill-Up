@@ -39,52 +39,6 @@ public class DomainController {
     public BaseVO selectDomainList(DomainVO domainVO, BaseVO baseVO) { 
         return domainService.selectDomainList(domainVO, baseVO); 
     }
-
-	
-    @PostMapping("/insert")
-    @ResponseBody
-    public SuccessResponse<Integer> insertDomain(@RequestBody DomainVO domainVO){
-        return new SuccessResponse<>(domainService.insertDomain(domainVO));
-    }
-    
-    @PostMapping("/delete")
-    @ResponseBody
-    public SuccessResponse<Integer> deleteDomain(@RequestBody DomainVO domainVO){
-        return new SuccessResponse<>(domainService.deleteDomain(domainVO));
-    }
-	
-	// 수정, 저장 기능
-    @GetMapping("/select")
-    @ResponseBody
-    public SuccessResponse<DomainVO> selectDomain(DomainVO domainVO) {
-    	return new SuccessResponse<>(domainService.selectDomain(domainVO));
-    }
-    
-    @GetMapping("/duplicationNameCheck")
-    @ResponseBody
-    public SuccessResponse<Integer> duplicationNameCheck(DomainVO domainVO) {
-    	return new SuccessResponse<>(domainService.duplicationNameCheck(domainVO));
-    }
-    
-    @GetMapping("/duplicateDomainTypeName")
-    @ResponseBody
-    public SuccessResponse<List<DomainVO>> duplicateDomainTypeName(DomainVO domainVO) {
-    	return new SuccessResponse<>(domainService.duplicateDomainTypeName(domainVO));
-    }
-    
-    @PostMapping("/updateUseYn")
-    @ResponseBody
-    public SuccessResponse<Integer> updateUseYn(@RequestBody DomainVO domainVO) {
-    	return new SuccessResponse<>(domainService.insertDomain(domainVO));
-    }
-
-	
-	// 도메인 목록 조회 (검색)
-	@PostMapping("/list")
-    @ResponseBody
-    public BaseVO selectDomainList(DomainVO domainVO, BaseVO baseVO) { 
-        return domainService.selectDomainList(domainVO, baseVO); 
-    }
 	
 	// 수정, 저장 기능
     @PostMapping("/insert")
