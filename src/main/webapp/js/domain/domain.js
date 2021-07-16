@@ -135,16 +135,7 @@ function dataTypeSelect() {
  */
 function searchList(searchType, keyword, orderNumber = 1) {
   //Sorting 하기 위한 컬럼들 서버로 가지고감
-  let columns = [
-    "DOMAIN_SEQ",
-    "DOMAIN_NM",
-    "DOMAIN_TYPE_NM",
-    "DATA_TYPE",
-    "DATA_LEN",
-    "DCML_LEN",
-    "DOMAIN_DSCRPT",
-    "UPD_DT",
-  ];
+  let columns = [ "DOMAIN_SEQ", "DOMAIN_NM", "DOMAIN_TYPE_NM", "DATA_TYPE", "DATA_LEN", "DCML_LEN","DOMAIN_DSCRPT","UPD_DT",];
   //let order = 'asc';
   order = orderNumber == 1 ? "asc" : "desc";
 
@@ -349,14 +340,7 @@ function openModal(type, domainSeq) {
       data: sendData,
       async: false,
       success: function (data) {
-        const {
-          domainTypeNm,
-          domainNm,
-          dataType,
-          dataLen,
-          domainDscrpt,
-          dcmlLen,
-        } = data.data;
+        const { domainTypeNm, domainNm, dataType, dataLen, domainDscrpt, dcmlLen, } = data.data;
         $("#insert_form input[name=domainTypeNm]").val(domainTypeNm);
         $("#insert_form input[name=domainNm]").val(domainNm);
         $("#insert_form #dataType").val(dataType);
