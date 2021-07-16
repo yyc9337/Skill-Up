@@ -118,7 +118,7 @@ public class TermService {
             throw new GlzzaBadRequestException("Term Seq is Valid");
         } 
 
-        //삭제가 성공되면 true 아니라면 false반환
+        //삭제가 성공되면 true 아니라면 false반환ㅇ
         return termDao.deleteTerm(termVO) == 1 ? true : false;
     }
 
