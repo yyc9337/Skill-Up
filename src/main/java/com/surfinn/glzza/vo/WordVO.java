@@ -26,6 +26,7 @@ public class WordVO extends BaseVO{
     
     // 단어 중복조회 시 flag 컬럼들
     private String fatalExist;
+    private String engnmExist;
     private String abbrExist;
     
     private String tag;
