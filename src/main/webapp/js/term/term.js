@@ -399,7 +399,7 @@ function createTerm() {
 	$("#termDscrpt").val($("#termDscrpt").val().replace(/(?:\r\n|\r|\n)/g, '<br>'));
 	
 	let sendData = {
-		"termNm" : $("#termrecNm").val(),
+		"termNm" : $("#termNm").val(),
 		"termAbbr" : $("#termAbbr").val(),
 		"domainSeq" : $("#domainSeq").val(),
 		"termDscrpt" : $("#termDscrpt").val().trim(),
@@ -410,7 +410,7 @@ function createTerm() {
 		alertMessage("경고", "이미 등록된 용어입니다.", "warning");
 		return false;
 	}
-	toggleInputStatus(true);   //모르겠음
+	toggleInputStatus(true);   //
 
 	$.ajax({
 		url : contextPath + "/term/create",
