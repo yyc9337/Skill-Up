@@ -100,9 +100,9 @@ function categorySelect() {
     contentType: "application/json",
     type: "GET",
     success: function (data) {
-      for (let i in data) {
+      for (let i in data.data) {
         let option = $("<option>");
-        $(option).val("domainNm").text(data[i].columnComment);
+        $(option).val("domainNm").text(data.data[i].columnComment);
         $("#searchType").append($(option));
       }
     },
@@ -148,13 +148,13 @@ function searchList(searchType, keyword, orderNumber = 1) {
   //let order = 'asc';
   order = orderNumber == 1 ? "asc" : "desc";
 
-  /*	orderNumber의 기본값 정해줌. 파라미터에 기본값 넣어서 전달하게 수정 (line 146)
+  /*	orderNumber의 기본값 정해줌. 파라미터에 기본값 넣어서 전달하게 수정
 	if(orderNumber == undefined) {
 		orderNumber = 1;
 	}
 	*/
 
-  /*	삼항조건연산자로 수정 (line 151)
+  /*	삼항조건연산자로 수정
 	if(orderNumber == 1) {
 		order = 'asc';
 	} else {
@@ -356,7 +356,7 @@ function openModal(type, domainSeq) {
           dataLen,
           domainDscrpt,
           dcmlLen,
-        } = data;
+        } = data.data;
         $("#insert_form input[name=domainTypeNm]").val(domainTypeNm);
         $("#insert_form input[name=domainNm]").val(domainNm);
         $("#insert_form #dataType").val(dataType);
@@ -467,7 +467,7 @@ function duplicateNameCheck(sendData) {
     data: sendData,
     async: false,
     success: function (data) {
-      if (data >= 1) {
+      if (data.data >= 1) {
         alertMessage(warning, warningExistDomainName, "warning");
         //$("#cancelButton2").click();
         $("#modal2").removeClass("show");
@@ -501,14 +501,14 @@ function duplicateDomainTypeName(domainTypeNm, type) {
       let table2 = $("#domainTypeTable").DataTable();
       table2.destroy();
 
-      if (data.length == 0) {
+      if (data.data.length == 0) {
         //중복 된 리스트가 없을 경우 바로 신규 등록, 수정 됨
         if (type == 1) {
           saveConfirm();
         } else if (type == 2) {
           updateConfirm();
         }
-      } else if (data.length == 1) {
+      } else if (data.data.length == 1) {
         // 중복 된 리스트가 한개만 있을경우
         // 신규 등록 : 중복안내 및 등록 여부 확인
         // 업데이트 : 해당 데이터 수정 시 입력한 도메인 분류명이 동일한지 확인 후 중복 안내
@@ -518,7 +518,7 @@ function duplicateDomainTypeName(domainTypeNm, type) {
           $("#saveButton2").show();
           $("#updateButton2").hide();
         } else if (type == 2) {
-          if (data[0].domainSeq == domainSeq) {
+          if (data.data[0].domainSeq == domainSeq) {
             updateConfirm();
           } else {
             $("#domainTypeNmListTitle").html(modalUpdateHeader);
@@ -527,7 +527,7 @@ function duplicateDomainTypeName(domainTypeNm, type) {
             $("#updateButton2").show();
           }
         }
-      } else if (data.length >= 2) {
+      } else if (data.data.length >= 2) {
         //중복 된 리스트가 2개 이상일 경우 모두 중복 안내
         if (type == 1) {
           $("#domainTypeNmListTitle").html(modalRegistHeader);
@@ -586,7 +586,7 @@ function insertDomain() {
     data: JSON.stringify(sendData),
     async: false,
     success: function (data) {
-      if (data == 1) {
+      if (data.data == 1) {
         alertMessage(succ, succInsertDomain, "success");
         $("#cancelButton").click();
         $("#cancelButton2").click();
@@ -654,7 +654,7 @@ function updateDomain() {
     data: JSON.stringify(sendData),
     async: false,
     success: function (data) {
-      if (data == 2) {
+      if (data.data == 2) {
         alertMessage(succ, succUpdateDomain, "success");
         $("#cancelButton").click();
         $("#cancelButton2").click();
