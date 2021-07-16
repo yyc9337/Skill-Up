@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.surfinn.glzza.core.CommonConst;
 import com.surfinn.glzza.dao.WordDao;
 import com.surfinn.glzza.utility.CommonUtil;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.WordVO;
 
@@ -19,13 +20,13 @@ public class WordService {
     private WordDao wordDao;
 
     // 단어 리스트
-    public Paging selectWordList(WordVO wordVO, Paging paging){
+    public BaseVO selectWordList(WordVO wordVO, BaseVO base){
         if (wordVO.getColumns() != null){
             wordVO.setSorting(wordVO.getColumns()[wordVO.getISortCol_0()]);
         }
 
-    	paging.setRecordsTotal(wordDao.selectTotalCountWord(wordVO));	
-        List<WordVO> list = wordDao.selectWordList(wordVO, paging); // 리스트 생성
+    	base.setRecordsTotal(wordDao.selectTotalCountWord(wordVO));	
+        List<WordVO> list = wordDao.selectWordList(wordVO, base); // 리스트 생성
         
         
         if(list.size() > 0) {
@@ -36,9 +37,9 @@ public class WordService {
         	}
         }
 
-        paging.setRecordsFiltered(list.size());
-		paging.setData(list);
-		return paging;
+        base.setRecordsFiltered(list.size());
+        base.setData(list);
+		return base;
     }
 
     // 단어 리스트 카운트
@@ -63,47 +64,33 @@ public class WordService {
             wordVO.setSynmList("");
         }
 
-        return wordDao.insertWord(wordVO);
+        return wordDao.insertWord(wordVO); //Dao에 요청
     }
 
     // 단어 삭제
     public int deleteWord(WordVO wordVO) {
         wordVO.setUpdId(CommonConst.UPD_ID);
-        return wordDao.deleteWord(wordVO);
+        return wordDao.deleteWord(wordVO); //Dao에 요청(wordVO반환)
     }
     
     public int updateWord(WordVO wordVO){
         wordVO.setUpdId(CommonConst.UPD_ID);
-        return wordDao.updateWord(wordVO);
+        return wordDao.updateWord(wordVO);//Dao에 요청(wordVO반환)
+    }
+    
+    public int revivalWord(WordVO wordVO){
+        wordVO.setUpdId(CommonConst.UPD_ID);
+        return wordDao.revivalWord(wordVO);
     }
     
     public WordVO selectWord(WordVO wordVO){
-        return wordDao.selectWord(wordVO);
+        return wordDao.selectWord(wordVO); //Dao에 요청(wordVO반환)
     }
 
-    // 중복 체크
-    public int duplicationCheck(WordVO wordVO){
-        if (wordVO.getWordNm().equals("") || wordVO.getWordAbbr().equals("")){
-            return -1;
-        } else {
-            if(wordDao.duplicationNameCheck(wordVO) >= 1){
-                return 1;
-            }
-            if(wordDao.duplicationEngShortNameCheck(wordVO) >= 1){
-                return 2;
-            }
-            if(wordDao.duplicationEngNameCheck(wordVO) >= 1){
-                return 3;
-            }
-
-            return 0;
-
-        }
-    }
     
-    // [하늘] 단어명 및 단어영문명 중복조회
+    // [하늘] 단어명 및 단어영문명 및 이음동의어 중복조회
     public List<WordVO> nameDuplicationCheck(WordVO wordVO){
-        List<WordVO> list = wordDao.nameDuplicationCheck(wordVO); // 리스트 생성
+        List<WordVO> list = wordDao.nameDuplicationCheck(wordVO); // 리스트 생성(Dao에 요청)
         
         if(list.size() > 0) {
         	for(int i = 0; i < list.size(); i++) {
@@ -116,18 +103,5 @@ public class WordService {
         return list;
     }
     
-    // [하늘] 단어명 및 단어영문명 중복조회
-    public List<WordVO> abbrDuplicationCheck(WordVO wordVO){
-        List<WordVO> list = wordDao.abbrDuplicationCheck(wordVO); // 리스트 생성
-        
-        if(list.size() > 0) {
-        	for(int i = 0; i < list.size(); i++) {
-        		if(!StringUtils.isEmpty(list.get(i).getWordDscrpt())) {
-        			list.get(i).setSummaryWordDscrpt(list.get(i).getWordDscrpt().replace("<br>", "  "));
-        		}
-        	}
-        }
-
-        return list;
-    }
+   
 }

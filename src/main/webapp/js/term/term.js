@@ -411,7 +411,6 @@ function createTerm() {
 		return false;
 	}
 	toggleInputStatus(true);   //termNm과 termabbr 토글 함수
-
 	$.ajax({
 		url : contextPath + "/term/create",
 		type : "POST",

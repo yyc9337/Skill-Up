@@ -46,6 +46,11 @@ public class BaseVO extends Paging {
 	private String sorting;
 	private String iDisplayStart;
 	private String iDisplayLength;
+    Integer recordsTotal; // 필터링 전 전체 데이터 수
+	Integer recordsFiltered; // 필터링 후 전체 데이터 수
+	List<?> data;
 	
-
-}
+	public Integer getRecordsFiltered() {		
+		return recordsTotal;
+	}
+	}
