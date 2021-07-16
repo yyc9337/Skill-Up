@@ -79,12 +79,13 @@ public class TermService {
     public boolean insertTerm(TermVO termVO){
     	//유효성 검사 값이 비어있는지 확인 비어있다면 throw 시킴
         validationTermObject(termVO);
-        //setUseYn을 N로 변경, Select시 삭제된적이 있는지 확인하기 위함
+        //신규등록할 데이터가 기존의 DB에 존재하나 사용하지 않는 경우 부활 시켜준다.
+        //기존의 DB에 존재하나 사용되지 않는(UseYN = N) 데이터가 있는지 체크. 
         termVO.setUseYn("N");
         //입력된 데이터가 기존에 작성되고 삭제된 데이터가 있는지 확인
-        TermVO temp = termDao.recycleCheck(termVO);
-        if(temp != null && !CommonUtil.isEmpty(temp.getTermSeq())){//유효성 검사
-        	//만약 1이 반환됐다면 DB성공임으로 true를 리턴 아니라며 false
+        TermVO temp = termDao.recycleCheck(termVO);   
+        //기존 데이터 부활
+        if(temp != null && !CommonUtil.isEmpty(temp.getTermSeq())){
             return termDao.recycleTerm(temp) == 1 ? true : false;
         }
         //UseYn을 Y로 바꿔줌(다시 테이블에 조회가능)
@@ -115,7 +116,7 @@ public class TermService {
         }
         if(termVO.getTermSeq() == 0){
             throw new GlzzaBadRequestException("Term Seq is Valid");
-        }
+        } 
 
         //삭제가 성공되면 true 아니라면 false반환
         return termDao.deleteTerm(termVO) == 1 ? true : false;

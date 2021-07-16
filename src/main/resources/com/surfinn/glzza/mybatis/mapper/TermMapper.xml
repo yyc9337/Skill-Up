@@ -90,7 +90,7 @@
 		FROM
     		information_schema.columns
 		WHERE
-    		table_schema = 'GLZZA' AND table_name = 'TB_TERM';
+    		table_schema = 'GLZZA' AND table_name = 'TB_TERM' AND COLUMN_COMMENT LIKE '용어%';   <!--AND COLUMN_COMMENT LIKE '용어%';을 추가하여 로딩속도와 쿼리 처리속도를 향상 되게함 --> 
 	</select>
 
 	<insert id="insertTerm" parameterType="com.surfinn.glzza.vo.TermVO">

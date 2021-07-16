@@ -228,6 +228,8 @@ function searchList(searchType, keyword, orderNumber) {
 }
 
 
+
+
 //도메인 분류명 목록
 function searchList2() {
 	
@@ -481,7 +483,7 @@ function duplicateDomainTypeName(domainTypeNm, type) {
 					$("#saveButton2").show();
 					$("#updateButton2").hide();
 				} else if(type == 2) {		
-					if(data[0].domainSeq == domainSeq) {
+					if(data.data[0].domainSeq == domainSeq) {
 						updateConfirm();
 					} else {
 						$("#domainTypeNmListTitle").html(modalUpdateHeader);

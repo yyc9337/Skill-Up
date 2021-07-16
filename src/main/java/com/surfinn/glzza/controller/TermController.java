@@ -32,6 +32,7 @@ public class TermController {
 //    public SuccessResponse<List<TermVO>> selectTermList(@RequestBody TermVO termVO, Paging paging){
 //        return new SuccessResponse<>(termService.selectTermList(termVO, paging));
 //    }
+    ///유영찬 커밋 테스트
 
     //카테고리 타입 검색 후 리스트로 반환
     @GetMapping("/searchType")

@@ -1,0 +1,110 @@
+package com.surfinn.glzza.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Service;
+
+import com.surfinn.glzza.dao.TermDao;
+import com.surfinn.glzza.exception.GlzzaBadRequestException;
+import com.surfinn.glzza.utility.CommonUtil;
+import com.surfinn.glzza.vo.BaseVO;
+import com.surfinn.glzza.vo.Paging;
+import com.surfinn.glzza.vo.TermVO;
+
+import io.micrometer.core.instrument.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service("termService")
+public class TermService {
+    @Autowired
+    TermDao termDao;
+    
+    @Autowired
+	private ResourceLoader resourceLoader;
+
+    public BaseVO selectTermList(TermVO termVO, BaseVO baseVo){    
+//    	paging.setRecordsTotal(termDao.selectTotalCountTerm(termVO));
+      
+	   String[] columns = new String[]{"TERM_SEQ","TERM_NM","TERM_ABBR","DOMAIN_SEQ","TERM_DSCRPT","UPD_DT"};
+       baseVo.setSorting(columns[baseVo.getISortCol_0()]);
+       if(baseVo.getISortCol_0()==5){
+       	baseVo.setSSortDir_0("DESC");
+       }else{
+       	baseVo.setSSortDir_0(baseVo.getSSortDir_0().toUpperCase());
+       }
+
+        List<TermVO> list = termDao.selectTermList(termVO, baseVo);
+        
+        if(list.size() > 0) {
+        	for(int i = 0; i < list.size(); i++) {
+        		if(!StringUtils.isEmpty(list.get(i).getTermDscrpt())) {
+        			list.get(i).setSummaryTermDscrpt(list.get(i).getTermDscrpt().replace("<br>", "  "));
+        		}
+        	}
+        }
+
+//        paging.setRecordsFiltered(list.size());
+     
+        baseVo.setData(list);
+		return baseVo;
+    }
+
+    public List<TermVO> selectSearchType(){
+        return termDao.selectSearchType();
+    }
+
+    public boolean insertTerm(TermVO termVO){
+        validationTermObject(termVO);
+        termVO.setUseYn("N");
+        TermVO temp = termDao.recycleCheck(termVO);
+        if(temp != null && !CommonUtil.isEmpty(temp.getTermSeq())){
+            return termDao.recycleTerm(temp) == 1 ? true : false;
+        }
+        termVO.setUseYn("Y");
+        return termDao.insertTerm(termVO) == 1 ? true : false;
+    }
+
+    public boolean duplicateCheck(TermVO termVO){
+        return termDao.duplicateCheck(termVO) == 0 ? true : false;
+    }
+
+    public TermVO searchTermBySeq(TermVO termVO){
+        if(CommonUtil.isEmpty(termVO.getTermSeq())){
+            throw new GlzzaBadRequestException("Term Seq is Empty");
+        }
+
+        return termDao.searchTermBySeq(termVO);
+    }
+
+    public boolean deleteTerm(TermVO termVO){
+        if(CommonUtil.isEmpty(termVO.getTermSeq())){
+            throw new GlzzaBadRequestException("Term Seq is Empty");
+        }
+        if(termVO.getTermSeq() == 0){
+            throw new GlzzaBadRequestException("Term Seq is Valid");
+        }
+
+        return termDao.deleteTerm(termVO) == 1 ? true : false;
+    }
+
+    public boolean updateTerm(TermVO termVO){
+        if(CommonUtil.isEmpty(termVO.getTermSeq())){
+            throw new GlzzaBadRequestException("Term Seq is Empty");
+        }
+        return termDao.updateTerm(termVO) == 1 ? true : false;
+    }
+
+    private void validationTermObject(TermVO termVO){
+        if(CommonUtil.isEmpty(termVO.getTermNm()))
+            throw new GlzzaBadRequestException("Term Name is Empty");
+        if(CommonUtil.isEmpty(termVO.getTermAbbr()))
+            throw new GlzzaBadRequestException("Term English Short Name is Empty");
+        if(CommonUtil.isEmpty(termVO.getDomainSeq()))
+            throw new GlzzaBadRequestException("Doamin Seq is Empty");
+    }
+
+
+}
