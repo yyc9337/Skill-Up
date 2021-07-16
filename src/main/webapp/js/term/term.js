@@ -328,18 +328,18 @@ function saveConfirm() {
 // 	});
 // }
 
-function loadDomainData(){    //모르겠음
+function loadDomainData(){    //모달 안에서 도메인명 선택 리스트 띄워주는 함수
 
 	$.ajax({
 		url : contextPath + "/domain/selectall",
 		type : "GET",
 		contentType : "application/json",
 		success : function(data){
-			if(data.length == 0){
+			if(data.data.length == 0){
 				return false;
 			}
 
-			$.each(data,function(index, item){
+			$.each(data.data,function(index, item){
 				let option = $("<option>");
 				$(option).val(item.domainSeq);
 				$(option).text(item.domainNm);
@@ -399,7 +399,7 @@ function createTerm() {
 	$("#termDscrpt").val($("#termDscrpt").val().replace(/(?:\r\n|\r|\n)/g, '<br>'));
 	
 	let sendData = {
-		"termNm" : $("#termrecNm").val(),
+		"termNm" : $("#termNm").val(),
 		"termAbbr" : $("#termAbbr").val(),
 		"domainSeq" : $("#domainSeq").val(),
 		"termDscrpt" : $("#termDscrpt").val().trim(),
@@ -410,7 +410,7 @@ function createTerm() {
 		alertMessage("경고", "이미 등록된 용어입니다.", "warning");
 		return false;
 	}
-	toggleInputStatus(true);   //모르겠음
+	toggleInputStatus(true);   //termNm과 termabbr 토글 함수
 
 	$.ajax({
 		url : contextPath + "/term/create",

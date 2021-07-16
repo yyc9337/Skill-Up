@@ -52,19 +52,19 @@ public class DomainController {
     
     @GetMapping("/select")
     @ResponseBody
-    public SuccessResponse<DomainVO> selectDomain(@RequestBody DomainVO domainVO) {
+    public SuccessResponse<DomainVO> selectDomain(DomainVO domainVO) {
     	return new SuccessResponse<>(domainService.selectDomain(domainVO));
     }
     
     @GetMapping("/duplicationNameCheck")
     @ResponseBody
-    public SuccessResponse<Integer> duplicationNameCheck(@RequestBody DomainVO domainVO) {
+    public SuccessResponse<Integer> duplicationNameCheck(DomainVO domainVO) {
     	return new SuccessResponse<>(domainService.duplicationNameCheck(domainVO));
     }
     
     @GetMapping("/duplicateDomainTypeName")
     @ResponseBody
-    public SuccessResponse<List<DomainVO>> duplicateDomainTypeName(@RequestBody DomainVO domainVO) {
+    public SuccessResponse<List<DomainVO>> duplicateDomainTypeName(DomainVO domainVO) {
     	return new SuccessResponse<>(domainService.duplicateDomainTypeName(domainVO));
     }
     

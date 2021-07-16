@@ -228,8 +228,6 @@ function searchList(searchType, keyword, orderNumber) {
 }
 
 
-
-
 //도메인 분류명 목록
 function searchList2() {
 	
@@ -332,6 +330,7 @@ function openModal(type, domainSeq) {
 	        data : sendData,
 			async : false,
 	        success : function(data){
+				console.log("data:", data.data);
 				$("#insert_form input[name=domainTypeNm]").val(data.data.domainTypeNm);
 				$("#insert_form input[name=domainNm]").val(data.data.domainNm);
 				$("#insert_form #dataType").val(data.data.dataType);
@@ -431,7 +430,7 @@ function duplicateNameCheck(sendData) {
         data : sendData,
 		async : false,
         success : function(data){
-			if(data.data >= 1) {
+			if(data >= 1) {
 				alertMessage(warning,warningExistDomainName,"warning");
 				//$("#cancelButton2").click();
 				$("#modal2").removeClass("show");
@@ -544,7 +543,7 @@ function insertDomain() {
         data : JSON.stringify(sendData),
 		async : false,
         success : function(data){
-			if(data.data==1) {
+			if(data==1) {
 				alertMessage(succ,succInsertDomain,"success");
 				$("#cancelButton").click();
 				$("#cancelButton2").click();
@@ -580,7 +579,7 @@ function deleteDomain(domainSeq) {
         data : JSON.stringify(sendData),
 		async : false,
         success : function(data){
-			if(data.data==1) {
+			if(data==1) {
 				alertMessage(succ,succDeleteDomain,"success");
 				$("#cancelButton").click();
 				dataTable.destroy();
@@ -623,7 +622,7 @@ function updateDomain() {
         data : JSON.stringify(sendData),
 		async : false,
         success : function(data){
-			if(data.data==2) {
+			if(data==2) {
 				alertMessage(succ,succUpdateDomain,"success");
 				$("#cancelButton").click();
 				$("#cancelButton2").click();

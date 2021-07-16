@@ -30,11 +30,13 @@ public class TermDao {
 
     //용어 생성
     public int insertTerm(TermVO termVO){
+        System.out.print(termVO.getTermNm()+"insert dao");
         return termMapper.insertTerm(termVO);
     }
 
     //유효성 검사
     public int duplicateCheck(TermVO termVO){
+        System.out.print(termVO.getTermNm()+"duplecate dao");
         return termMapper.duplicateCheck(termVO);
     }
 
