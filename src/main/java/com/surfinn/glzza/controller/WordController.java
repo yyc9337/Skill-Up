@@ -1,6 +1,8 @@
+// commit test
 package com.surfinn.glzza.controller;
 
 import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,7 @@ import com.surfinn.glzza.vo.WordVO;
 @RequestMapping("/word")
 public class WordController {
     @Autowired
-    private WordService wordService;
+    private WordService wordService;  //WordService에 있는 메소드를 사용.
 
     // 단어 리스트
     @PostMapping("/list")

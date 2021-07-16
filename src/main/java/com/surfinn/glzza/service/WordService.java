@@ -64,19 +64,18 @@ public class WordService {
             wordVO.setSynmList("");
         }
 
-        return wordDao.insertWord(wordVO);
+        return wordDao.insertWord(wordVO); //Dao에 요청
     }
 
     // 단어 삭제
     public int deleteWord(WordVO wordVO) {
         wordVO.setUpdId(CommonConst.UPD_ID);
-        return wordDao.deleteWord(wordVO);
+        return wordDao.deleteWord(wordVO); //Dao에 요청(wordVO반환)
     }
     
     public int updateWord(WordVO wordVO){
         wordVO.setUpdId(CommonConst.UPD_ID);
-        return wordDao.updateWord(wordVO);
-    }
+        return wordDao.updateWord(wordVO); //Dao에 요청(wordVO반환)
     
     public int revivalWord(WordVO wordVO){
         wordVO.setUpdId(CommonConst.UPD_ID);
@@ -84,13 +83,13 @@ public class WordService {
     }
     
     public WordVO selectWord(WordVO wordVO){
-        return wordDao.selectWord(wordVO);
+        return wordDao.selectWord(wordVO); //Dao에 요청(wordVO반환)
     }
 
     
     // [하늘] 단어명 및 단어영문명 및 이음동의어 중복조회
     public List<WordVO> nameDuplicationCheck(WordVO wordVO){
-        List<WordVO> list = wordDao.nameDuplicationCheck(wordVO); // 리스트 생성
+        List<WordVO> list = wordDao.nameDuplicationCheck(wordVO); // 리스트 생성(Dao에 요청)
         
         if(list.size() > 0) {
         	for(int i = 0; i < list.size(); i++) {

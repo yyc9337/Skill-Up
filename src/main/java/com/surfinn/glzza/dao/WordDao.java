@@ -24,22 +24,22 @@ public class WordDao {
     }
 
     public int selectWordListCount(WordVO wordVO){
-        return wordMapper.selectWordListCount(wordVO);
+        return wordMapper.selectWordListCount(wordVO); //wordMappr에 요청
     }
 
     public List<WordVO> searchType(){
-        return wordMapper.searchType();
+        return wordMapper.searchType(); //wordMappr에 요청
     }
 
     public int insertWord(WordVO wordVO){
-        return wordMapper.insertWord(wordVO);
+        return wordMapper.insertWord(wordVO); //wordMappr에 요청
     }
 
     public int deleteWord(WordVO wordVO){
-        return wordMapper.deleteWord(wordVO);
+        return wordMapper.deleteWord(wordVO); //wordMappr에 요청
     }
     public int updateWord(WordVO wordVO){
-        return wordMapper.updateWord(wordVO);
+        return wordMapper.updateWord(wordVO); //wordMappr에 요청
     }
    
     public int revivalWord(WordVO wordVO){
