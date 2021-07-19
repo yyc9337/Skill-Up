@@ -217,4 +217,17 @@
 	<select id="selectAll" resultType="com.surfinn.glzza.vo.DomainVO">
 		SELECT * FROM TB_DOMAIN WHERE USE_YN = 'Y'
 	</select>
+	
+	<!-- 단어 복원 -->
+	    <update id="revivalDomain" parameterType="com.surfinn.glzza.vo.DomainVO">
+        UPDATE TB_DOMAIN
+        SET
+            USE_YN = 'Y',
+            UPD_ID = #{updId},
+            UPD_DT = NOW(),
+			DOMAIN_DSCRPT = #{domainDscrpt}		
+        WHERE
+            DOMAIN_SEQ = #{domainSeq}
+    </update>
+    
 </mapper>

@@ -207,7 +207,7 @@ function searchList(searchType, keyword, orderNumber) {
        $("#newButton").click();
       
       if(searchType == "DeleteList") {
-		openModal('revival', rowData.wordSeq);
+		openModal('revival', rowData.domainSeq);
 		} else {
 			openModal("update", rowData.domainSeq);
 		}
@@ -311,7 +311,7 @@ function openModal(type, domainSeq) {
   clearFormData(); // form안에 입력 내용을 비워줌 (common.js)
   readOnlyOption(""); // 데이터 타입이 선택되지 않았으므로 데이터 길이 및 소수점 길이 입력 불가
 
-  //add = 신규등록 , update = 상세보기
+  //add = 신규등록 , update = 상세보기, revival = 단어 복원
   if (type == "add") {
     $("#modal #saveButton").show();
     $("#modal #updateButton").hide();
@@ -319,10 +319,11 @@ function openModal(type, domainSeq) {
     $("#modal .modal-title").html(modalRegistHeader);
   } else if (type == "update" || type == "revival") {
 	$("#modal #saveButton").hide();
+	$("#modal .modal-title").html(modalUpdateHeader);
 	if (type == "update") {
+		$("#modal #revivalButton").hide();
     	$("#modal #updateButton").show();
     	$("#modal #deleteButton").show();
-    	$("#modal .modal-title").html(modalUpdateHeader);
 	} else {
 		$("#modal #revivalButton").show();
         $("#modal #deleteButton").hide();
@@ -705,4 +706,37 @@ function Delete_History() {
 	let dataTable = $("#domainTable").DataTable();
 	dataTable.destroy();
 	searchList("DeleteList");
+}
+
+// 복원 여부 확인
+function revivalConfirm() {
+	if (!insertValidation()){
+      return;
+    }
+	checkConfirm('단어 복원', '단어를 재사용하시겠습니까?', 'revivalDomain();');
+}
+
+// 복원 기능
+function revivalDomain() {
+  let sendData = $("#insert_form").serializeObjectCustom();
+  let dataTable = $("#domainTable").DataTable();
+
+  $.ajax({
+    url: contextPath + "/domain/revival",
+    contentType: "application/json",
+    type: "POST",
+    data: JSON.stringify(sendData),
+    async: false,
+    success: function (data) {
+            if(data.data==1) {
+                alertMessage("성공!","단어 복원이 완료되었습니다.","success");
+                $("#cancelButton").click();
+                dataTable.destroy();
+                searchList('','',0);
+            } else {
+                alertMessage("경고!","실패하였습니다. 관리자에게 문의해주세요.","danger");
+                $("#cancelButton").click();
+            }
+    },
+  });
 }
