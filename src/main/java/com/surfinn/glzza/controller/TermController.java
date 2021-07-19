@@ -4,6 +4,7 @@ import com.surfinn.glzza.service.TermService;
 import com.surfinn.glzza.utility.SuccessResponse;
 import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.TermVO;
+import com.surfinn.glzza.vo.WordVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,6 +69,13 @@ public class TermController {
     @PutMapping("/update")
     public SuccessResponse<Boolean> updateTerm(@RequestBody TermVO termVO){
         return new SuccessResponse<>(termService.updateTerm(termVO));
+    }
+    
+    //용어 부활
+    @PostMapping("/revival")
+    @ResponseBody
+    public SuccessResponse<Integer> revivalTerm(@RequestBody TermVO termVO) {
+    	return new SuccessResponse<>(termService.revivalTerm(termVO));
     }
 
 

@@ -17,11 +17,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import com.surfinn.glzza.core.CommonConst;
 import com.surfinn.glzza.dao.TermDao;
 import com.surfinn.glzza.exception.GlzzaBadRequestException;
 import com.surfinn.glzza.utility.CommonUtil;
 import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.TermVO;
+import com.surfinn.glzza.vo.WordVO;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -137,6 +139,12 @@ public class TermService {
             throw new GlzzaBadRequestException("Term English Short Name is Empty");
         if(CommonUtil.isEmpty(termVO.getDomainSeq()))//도메인 시퀀셜이 비어있다면
             throw new GlzzaBadRequestException("Doamin Seq is Empty");
+    }
+    
+    //용어 부활
+    public int revivalTerm(TermVO termVO){
+        termVO.setUpdId(CommonConst.UPD_ID);
+        return termDao.revivalTerm(termVO);
     }
 
 

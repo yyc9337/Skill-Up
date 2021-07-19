@@ -608,7 +608,7 @@ function revivalWord() {
     let dataTable = $("#wordTable").DataTable();   
 
     $.ajax({
-        url : contextPath +"/word/revival",
+        url : contextPath +"/term/revival",
         contentType : "application/json",
         type : "POST",
         data : JSON.stringify(sendData),
@@ -624,5 +624,104 @@ function revivalWord() {
             }
         }
     });
+}
+
+function searchList(searchType, keyword, orderNumber) {
+
+    let order = 'asc';
+	//병합
+    if (orderNumber == undefined || orderNumber == 1){
+		orderNumber = 1;
+        order = 'asc';
+    } else {
+        order = 'desc';
+    }
+    
+    //Sorting 하기 위한 컬럼들 서버로 가지고감
+    var columns = ['WORD_SEQ','WORD_NM','WORD_ABBR','WORD_ENG_NM', 'WORD_DSCRPT', 'SYNM_LIST'];
+	//입력 파라미터
+    var param = {
+			"searchType" : searchType,
+			"keyword" : keyword
+			}
+
+    //sAjaxSource 를 사용하면 기본적인 DataTable에 사용되는 옵션들을 객체로 가지고 감.
+    $("#wordTable").DataTable({
+	  	processing: true, 
+	  	serverSide: true,
+        responsive: true,
+        autoWidth: true,
+        sAjaxSource : contextPath + '/word/list?columns='+columns +'&keyword=' + keyword + '&searchType=' + searchType,
+        sServerMethod: "POST",
+		"drawCallback": function (settings, json) {
+			//$('[data-toggle="tooltip"]').tooltip('update');
+			$('[data-toggle="popover"]').popover('update');
+		},
+		columns: [
+          { data: 'wordSeq', width: "10%"},
+          { data: 'wordNm' },
+          { data: 'wordAbbr' },
+          { data: 'wordEngNm' },
+          { data: 'summaryWordDscrpt' }, //summaryWordDscrpt
+          { data: 'synmList' }
+       ],
+       columnDefs: [
+			{ targets:[0], title: 'ID' },
+			{ targets:[1], title: '단어명' },
+			{ targets:[2], title: '단어 영문 약어명' },
+			{ targets:[3], title: '단어 영문명' },
+			{ targets:[4], title: '단어 설명' },
+			{ targets:[5], title: '이음동의어' }
+		],
+        // order: [[orderNumber, 'asc']]
+        order: [[orderNumber, order]],
+
+		createdRow: function (row, data, dataIndex) {
+			// $(row).find('td:eq(4)').attr('data-toggle', "tooltip");
+
+			//$(row).find('td:eq(4)').attr('title', data["wordSeq"]);
+			// body속성 부여
+			$(row).find('td:eq(4)').attr('data-container', 'body');
+			// wordDscrpt 내용 채우기 - 해당 태그에 속성 부여
+			$(row).find('td:eq(4)').attr('data-content', data["wordDscrpt"]);
+			// $(row).find('td:eq(4)').attr('data-placement', "bottom");
+			// pop업창 띄우기 -  해당 태그에 속성 부여
+			$(row).find('td:eq(4)').attr('data-toggle', "popover");
+			//마우스 포인팅작업  - 해당 태그에 속성 부여
+			$(row).find('td:eq(4)').attr('data-trigger', "hover");
+			
+			// 각 행에 대한 하이라이트 작업 공간
+			
+		}
+	});
+
+	// tr요소를 더블클릭했을 때 wordTable 생성
+    $('#wordTable tbody').on('dblclick', 'tr', function () {
+		// table을 DataTable로 생성
+        let table = $("#wordTable").DataTable();
+		// table
+        var rowData = table.row( this ).data();
+
+		if(rowData != undefined) {
+			//Modal 실행
+        	$("#newButton").click();
+        	//실행된 Modal에 update로 변수 전달
+        	if(searchType == "DeleteList") {
+				openModal('revival', rowData.wordSeq);
+			}
+				else {
+					openModal('update', rowData.wordSeq);
+				}
+        	
+        
+        }
+    });
+	// 카테고리 변경시 마우스 커서가 keyword창으로 전달됨
+    $("#searchType").change(function () {
+        $("#keyword").focus();
+    });
+    // Table 높이 580px로 고정
+    let dataTableHeight = document.getElementsByClassName('dataTables_scrollBody')[0];
+	dataTableHeight.style.minHeight = '580px';
 }
 
