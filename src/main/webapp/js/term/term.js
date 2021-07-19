@@ -68,7 +68,7 @@ $(window).on('load', function() {
 	categorySelect();
 	loadDomainData();
 	searchList();
-
+	
 	$('#termTable tbody').on( 'dblclick', 'tr', function (event) {    //더블클릭하면 모달이 생성됨
 		let table = $("#termTable").DataTable();
 		let tr = table.row($(this).closest('tr'));
@@ -83,23 +83,6 @@ $(window).on('load', function() {
 
 });
 
-// function formatRepo (item) {
-// 	let option = $("<option>");
-// 	if(item.synmList == null){
-// 		$(option).text(item.wordNm + "    [영어명 : "+item.wordEngNm+", 약어명 : "+item.wordEngShortNm+"]");
-// 	}else{
-// 		$(option).text(item.wordNm + "    [영어명 : "+item.wordEngNm+", 약어명 : "+item.wordEngShortNm+", 동의어 : "+item.synmList+"]");
-// 	}
-// 	$(option).text(item.wordNm);
-// 	$(option).val(item.wordSeq);
-// 	$(option).attr("wordEngShortNm",item.wordEngShortNm);
-// 	return option;
-// }
-//
-// function formatRepoSelection (item) {
-// 	console.log(item);
-// 	return item.wordNm;
-// }
 
 function selectDoamin(domainSeq){  
 	// ID domainDetail
@@ -135,26 +118,6 @@ function categorySelect() {   //카테고리를 선택하는 함수
 					$(option).val('termDscrpt').text(data.data[i].columnComment);
 					$("#searchType").append($(option));
 				}
-				
-				/*
-				if(data.data[i].columnName == 'TERM_ABBR') {
-					var option  = $("<option>");
-					$(option).val('termAbbr').text(data.data[i].columnComment);
-				//	$(option).val('termAbbr').text('용어영문약어명');
-					$("#searchType").append($(option));
-				}
-				
-				if(data.data[i].columnName == 'TERM_NM') {
-					var option  = $("<option>");
-					$(option).val('termNm').text('용어 이름');
-					$("#searchType").append($(option));
-				}
-
-				if(data.data[i].columnName == 'TERM_DSCRPT') {
-					var option  = $("<option>");
-					$(option).val('termDscrpt').text('용어 설명');
-					$("#searchType").append($(option));
-				}*/
 			}
         }
     });
@@ -598,6 +561,7 @@ function revivalConfirm() {
 
 
 // 복원 기능 추가
+/*
 function revivalWord() {
 
     let sendData = {
@@ -625,7 +589,8 @@ function revivalWord() {
         }
     });
 }
-
+*/
+/*
 function searchListwd(searchType, keyword, orderNumber) {
 
     let order = 'asc';
@@ -714,11 +679,10 @@ function searchListwd(searchType, keyword, orderNumber) {
     // Table 높이 580px로 고정
     let dataTableHeight = document.getElementsByClassName('dataTables_scrollBody')[0];
 	dataTableHeight.style.minHeight = '580px';
-}
+}*/
 
 
-
-
+/*
 function openModal(type, termSeq) {
     clearFormData();
     if (type == 'update' || type == "revival"){
@@ -779,4 +743,4 @@ function openModal(type, termSeq) {
             }
         });
     }
-}
+}*/

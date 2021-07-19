@@ -1,7 +1,10 @@
 //onload 하는 중
+
+	let btnflag = 'in';
 $(document).ready(function () {
     categorySelect();
     searchList();
+    
 
     //한글입력 안되게 처리
     //keydown(누른다)-keypress(입력된다)-keyup(입력끝)
@@ -83,6 +86,7 @@ function searchList(searchType, keyword, orderNumber) {
     } else {
         order = 'desc';
     }
+	
     
     //Sorting 하기 위한 컬럼들 서버로 가지고감
     var columns = ['WORD_SEQ','WORD_NM','WORD_ABBR','WORD_ENG_NM', 'WORD_DSCRPT', 'SYNM_LIST'];
@@ -197,12 +201,27 @@ function searchWord() {
     searchList(searchType, keyword);
 }
 function Delete_History() {
+	if(btnflag == 'in'){
+		btnflag = 'out';
+		History_in();
+	}
+	if(btnflag == 'out'){
+		btnflag = 'in';
+		History_out();
+	}
+}
+
+function History_in() {
 	let searchType = 'DeleteList';
 	let dataTable = $("#wordTable").DataTable();
 	dataTable.destroy();
 	searchList(searchType);
-	
 }
+
+function History_out() {
+	searchList();
+}
+
 //검색 초기화 아이콘 클릭 이벤트
 function resetSearch() {
     $("#searchType").val('all');
