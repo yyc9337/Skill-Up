@@ -76,7 +76,14 @@
 			<if test="searchType eq 'domainNm'">
 				AND DOMAIN_NM LIKE CONCAT('%', #{keyword}, '%')
 			</if>
-			AND USE_YN = 'Y'
+			<choose>
+	    	<when test="searchType eq 'DeleteList'">
+        		AND USE_YN = 'N'
+        	</when>
+      		<otherwise>
+        	    AND USE_YN = 'Y'
+        	</otherwise>
+	    	</choose>
 		</where>	
 	</select>
 
