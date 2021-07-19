@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.surfinn.glzza.mybatis.mapper.TermMapper;
 import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.TermVO;
+import com.surfinn.glzza.vo.WordVO;
 
 @Repository("termDao")
 public class TermDao {
@@ -57,4 +58,6 @@ public class TermDao {
 
     //입력된 데이터가 기존에 작성되고 삭제된 적이 있는지 확인
     public TermVO recycleCheck(TermVO termVO) { return termMapper.recycleCheck(termVO);}
+    
+    public int revivalTerm(TermVO termVO){ return termMapper.revivalTerm(termVO);}
 }
