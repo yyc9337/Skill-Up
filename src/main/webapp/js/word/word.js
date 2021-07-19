@@ -1,10 +1,13 @@
 //onload 하는 중
 
-	let btnflag = 'in';
+
+
 $(document).ready(function () {
     categorySelect();
     searchList();
     
+	$("#modal #revivalButton").show();
+	$("#modal #outrevivalButton").hide();
 
     //한글입력 안되게 처리
     //keydown(누른다)-keypress(입력된다)-keyup(입력끝)
@@ -201,17 +204,8 @@ function searchWord() {
     searchList(searchType, keyword);
 }
 function Delete_History() {
-	if(btnflag == 'in'){
-		btnflag = 'out';
-		History_in();
-	}
-	if(btnflag == 'out'){
-		btnflag = 'in';
-		History_out();
-	}
-}
-
-function History_in() {
+	$("#modal #revivalButton").hide();
+	$("#modal #outrevivalButton").show();
 	let searchType = 'DeleteList';
 	let dataTable = $("#wordTable").DataTable();
 	dataTable.destroy();
@@ -219,6 +213,10 @@ function History_in() {
 }
 
 function History_out() {
+	$("#modal #revivalButton").show();
+	$("#modal #outrevivalButton").hide();
+	let dataTable = $("#wordTable").DataTable();
+	dataTable.destroy();
 	searchList();
 }
 
