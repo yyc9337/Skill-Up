@@ -117,7 +117,7 @@ function selectDoamin(domainSeq){
 
 }
 
-//검색 SelectBox 초기화ㅋ
+//검색 SelectBox 초기화
 function categorySelect() {   //카테고리를 선택하는 함수
 	$.ajax({
         url : contextPath +"/term/searchType",
@@ -162,10 +162,17 @@ function categorySelect() {   //카테고리를 선택하는 함수
 
 //용어 목록
 function searchList(searchType, keyword, orderNumber) {
-
 	if(orderNumber == undefined) {
 		orderNumber = 1;
-	}
+	}    
+	
+	//Sorting 하기 위한 컬럼들 서버로 가지고감
+    var columns = ['termSeq','termNm','termAbbr','domainNm', 'summaryTermDscrpt', 'updDt'];
+	//입력 파라미터
+    var param = {
+			"searchType" : searchType,
+			"keyword" : keyword
+			}
 
 	$("#termTable").DataTable({   //데이터 테이블 생성
 	  	processing: true,    //테이블을 생성한 후 어떠한 기능들을 허용하겠다는 기능을 갖고 있는데 정확히 무엇인지 파악 중 
@@ -175,7 +182,7 @@ function searchList(searchType, keyword, orderNumber) {
 		sAjaxSource : contextPath + '/term/list?keyword=' + keyword + '&searchType=' + searchType,
 	  	sServerMethod: "POST",
 
-		// popover
+		// pop over
 		"drawCallback": function (settings, json) {     //마우스를 가져다 대면 팝업 방식으로 용어 설명란에 설명 팝업이생김
 			//$('[data-toggle="tooltip"]').tooltip('update');
 			$('[data-toggle="popover"]').popover('update');
@@ -210,6 +217,31 @@ function searchList(searchType, keyword, orderNumber) {
 		}
 	  });	
 	 
+	// tr요소를 더블클릭했을 때 wordTable 생성
+    $('#termTable tbody').on('dblclick', 'tr', function () {
+		// table을 DataTable로 생성
+        let table = $("#termTable").DataTable();
+		// table
+        var rowData = table.row( this ).data();
+
+		if(rowData != undefined) {
+			//Modal 실행
+        	$("#newButton").click();
+        	//실행된 Modal에 update로 변수 전달
+        	if(searchType == "DeleteList") {
+				openModal('revival', rowData.wordSeq);
+			}
+				else {
+					openModal('update', rowData.wordSeq);
+				}
+        	
+        
+        }
+    });
+	// 카테고리 변경시 마우스 커서가 keyword창으로 전달됨
+    $("#searchType").change(function () {
+        $("#keyword").focus();
+    });
 	 //"dataTables_scrollBody"클래스를 가진 div는 플러그인에 의해 자동 생성됩니다. 이 테이블의 높이를 580px로 고정시킴 
 	 let dataTableHeight = document.getElementsByClassName('dataTables_scrollBody')[0];
 	 dataTableHeight.style.minHeight = '580px'; 
@@ -257,6 +289,14 @@ function searchTerm() {
 	searchList(searchType, keyword);
 }
 
+//삭제 조회버튼
+function Delete_History() {
+	let searchType = 'DeleteList';
+	let dataTable = $("#termTable").DataTable();
+	dataTable.destroy();
+	searchListwd(searchType);
+	
+}
 function destroyTable(){
 	let dataTable = $("#termTable").DataTable();
 	dataTable.destroy();
@@ -568,4 +608,68 @@ function excelDownload_exerd() {
 	let serviceName = 'termListExcelDownload';
 	let fileName = 'TERM_LIST_EXERD';	
 	apiRequestExcel(serviceName, fileName, $("#search_form"));
+}
+
+
+//모달 초기화
+function openModal(type, wordSeq) {
+    clearFormData();
+	
+	//add = 신규등록 , update = 상세보기
+    if(type == "revival") {
+		$('div.modal-body').children().show();
+		
+		// 등록 프로세스 관련 구역 및 버튼 hide
+		$('div #stage0').find('button').hide();
+		$('#stage0Helper').hide();
+		$('div #stage2').find('button').hide();
+		$('#stage2Helper').hide();
+		$('div.insertWord').hide();
+		//버튼 관리
+		if(type == "revival"){
+			$("#modal #revivalButton").show();
+        	$("#modal #deleteButton").hide();
+			$("#modal #updateButton").hide();
+		}
+		else{
+			$("#modal #revivalButton").hide();
+        	$("#modal #deleteButton").show();
+			$("#modal #updateButton").show();
+		}
+        $("#modal #saveButton").hide();
+        $("#modal .modal-title").html('단어 상세보기');
+        $("#insert_form input[name=wordSeq]").val(wordSeq);
+		
+		// 비활성화
+		$("#wordNm").attr('readonly', true).addClass('valid');
+		$("#wordEngNm").attr('readonly', true).addClass('valid');
+		$("#wordAbbr").attr('readonly', true).addClass('valid');
+		
+		// 인풋 길이
+		$('#wordEngNm').removeClass('input-short');
+		$('#wordAbbr').removeClass('input-short');
+
+        let sendData = {
+            "wordSeq" : wordSeq
+    }
+        
+
+        $.ajax({
+            url : contextPath +"/term/search",
+            contentType : "application/json",
+            type : "GET",
+            data : sendData,
+            async : false,
+            success : function(data){
+                $("#insert_form #wordSeq").val(data.data.wordSeq);
+                $("#insert_form #wordNm").val(data.data.wordNm);
+                $("#insert_form #wordAbbr").val(data.data.wordAbbr);
+                $("#insert_form #wordEngNm").val(data.data.wordEngNm);
+                if(data.wordDscrpt != null) {
+					$("#insert_form #wordDscrpt").val(data.data.wordDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
+				}
+                $("#insert_form #synmList").val(data.data.synmList);
+            }
+        });
+    }
 }

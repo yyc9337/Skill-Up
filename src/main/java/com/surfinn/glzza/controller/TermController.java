@@ -42,7 +42,6 @@ public class TermController {
     //용어 생성
     @PostMapping("/create")
     public SuccessResponse<Boolean> insertTerm(@RequestBody TermVO termVO){
-        System.out.println(termVO.getTermNm()+"create controll");
         return new SuccessResponse<>(termService.insertTerm(termVO));
         
     }
@@ -50,7 +49,6 @@ public class TermController {
     //유효성 검사
     @PostMapping("/duplicateCheck")
     public SuccessResponse<Boolean> duplicateCheck(@RequestBody TermVO termVO){
-        System.out.println(termVO.getTermNm()+"duple ctrl");
         return new SuccessResponse<>(termService.duplicateCheck(termVO));
     }
 
