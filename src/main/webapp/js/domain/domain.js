@@ -135,13 +135,21 @@ function dataTypeSelect() {
  */
 function searchList(searchType, keyword, orderNumber) {
   //Sorting 하기 위한 컬럼들 서버로 가지고감
-  let columns = [ "DOMAIN_SEQ", "DOMAIN_NM", "DOMAIN_TYPE_NM", "DATA_TYPE", "DATA_LEN", "DCML_LEN","DOMAIN_DSCRPT","UPD_DT",];
- 
-  if(orderNumber == undefined) {
-	  orderNumber = 1;
-	}
-   let order = orderNumber == 1 ? "asc" : "desc";
+  let columns = [
+    "DOMAIN_SEQ",
+    "DOMAIN_NM",
+    "DOMAIN_TYPE_NM",
+    "DATA_TYPE",
+    "DATA_LEN",
+    "DCML_LEN",
+    "DOMAIN_DSCRPT",
+    "UPD_DT",
+  ];
 
+  if (orderNumber == undefined) {
+    orderNumber = 1;
+  }
+  let order = orderNumber == 1 ? "asc" : "desc";
 
   //sAjaxSource 를 사용하면 기본적인 DataTable에 사용되는 옵션들을 객체로 가지고 감. 서버의 DomainVO 객체 확인하기
   $("#domainTable").DataTable({
@@ -204,14 +212,13 @@ function searchList(searchType, keyword, orderNumber) {
     let rowData = table.row(this).data();
 
     if (rowData != undefined) {
-       $("#newButton").click();
-      
-      if(searchType == "DeleteList") {
-		openModal('revival', rowData.domainSeq);
-		} else {
-			openModal("update", rowData.domainSeq);
-		}
-      	
+      $("#newButton").click();
+
+      if (searchType == "DeleteList") {
+        openModal("revival", rowData.domainSeq);
+      } else {
+        openModal("update", rowData.domainSeq);
+      }
     }
   });
 
@@ -316,30 +323,31 @@ function openModal(type, domainSeq) {
     $("#modal #saveButton").show();
     $("#modal #updateButton").hide();
     $("#modal #deleteButton").hide();
+    $("#modal #revivalButton").hide();
     $("#modal .modal-title").html(modalRegistHeader);
   } else if (type == "update" || type == "revival") {
-	$("#modal #saveButton").hide();
-	$("#modal .modal-title").html(modalUpdateHeader);
-	if (type == "update") {
-		$("#modal #revivalButton").hide();
-    	$("#modal #updateButton").show();
-    	$("#modal #deleteButton").show();
-	} else {
-		$("#modal #revivalButton").show();
-        $("#modal #deleteButton").hide();
-		$("#modal #updateButton").hide();
-	}
-/*    $("#modal #saveButton").hide();
+    $("#modal #saveButton").hide();
+    $("#modal .modal-title").html(modalUpdateHeader);
+    if (type == "update") {
+      $("#modal #revivalButton").hide();
+      $("#modal #updateButton").show();
+      $("#modal #deleteButton").show();
+    } else {
+      $("#modal #revivalButton").show();
+      $("#modal #deleteButton").hide();
+      $("#modal #updateButton").hide();
+    }
+    /*    $("#modal #saveButton").hide();
     $("#modal #updateButton").show();
     $("#modal #deleteButton").show();
     $("#modal .modal-title").html(modalUpdateHeader);*/
 
     $("#insert_form input[name=domainSeq]").val(domainSeq);
-	
+
     let sendData = {
-      "domainSeq": domainSeq,
+      domainSeq: domainSeq,
     };
-	
+
     // domain/select에 넘겨준 domainSeq로 선택한 도메인 정보를 불러와 화면에 뿌려줌
     $.ajax({
       url: contextPath + "/domain/select",
@@ -348,7 +356,14 @@ function openModal(type, domainSeq) {
       data: sendData,
       async: false,
       success: function (data) {
-        const { domainTypeNm, domainNm, dataType, dataLen, domainDscrpt, dcmlLen, } = data.data;
+        const {
+          domainTypeNm,
+          domainNm,
+          dataType,
+          dataLen,
+          domainDscrpt,
+          dcmlLen,
+        } = data.data;
         $("#insert_form input[name=domainTypeNm]").val(domainTypeNm);
         $("#insert_form input[name=domainNm]").val(domainNm);
         $("#insert_form #dataType").val(dataType);
@@ -362,7 +377,7 @@ function openModal(type, domainSeq) {
         readOnlyOption(dataType);
       },
     });
-  } 
+  }
 
   // 데이터 타입 변경시 변경된 데이터 타입에 맞게 readOnlyOption 함수 재실행
   // NUMBER일 경우 소수점 길이 활성화
@@ -674,11 +689,12 @@ function domainNameAutoCreate(domainTypeNm, dataType, dataLen, dcmlLen) {
   }
 
   if (dataLen == "" && dcmlLen == "") {
-    $("#modal #domainNm").val(`${domainTypeNm.trim()}${dataType}`
-	);
+    $("#modal #domainNm").val(`${domainTypeNm.trim()}${dataType}`);
   } else if (dcmlLen != "") {
     $("#modal #domainNm").val(
-      `${domainTypeNm.trim()}${dataType}(${dataLen.trim()},${$("#dcmlLen").val().trim()})`
+      `${domainTypeNm.trim()}${dataType}(${dataLen.trim()},${$("#dcmlLen")
+        .val()
+        .trim()})`
     );
   } else {
     $("#modal #domainNm").val(
@@ -703,17 +719,19 @@ function excelDownload_exerd() {
 
 // 삭제 기록 조회
 function Delete_History() {
-	let dataTable = $("#domainTable").DataTable();
-	dataTable.destroy();
-	searchList("DeleteList");
+  let dataTable = $("#domainTable").DataTable();
+  dataTable.destroy();
+  searchList("DeleteList");
+  $("#revivalButton").hide();
+  $("#listButton").show();
 }
 
 // 복원 여부 확인
 function revivalConfirm() {
-	if (!insertValidation()){
-      return;
-    }
-	checkConfirm('단어 복원', '단어를 재사용하시겠습니까?', 'revivalDomain();');
+  if (!insertValidation()) {
+    return;
+  }
+  checkConfirm("단어 복원", "단어를 재사용하시겠습니까?", "revivalDomain();");
 }
 
 // 복원 기능
@@ -728,15 +746,27 @@ function revivalDomain() {
     data: JSON.stringify(sendData),
     async: false,
     success: function (data) {
-            if(data.data==1) {
-                alertMessage("성공!","단어 복원이 완료되었습니다.","success");
-                $("#cancelButton").click();
-                dataTable.destroy();
-                searchList('','',0);
-            } else {
-                alertMessage("경고!","실패하였습니다. 관리자에게 문의해주세요.","danger");
-                $("#cancelButton").click();
-            }
+      if (data.data == 1) {
+        alertMessage("성공!", "단어 복원이 완료되었습니다.", "success");
+        $("#cancelButton").click();
+        Delete_History();
+      } else {
+        alertMessage(
+          "경고!",
+          "실패하였습니다. 관리자에게 문의해주세요.",
+          "danger"
+        );
+        $("#cancelButton").click();
+      }
     },
   });
+}
+
+// 원래 목록 보기
+function showList() {
+	let dataTable = $("#domainTable").DataTable();
+  dataTable.destroy();
+  searchList();
+  $("#revivalButton").show();
+  $("#listButton").hide();
 }
