@@ -1,0 +1,317 @@
+body.jui{
+	overflow: initial !important;
+}
+iframe#contentMain{
+    margin-top: 72px;
+}
+.input-group{
+	width:100% !important;
+}
+.input-group .input-group-prepend .input-group-text {
+    min-width: 100px;
+}
+.input-group-sm{
+    margin-right: 20px;
+    margin-left: 20px;
+}
+.form-inline {
+	padding-top: 15px;
+}
+.form-control:disabled, .form-control[readonly] {
+    background-color: #f4f6f8 !important; 	
+}
+
+.iw-col #search_code_xtable.btn{
+    margin: 0 !important;
+    line-height: 1.4rem;
+}
+
+.us.label{
+	color: rgba(81,45,168,.8);
+    max-width: none;
+    padding: 0;
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 1.8rem;
+    width: 130px;
+    float: left;
+    line-height: 1.2;
+    text-align: left !important;
+}
+.us.btn.dropdown-toggle{
+	background-color: #eee !important;
+    border: none  !important;
+    border-left: 1px solid #cbcfd7  !important;
+    border-radius: 0  !important;
+    height: 30px  !important;
+    line-height: 10px !important;
+    width: 100%  !important;
+    text-align: right  !important;
+}
+
+
+.us-text-strong{
+    font-weight: 600 !important;
+}
+.us-text-color-red{
+	color:red;
+}
+.us-text-color-rgba{
+	color: rgba(0,0,0,.0);
+}
+.us-w-100{width:100px;}
+.us-w-110{width:110px;}
+.us-w-120{width:120px;}
+
+.mb-100{
+	margin-bottom:100px !important;
+}
+
+.us-date-time-picker-icon{
+    height: calc(1.4em + 2.12rem + 2px);
+}
+
+.us-info-a{    
+	margin: 0 !important;
+    padding: 0;
+    background-color: transparent;
+    color: #757575;
+    border-color: transparent;
+}
+
+
+
+
+
+/* semidark-style-1.min.css */
+.us.dt-card{
+	box-shadow:none;
+	margin-bottom:0;
+}
+.dt-card__body{
+	padding:0;
+}		
+.dt-page__title{
+	margin-bottom:0;
+}
+.dt-content {
+    padding: 2.5rem;
+}
+.dt-entry__header {
+    margin-bottom: 1.5rem;
+}
+.dt-sidebar--fixed .dt-sidebar {
+    height: calc(100vh) !important;
+    padding-top:72px;
+}
+.dt-module-side-nav__item.active .dt-module-side-nav__link{
+	width:90%;
+    padding: 1.2rem 2.6rem;
+}
+.us.input-group>.form-control, .us.input-group>.custom-select {
+    border-radius: .4rem !important;
+}
+
+
+
+
+/*jui.jui.css*/
+.jui [class^="icon-"],
+.jui [class*=" icon-"] {
+  line-height: inherit;
+}
+.jui table.table {
+	font-size:14px;
+}
+
+
+
+
+
+/* iw_style,css */
+.us.iw-col.s1{
+    width: 16% !important;
+}
+.us.input-group-append{
+	width:9.0001%;
+}
+.iw-col > h5{
+    font-size: 1.2em;
+    margin: 0 !important;
+    font-weight: bold;
+    line-height: 40px;
+    color: #757575;
+}
+.iw-col .iw-select{
+    line-height: initial !important;
+}
+.iw-select, .iw-text{
+    max-width: 150px;
+}
+.iw-text {
+	-webkit-appearance: none;
+    background: none;
+    padding: 0.5em 4px;
+    border: 1px solid #d7d7d7;
+    border-radius: 0.3em;
+    box-sizing: border-box;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none!important;
+    color: #666;
+    line-height: initial;
+}
+
+
+
+
+
+
+/* jquery.thema.css */
+/* .jui .table.simple > thead th{
+	padding:1.2rem;
+}
+.jui .table.simple > tbody > tr > td{
+	padding:1rem;
+} */
+
+
+
+
+/* style.css */
+.us.icon-calendar:before {
+    content: "\47";
+}
+.us.icon-message:before{
+    content: "\e057";
+}
+.us.icon-plus:before {
+  content: "\e077";
+}
+.us.icon-minus:before {
+  content: "\e059";
+}
+
+.modal-title {
+	font-weight: bold;
+}
+.modal-header .close {
+	font-size: 20pt;
+}
+
+.span-blank {
+	margin-right: 10px;
+}
+
+.modal-header-span {
+	padding: 1.6rem 1.6rem;
+	margin: -1.6rem -1.6rem -1.6rem auto;
+	font-size: 12pt;
+}
+
+.bootstrap-datetimepicker-widget.dropdown-menu {
+	width: 34rem;
+}
+
+.search_div .form-row {
+	margin:0px;
+}
+
+.form-control.multi {
+	display: inherit;
+}
+
+.form-row table tr td:not(:last-child) {
+	vertical-align: middle;	
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+
+.form-row table tr td:last-child {
+	vertical-align: middle;	
+	/* border: 1px solid #ddd */
+	border-left: 1px solid #ddd;
+}
+
+.form-row table tr td input.col-md-1 {	flex: 0 0 8.3333333333%;    max-width: 8.3333333333%	}
+.form-row table tr td input.col-md-2 {    flex: 0 0 16.6666666667%;    max-width: 16.6666666667%	}
+.form-row table tr td input.col-md-3 {    flex: 0 0 25%;    max-width: 25%	}
+.form-row table tr td input.col-md-4 {    flex: 0 0 33.3333333333%;    max-width: 33.3333333333%	}
+.form-row table tr td input.col-md-5 {    flex: 0 0 41.6666666667%;    max-width: 41.6666666667%	}
+.form-row table tr td input.col-md-6 {    flex: 0 0 50%;    max-width: 50%	}
+.form-row table tr td input.col-md-7 {    flex: 0 0 58.3333333333%;    max-width: 58.3333333333%	}
+.form-row table tr td input.col-md-8 {    flex: 0 0 66.6666666667%;    max-width: 66.6666666667%	}
+.form-row table tr td input.col-md-9 {    flex: 0 0 75%;    max-width: 75%	}
+.form-row table tr td input.col-md-10 {    flex: 0 0 83.3333333333%;    max-width: 83.3333333333%	}
+.form-row table tr td input.col-md-11 {    flex: 0 0 91.6666666667%;    max-width: 91.6666666667%	}
+.form-row table tr td input.col-md-12 {    flex: 0 0 100%;    max-width: 100%	}
+
+
+.form-row table th.col-md-1 {	width: 8.3333333333%;flex: 0 0 8.3333333333%;    max-width: 8.3333333333%	}
+.form-row table th.col-md-2 {   width: 16.6666666667%; flex: 0 0 16.6666666667%;    max-width: 16.6666666667%	}
+.form-row table th.col-md-3 {   width: 25%; flex: 0 0 25%;    max-width: 25%	}
+.form-row table th.col-md-4 {   width: 33.3333333333%; flex: 0 0 33.3333333333%;    max-width: 33.3333333333%	}
+.form-row table th.col-md-5 {   width: 41.6666666667%; flex: 0 0 41.6666666667%;    max-width: 41.6666666667%	}
+.form-row table th.col-md-6 {   width: 50%; flex: 0 0 50%;    max-width: 50%	}
+.form-row table th.col-md-7 {   width: 58.3333333333%; flex: 0 0 58.3333333333%;    max-width: 58.3333333333%	}
+.form-row table th.col-md-8 {   width: 66.6666666667%; flex: 0 0 66.6666666667%;    max-width: 66.6666666667%	}
+.form-row table th.col-md-9 {   width: 75%; flex: 0 0 75%;    max-width: 75%	}
+.form-row table th.col-md-10 {  width: 83.3333333333%;  flex: 0 0 83.3333333333%;    max-width: 83.3333333333%	}
+.form-row table th.col-md-11 {  width: 91.6666666667%;  flex: 0 0 91.6666666667%;    max-width: 91.6666666667%	}
+.form-row table th.col-md-12 {  width: 100%;  flex: 0 0 100%;    max-width: 100%	}
+
+.form-row table td.col-md-1 {	width: 8.3333333333%;flex: 0 0 8.3333333333%;    max-width: 8.3333333333%	}
+.form-row table td.col-md-2 {   width: 16.6666666667%; flex: 0 0 16.6666666667%;    max-width: 16.6666666667%	}
+.form-row table td.col-md-3 {   width: 25%; flex: 0 0 25%;    max-width: 25%	}
+.form-row table td.col-md-4 {   width: 33.3333333333%; flex: 0 0 33.3333333333%;    max-width: 33.3333333333%	}
+.form-row table td.col-md-5 {   width: 41.6666666667%; flex: 0 0 41.6666666667%;    max-width: 41.6666666667%	}
+.form-row table td.col-md-6 {   width: 50%; flex: 0 0 50%;    max-width: 50%	}
+.form-row table td.col-md-7 {   width: 58.3333333333%; flex: 0 0 58.3333333333%;    max-width: 58.3333333333%	}
+.form-row table td.col-md-8 {   width: 66.6666666667%; flex: 0 0 66.6666666667%;    max-width: 66.6666666667%	}
+.form-row table td.col-md-9 {   width: 75%; flex: 0 0 75%;    max-width: 75%	}
+.form-row table td.col-md-10 {  width: 83.3333333333%;  flex: 0 0 83.3333333333%;    max-width: 83.3333333333%	}
+.form-row table td.col-md-11 {  width: 91.6666666667%;  flex: 0 0 91.6666666667%;    max-width: 91.6666666667%	}
+.form-row table td.col-md-12 {  width: 100%;  flex: 0 0 100%;    max-width: 100%	}
+
+.modal-item-name{
+    width :147px !important;
+}
+.col-width-150{
+    width: 150px !important;
+}
+
+.width-140{
+    width: 140px !important;
+    max-width : 140px !important;
+}
+.width-150{
+    width: 150px !important;
+    max-width : 150px !important;
+}
+.width-160{
+    width: 160px !important;
+    max-width : 160px !important;
+}
+.width-170{
+    max-width : 170px !important;
+    width: 170px !important;
+}
+
+.max-width{
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.width-per-90{
+    width: 90% !important;
+    max-width: 90% !important;
+}
+
+.padding-left-rem{
+    padding-left:1.6rem !important;
+}
+
+.modal .modal-body{
+	max-height: 70vh;
+	overflow-y: auto;
+}

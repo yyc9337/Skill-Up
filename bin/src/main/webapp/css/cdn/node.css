@@ -1,0 +1,26 @@
+/* #ndIpList td, #ndIpList th {
+	vertical-align: middle;
+}
+
+#nodeIpRegister {
+	border: 1px solid #ddd
+}
+
+#nodeIpRegister th, #nodeIpRegister td {
+	vertical-align: middle;
+	text-align: center;
+	border: 1px solid #ddd
+}
+
+#nodeIpSrch th, #nodeIpSrch td {
+	vertical-align: middle;
+	border: 1px solid #ddd
+}
+
+#nodeIpRegister pre {
+	padding-right: 30px;
+}
+
+#nodeIpSrch td>input {
+	width: 40px;
+} */
