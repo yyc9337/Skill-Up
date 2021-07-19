@@ -24,6 +24,8 @@ public interface TermMapper {
     int deleteTerm(TermVO termVO);  //용어 삭제, 삭제버튼 클릭시
 
     int updateTerm(TermVO termVO);  //용어 업데이트, 수정버튼 클릭시
+    
+    int revivalTerm(TermVO termVO); //부활
 
     int recycleTerm(TermVO termVO); //입력된 데이터를 기준으로 재활용(기존에 삭제됐던 용어 부활), select 성공시 1 return
 

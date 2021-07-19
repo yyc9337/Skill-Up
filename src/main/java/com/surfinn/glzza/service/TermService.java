@@ -17,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import com.surfinn.glzza.core.CommonConst;
 import com.surfinn.glzza.dao.TermDao;
 import com.surfinn.glzza.exception.GlzzaBadRequestException;
 import com.surfinn.glzza.utility.CommonUtil;
@@ -128,6 +129,14 @@ public class TermService {
         }
         return termDao.updateTerm(termVO) == 1 ? true : false;
     }
+    
+    //부활
+    public int revivalTerm(TermVO termVO){
+        termVO.setUpdId(CommonConst.UPD_ID);
+        return termDao.revivalTerm(termVO);
+    }
+    
+
 
     //유효성 검사
     private void validationTermObject(TermVO termVO){

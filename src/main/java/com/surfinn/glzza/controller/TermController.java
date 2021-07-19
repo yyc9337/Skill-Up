@@ -71,6 +71,14 @@ public class TermController {
     public SuccessResponse<Boolean> updateTerm(@RequestBody TermVO termVO){
         return new SuccessResponse<>(termService.updateTerm(termVO));
     }
+    
+    //부활
+    @PostMapping("/revival")
+    @ResponseBody
+    public SuccessResponse<Integer> revivalTerm(@RequestBody TermVO termVO) {
+    	return new SuccessResponse<>(termService.revivalTerm(termVO));
+    }
+
 
 
 }
