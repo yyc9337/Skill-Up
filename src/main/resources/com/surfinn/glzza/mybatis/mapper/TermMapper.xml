@@ -21,7 +21,17 @@
 		INNER JOIN TB_DOMAIN B
 		ON A.DOMAIN_SEQ = B.DOMAIN_SEQ
 		<where>
+		 <choose>
+        <when test="TermVO.searchType eq 'DeleteList'">
+        	AND USE_YN = 'N'
+        </when>
+        <otherwise>
 			AND A.USE_YN = 'Y'
+		</otherwise>
+        </choose>
+			
+			
+			<!-- 전체 -->
 			<if test="termVO.searchType eq 'all'">
 				AND (A.TERM_ABBR LIKE CONCAT('%', #{termVO.keyword}, '%')
 				OR	A.TERM_NM LIKE CONCAT('%', #{termVO.keyword}, '%')
@@ -53,7 +63,6 @@
     <select id="selectTotalCountTerm" parameterType="com.surfinn.glzza.vo.TermVO" resultType="Integer">
 		SELECT COUNT(*) AS TOTAL_COUNT FROM TB_TERM
 		<where>
-			AND USE_YN = 'Y'
 			<if test="searchType eq 'all'">
 				AND TERM_ABBR LIKE CONCAT('%', #{keyword}, '%')
 				OR	TERM_NM LIKE CONCAT('%', #{keyword}, '%')
@@ -68,6 +77,15 @@
 			<if test="searchType eq 'termDscrpt'">
 				AND TERM_DSCRPT LIKE CONCAT('%', #{keyword}, '%')
 			</if>
+			<choose>
+	    	<when test="searchType eq 'DeleteList'">
+        		AND USE_YN = 'N'
+        	</when>
+      		<otherwise>
+        	    AND USE_YN = 'Y'
+        	</otherwise>
+	    	</choose>    
+			
 		</where>
 	</select>
     
@@ -158,5 +176,17 @@
 	<update id="recycleTerm" parameterType="com.surfinn.glzza.vo.TermVO">
 		UPDATE TB_TERM SET USE_YN = "Y", UPD_DT = NOW() WHERE TERM_SEQ = #{termSeq}
 	</update>
+	<update id="revivalTerm" parameterType="com.surfinn.glzza.vo.TermVO">
+        UPDATE TB_TERM
+        SET
+            USE_YN = 'Y',
+            UPD_ID = #{updId},
+            UPD_DT = NOW()
+            SYNM_LIST = #{synmList},
+			TERM_DSCRPT = #{termDscrpt},		
+        WHERE
+            TERM_SEQ = #{termSeq}
+    </update>
+	
 	
 </mapper>
