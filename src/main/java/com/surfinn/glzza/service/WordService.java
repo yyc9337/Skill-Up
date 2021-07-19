@@ -55,8 +55,8 @@ public class WordService {
     public int insertWord(WordVO wordVO) {
         wordVO.setRegId(CommonConst.REG_ID);
         wordVO.setUpdId(CommonConst.UPD_ID);
-        if(!CommonUtil.isEmpty(wordVO.getWordDscrpt())) {
-        	wordVO.setWordDscrpt(wordVO.getWordDscrpt().trim().replace("\r\n","<br>"));
+        if(!CommonUtil.isEmpty(wordVO.getWordDscrpt())) { //유효성 검사
+        	wordVO.setWordDscrpt(wordVO.getWordDscrpt().trim().replace("\r\n","<br>")); //\r\n을 <br>로 바꾼다.
         }
 
         if (wordVO.getSynmList() == null){
@@ -93,8 +93,8 @@ public class WordService {
         
         if(list.size() > 0) {
         	for(int i = 0; i < list.size(); i++) {
-        		if(!StringUtils.isEmpty(list.get(i).getWordDscrpt())) {
-        			list.get(i).setSummaryWordDscrpt(list.get(i).getWordDscrpt().replace("<br>", "  "));
+        		if(!StringUtils.isEmpty(list.get(i).getWordDscrpt())) {//리스트 안의 단어들의 설명을 가져와서 유효성 검사 
+        			list.get(i).setSummaryWordDscrpt(list.get(i).getWordDscrpt().replace("<br>", "  ")); //<br> 태그를 공백으로 바꾼다
         		}
         	}
         }
