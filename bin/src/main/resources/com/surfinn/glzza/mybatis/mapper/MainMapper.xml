@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.surfinn.glzza.mybatis.mapper.MainMapper">
+
+	<select id="duplicationIdCheck" parameterType="com.surfinn.glzza.vo.UserVO" resultType="int">
+		SELECT 
+			COUNT(A.LOGIN_ID) 
+		FROM TB_USER A 
+		WHERE A.LOGIN_ID = #{loginId}
+	</select>
+	
+	<insert id="signupId" parameterType="com.surfinn.glzza.vo.UserVO">
+		INSERT INTO TB_USER (
+       		USER_NM,
+       		LOGIN_ID,
+       		PWD,
+   			REG_DT,
+   			REG_ID,
+   			UPD_DT,
+   			UPD_ID
+       ) VALUES (
+       		#{userNm},
+       		#{loginId},
+       		#{pwd},
+       		NOW(),
+       		#{regId},
+       		NOW(),
+       		#{updId}
+       	)        		
+	</insert>
+	
+	<select id="loginWeb" parameterType="com.surfinn.glzza.vo.UserVO" resultType="int">
+		SELECT 
+			COUNT(A.LOGIN_ID) 
+		FROM TB_USER A 
+		<where>
+			<if test="loginId != null">
+				AND A.LOGIN_ID = #{loginId}
+			</if>
+			<if test="pwd != null">
+				AND A.PWD = #{pwd}
+			</if>
+		</where>
+	</select>
+
+</mapper>
+

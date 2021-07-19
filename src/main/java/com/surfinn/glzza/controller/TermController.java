@@ -3,7 +3,6 @@ package com.surfinn.glzza.controller;
 import com.surfinn.glzza.service.TermService;
 import com.surfinn.glzza.utility.SuccessResponse;
 import com.surfinn.glzza.vo.BaseVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
 import lombok.extern.slf4j.Slf4j;

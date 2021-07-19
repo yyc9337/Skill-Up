@@ -1,0 +1,9 @@
+.sysMngSrch td {border:1px solid #ddd; vertical-align: middle !important;}
+
+.sysMngSrch select, .sysMngSrch input {width:80%;}
+
+.sysCdPaging button {width: 30px; height: 30px;}
+
+#sysCdRegister td{vertical-align: middle;}
+
+#sysNm option {overflow: hidden}

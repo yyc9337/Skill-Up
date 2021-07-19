@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.surfinn.glzza.mybatis.mapper.WordMapper">
+    <!-- 리스트 선택 sql -->
+    <sql id="selectWordListSql">
+        SELECT
+            WORD_SEQ,
+            WORD_NM,
+            WORD_ABBR,
+<!--            WORD_ENG_SHORT_NM,-->
+            WORD_ENG_NM,
+            WORD_DSCRPT,
+<!--            REPLACE (WORD_DSCRPT, CHR(10), '') AS WORD_DSCRPT,-->
+            SYNM_LIST,
+            REG_DT,
+            REG_ID,
+            UPD_DT,
+            UPD_ID
+        FROM
+            TB_WORD
+        <where>
+        <choose>
+        <when test="wordVO.searchType eq 'DeleteList'">
+        	AND USE_YN = 'N'
+        </when>
+        <otherwise>
+            AND USE_YN = 'Y'
+        </otherwise>
+        </choose>
+            <!-- 전체 -->
+	        <if test="wordVO.searchType eq 'all'">
+	            AND (WORD_ABBR LIKE CONCAT('%', #{wordVO.keyword}, '%')
+	            OR WORD_NM LIKE CONCAT('%', #{wordVO.keyword}, '%')
+	            OR WORD_ENG_NM LIKE CONCAT('%', #{wordVO.keyword}, '%')
+	            OR WORD_DSCRPT LIKE CONCAT('%', #{wordVO.keyword}, '%'))
+	        </if>
+	        <!-- 단어영문약어명 -->
+	        <if test="wordVO.searchType eq 'wordAbbr'">
+	            AND WORD_ABBR LIKE CONCAT('%', #{wordVO.keyword}, '%')
+	        </if>
+	        <!-- 단어명 -->
+	        <if test="wordVO.searchType eq 'wordNm'">
+	            AND WORD_NM LIKE CONCAT('%', #{wordVO.keyword}, '%')
+	        </if>
+	        <!-- 단어영문명 -->
+	        <if test="wordVO.searchType eq 'wordEngNm'">
+	            AND WORD_ENG_NM LIKE CONCAT('%', #{wordVO.keyword}, '%')
+	        </if>
+	        <!-- 단어설명 -->
+	        <if test="wordVO.searchType eq 'wordDscrpt'">
+	            AND WORD_DSCRPT LIKE CONCAT('%', #{wordVO.keyword}, '%')
+	        </if>
+	        <!-- 이음동의어 -->
+	        <if test="wordVO.searchType eq 'synmList'">
+	            AND SYNM_LIST LIKE CONCAT('%', #{wordVO.keyword}, '%')
+	        </if>
+<!--			ORDER BY WORD_NM-->
+<!--			<if test="paging.start != null">-->
+<!--				LIMIT #{paging.length} OFFSET #{paging.start}-->
+<!--			</if>-->
+            <if test="wordVO.sorting != null">
+                ORDER BY ${wordVO.sorting}
+            </if>
+            <if test = "wordVO.sorting != null and wordVO.sSortDir_0 != null" >
+                ${wordVO.sSortDir_0}
+            </if>
+            <if test="wordVO.iDisplayStart != null and wordVO.iDisplayLength != null">
+                LIMIT ${wordVO.iDisplayStart} , ${wordVO.iDisplayLength}
+            </if>
+        </where>  
+    </sql>
+    
+     <select id="selectTotalCountWord" parameterType="com.surfinn.glzza.vo.WordVO" resultType="Integer">
+		SELECT COUNT(*) AS RECORDS_TOTAL FROM TB_WORD
+		<where>					
+			 <if test="searchType eq 'all'">
+	            AND (WORD_ABBR LIKE CONCAT('%', #{keyword}, '%')
+	            OR WORD_NM LIKE CONCAT('%', #{keyword}, '%')
+	            OR WORD_ENG_NM LIKE CONCAT('%', #{keyword}, '%')
+	            OR WORD_DSCRPT LIKE CONCAT('%', #{keyword}, '%'))
+	        </if>
+	        <!-- 단어영문약어명 -->
+	        <if test="searchType eq 'wordAbbr'">
+	            AND WORD_ABBR LIKE CONCAT('%', #{keyword}, '%')
+	        </if>
+	        <!-- 단어명 -->
+	        <if test="searchType eq 'wordNm'">
+	            AND WORD_NM LIKE CONCAT('%', #{keyword}, '%')
+	        </if>
+	        <!-- 단어영문명 -->
+	        <if test="searchType eq 'wordEngNm'">
+	            AND WORD_ENG_NM LIKE CONCAT('%', #{keyword}, '%')
+	        </if>
+	        <!-- 단어설명 -->
+	        <if test="searchType eq 'wordDscrpt'">
+	            AND WORD_DSCRPT LIKE CONCAT('%', #{keyword}, '%')
+	        </if>
+	        <!-- 이음동의어 -->
+	        <if test="searchType eq 'synmList'">
+	            AND SYNM_LIST LIKE CONCAT('%', #{keyword}, '%')
+	        </if>
+	   		<choose>
+	    	<when test="searchType eq 'DeleteList'">
+        		AND USE_YN = 'N'
+        	</when>
+      		<otherwise>
+        	    AND USE_YN = 'Y'
+        	</otherwise>
+	    	</choose>    
+		</where>	
+	</select>
+	
+	<!-- SELECT BOX 단어 검색 -->
+    <select id="searchType" parameterType="com.surfinn.glzza.vo.WordVO" resultType="com.surfinn.glzza.vo.WordVO">
+        SELECT
+            COLUMN_NAME,
+            COLUMN_COMMENT
+        FROM
+            information_schema.columns
+        WHERE
+            table_schema = 'GLZZA' AND table_name = 'TB_WORD' AND (columns.COLUMN_COMMENT LIKE '%단어%' OR columns.COLUMN_COMMENT LIKE '%이음%');
+    </select>
+
+    <!-- 리스트 선택 -->
+    <select id="selectWordList" resultType="com.surfinn.glzza.vo.WordVO">
+        <include refid="selectWordListSql"></include>
+    </select>
+    
+    <!-- 리스트 카운트 -->
+    <select id="selectWordCount" parameterType="com.surfinn.glzza.vo.WordVO" resultType="int">
+        SELECT COUNT(*) FROM (<include refid="selectWordListSql"></include>)
+    </select>
+
+    <!-- 단어 상세보기 -->
+    <select id="selectWord" parameterType="com.surfinn.glzza.vo.WordVO" resultType="com.surfinn.glzza.vo.WordVO">
+        SELECT
+        WORD_SEQ,
+        WORD_NM,
+        WORD_ABBR,
+        WORD_ENG_NM,
+        WORD_DSCRPT,
+        SYNM_LIST,
+        USE_YN
+        FROM
+        TB_WORD
+        <where>
+            <if test="wordSeq != '' and wordSeq != null">
+                AND word_SEQ = #{wordSeq}
+            </if>
+        </where>
+    </select>
+
+    <!-- 단어 등록 -->
+    <insert id="insertWord" parameterType="com.surfinn.glzza.vo.WordVO">
+        INSERT INTO TB_WORD (
+            WORD_NM,
+            WORD_ABBR,
+            WORD_ENG_NM,
+            WORD_DSCRPT,
+            SYNM_LIST,
+            REG_DT,
+            REG_ID,
+            UPD_DT,
+            UPD_ID
+        ) VALUES (
+            #{wordNm},
+            #{wordAbbr},
+            #{wordEngNm},
+            #{wordDscrpt},
+            #{synmList},
+            NOW(),
+            #{regId},
+            NOW(),
+            #{updId}
+        ) ON DUPLICATE KEY UPDATE
+            WORD_NM = #{wordNm},
+            WORD_ABBR = #{wordAbbr},
+            WORD_ENG_NM = #{wordEngNm},
+            WORD_DSCRPT = #{wordDscrpt},
+            SYNM_LIST = #{synmList},
+            REG_ID = #{regId},
+            REG_DT = NOW(),
+            UPD_ID = #{updId},
+            UPD_DT = NOW()
+    </insert>
+
+    <!-- 상세보기 -->
+    <select id="searchWordBySeq" parameterType="com.surfinn.glzza.vo.WordVO" resultType="com.surfinn.glzza.vo.WordVO">
+        SELECT * FROM TB_WORD WHERE WORD_SEQ = #{wordSeq}
+    </select>
+
+    <update id="deleteWord" parameterType="com.surfinn.glzza.vo.WordVO">
+        UPDATE TB_WORD
+        SET
+            USE_YN = 'N',
+            UPD_ID = #{updId},
+            UPD_DT = NOW()		
+        WHERE
+            WORD_SEQ = #{wordSeq}
+    </update>
+    
+    <update id="revivalWord" parameterType="com.surfinn.glzza.vo.WordVO">
+        UPDATE TB_WORD
+        SET
+            USE_YN = 'Y',
+            UPD_ID = #{updId},
+            UPD_DT = NOW(),
+            SYNM_LIST = #{synmList},
+			WORD_DSCRPT = #{wordDscrpt}		
+        WHERE
+            WORD_SEQ = #{wordSeq}
+    </update>
+    
+
+    <!-- 단어명 단어영문명 중복 목록 선택 -->
+    <sql id="selectWordDuplicationListSql">
+        SELECT A.WORD_SEQ,
+	            A.WORD_NM,
+	            A.WORD_ABBR,
+	            A.WORD_ENG_NM,
+	            A.WORD_DSCRPT,
+	            A.SYNM_LIST, 
+        		FATAL_EXIST,
+        <choose>
+        <when test="searchType eq 'full'">
+        		ENGNM_EXIST
+        </when>
+        <otherwise>
+        		ABBR_EXIST
+        </otherwise>
+        </choose>
+		FROM TB_WORD A
+
+		<if test="searchType eq 'full'">
+			LEFT OUTER JOIN (
+								SELECT WORD_SEQ, 'T' AS FATAL_EXIST
+								FROM TB_WORD 
+								WHERE NOT (USE_YN = 'N') 
+									AND WORD_NM = #{wordNm} 
+									AND WORD_ENG_NM = #{wordEngNm}
+							) B ON A.WORD_SEQ = B.WORD_SEQ
+							
+			LEFT OUTER JOIN (
+								SELECT WORD_SEQ, 'T' AS ENGNM_EXIST
+								FROM GLZZA.TB_WORD 
+								WHERE NOT (USE_YN = 'N') 
+									AND WORD_ENG_NM = #{wordEngNm}
+			
+							) C ON A.WORD_SEQ = C.WORD_SEQ
+			WHERE NOT A.USE_YN = 'N' AND (A.WORD_NM = #{wordNm} OR WORD_ENG_NM = #{wordEngNm})
+		</if>
+		<if test="searchType eq 'short'">
+			LEFT OUTER JOIN (
+							SELECT WORD_SEQ, 'T' AS FATAL_EXIST, 'T' AS ABBR_EXIST
+							FROM TB_WORD
+							WHERE WORD_ABBR = #{wordAbbr}
+						) B
+				ON A.WORD_SEQ = B.WORD_SEQ
+			WHERE NOT A.USE_YN = 'N'
+			AND A.WORD_ABBR LIKE CONCAT('%', #{wordAbbr} ,'%')
+		</if>
+
+    </sql>
+    
+    <!-- 단어명 단어영문명 중복 목록 선택 -->
+    <select id="selectWordDuplicationList" parameterType="com.surfinn.glzza.vo.WordVO" resultType="com.surfinn.glzza.vo.WordVO">
+        <include refid="selectWordDuplicationListSql"></include>
+    </select>
+   
+    <!-- 단어 업데이트 -->
+    <update id="updateWord" parameterType="com.surfinn.glzza.vo.WordVO">
+		UPDATE TB_WORD
+		SET
+			SYNM_LIST = #{synmList},
+			WORD_DSCRPT = #{wordDscrpt},
+			UPD_ID = #{updId},
+            UPD_DT = NOW()			
+		WHERE 
+			word_SEQ = #{wordSeq}
+	</update>
+</mapper>

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.surfinn.glzza.service.CodeService;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.DomainCodeVO;
-import com.surfinn.glzza.vo.Paging;
 
 @RestController
 @RequestMapping("/code")
@@ -24,8 +24,8 @@ public class CodeController {
 		
 	@PostMapping("/domainCodeList")
 	@ResponseBody
-	public Paging selectCodeList(DomainCodeVO domainCodeVO, Paging paging) {
-		return codeService.selectDomainCodeList(domainCodeVO, paging);
+	public BaseVO selectCodeList(DomainCodeVO domainCodeVO, BaseVO baseVO) {
+		return codeService.selectDomainCodeList(domainCodeVO, baseVO);
 	}
 	
     @ResponseBody

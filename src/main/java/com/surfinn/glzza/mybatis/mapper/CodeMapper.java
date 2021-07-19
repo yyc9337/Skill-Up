@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.DomainCodeVO;
-import com.surfinn.glzza.vo.Paging;
 
 @Mapper
 public interface CodeMapper {
 
-	List<DomainCodeVO> selectDomainCodeList(DomainCodeVO domainCodeVO, Paging paging);
+	List<DomainCodeVO> selectDomainCodeList(DomainCodeVO domainCodeVO, BaseVO baseVO);
 
 	Integer selectDomainCodeListCount(DomainCodeVO domainCodeVO);
 

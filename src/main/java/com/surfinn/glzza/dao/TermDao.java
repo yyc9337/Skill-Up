@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.surfinn.glzza.mybatis.mapper.TermMapper;
 import com.surfinn.glzza.vo.BaseVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
 @Repository("termDao")

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <logger name="com.surfinn.glzza" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="org.apache.ibatis.logging" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="org.springframework" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+
+    <!-- ######################################################### -->
+    <!-- START Custom Logger Configuration -->
+    <!-- ######################################################### -->
+<!--     <logger name="cpnApiReceiveLogger" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="cpnApiCallLogger" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="cpnBatchLogger" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger> -->
+
+    <!-- ######################################################### -->
+    <!-- Configuration END-->
+    <!-- ######################################################### -->
+
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</included>

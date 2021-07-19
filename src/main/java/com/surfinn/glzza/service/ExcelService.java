@@ -14,7 +14,6 @@ import com.surfinn.glzza.utility.CommonUtil;
 import com.surfinn.glzza.utility.MapToModelUtil;
 import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.DomainVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 import com.surfinn.glzza.vo.WordVO;
 import com.surfinn.glzza.vo.BaseVO;

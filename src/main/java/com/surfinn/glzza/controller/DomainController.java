@@ -14,7 +14,7 @@ import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.service.DomainService;
 import com.surfinn.glzza.utility.SuccessResponse;
 import com.surfinn.glzza.vo.DomainVO;
-import com.surfinn.glzza.vo.TermVO;
+
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -21,7 +21,6 @@ import com.surfinn.glzza.dao.TermDao;
 import com.surfinn.glzza.exception.GlzzaBadRequestException;
 import com.surfinn.glzza.utility.CommonUtil;
 import com.surfinn.glzza.vo.BaseVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
 import io.micrometer.core.instrument.util.StringUtils;

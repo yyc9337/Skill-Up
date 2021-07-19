@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.surfinn.glzza.vo.BaseVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
 @Mapper
