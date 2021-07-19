@@ -337,11 +337,7 @@ function openModal(type, domainSeq) {
       $("#modal #deleteButton").hide();
       $("#modal #updateButton").hide();
     }
-    /*    $("#modal #saveButton").hide();
-    $("#modal #updateButton").show();
-    $("#modal #deleteButton").show();
-    $("#modal .modal-title").html(modalUpdateHeader);*/
-
+    
     $("#insert_form input[name=domainSeq]").val(domainSeq);
 
     let sendData = {
@@ -721,7 +717,7 @@ function excelDownload_exerd() {
 function Delete_History() {
   let dataTable = $("#domainTable").DataTable();
   dataTable.destroy();
-  searchList("DeleteList");
+  searchList("DeleteList","",7); // 가장 최근에 삭제된 도메인이 맨 위로 오게 정렬
   $("#revivalButton").hide();
   $("#listButton").show();
 }
