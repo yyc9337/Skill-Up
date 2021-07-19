@@ -209,6 +209,7 @@ td{
 				</form>
 					<div class="modal-footer">
 						<button type="button" class="btn bg-teal" id="modalUpdateButton" onclick="updateTerm();"><spring:message code="common.modalUpdate"/></button>
+                        <button type="button" id="revivalButton" class="btn bg-teal" onclick="revivalConfirm();"><spring:message code="word.wordrevival"/></button>
 						<button type="button" class="btn bg-teal" id="modalConfirmButton" onclick="saveConfirm();"><spring:message code="common.modalSave"/></button>
 						<button type="button" class="btn btn-outline" id="modalCancelButton" onclick="modalOff();"><spring:message code="common.modalCancel"/></button>
 					</div>

@@ -165,14 +165,6 @@ function searchList(searchType, keyword, orderNumber) {
 	if(orderNumber == undefined) {
 		orderNumber = 1;
 	}    
-	
-	//Sorting 하기 위한 컬럼들 서버로 가지고감
-    var columns = ['termSeq','termNm','termAbbr','domainNm', 'summaryTermDscrpt', 'updDt'];
-	//입력 파라미터
-    var param = {
-			"searchType" : searchType,
-			"keyword" : keyword
-			}
 
 	$("#termTable").DataTable({   //데이터 테이블 생성
 	  	processing: true,    //테이블을 생성한 후 어떠한 기능들을 허용하겠다는 기능을 갖고 있는데 정확히 무엇인지 파악 중 
@@ -216,28 +208,10 @@ function searchList(searchType, keyword, orderNumber) {
 			$(row).find('td:eq(4)').attr('data-trigger', "hover");
 		}
 	  });	
+		//if(searchType == "DeleteList") {
+		//	modalOn(,,'revival');
+		//}
 	 
-	// tr요소를 더블클릭했을 때 wordTable 생성
-    $('#termTable tbody').on('dblclick', 'tr', function () {
-		// table을 DataTable로 생성
-        let table = $("#termTable").DataTable();
-		// table
-        var rowData = table.row( this ).data();
-
-		if(rowData != undefined) {
-			//Modal 실행
-        	$("#newButton").click();
-        	//실행된 Modal에 update로 변수 전달
-        	if(searchType == "DeleteList") {
-				openModal('revival', rowData.wordSeq);
-			}
-				else {
-					openModal('update', rowData.wordSeq);
-				}
-        	
-        
-        }
-    });
 	// 카테고리 변경시 마우스 커서가 keyword창으로 전달됨
     $("#searchType").change(function () {
         $("#keyword").focus();
@@ -470,7 +444,7 @@ function createTerm() {
 		}
 	});
 }
-function modalOn(isCreated = true, termData = null){
+function modalOn(isCreated = true, termData = null,type = null){//modalOn(false,rowData);
 	toggleInputStatus(false);
 	clearFormData();
 	$("#wordSelectTag").val(null).trigger("change");
@@ -479,9 +453,13 @@ function modalOn(isCreated = true, termData = null){
 		$("#compositionDiv").css("display","flex");
 		$("#modalConfirmButton").attr("onclick","saveConfirm();");
 		$("#modalConfirmButton").attr("class","btn bg-teal");
+		$("#modal #revivalButton").hide();
 		$("#modalConfirmButton").text("저장");
 		$("#modalUpdateButton").css("display","none");
 		$("#domainDetail").text("");
+	}
+	else if(type == "revival"){
+		$("#modal #revivalButton").show();
 	}else{   //둘다 꺼짐
 		$("#modalUpdateButton").css("display","block");
 		$("#compositionDiv").css("display","none");
@@ -610,66 +588,41 @@ function excelDownload_exerd() {
 	apiRequestExcel(serviceName, fileName, $("#search_form"));
 }
 
-
-//모달 초기화
-function openModal(type, wordSeq) {
-    clearFormData();
-	
-	//add = 신규등록 , update = 상세보기
-    if(type == "revival") {
-		$('div.modal-body').children().show();
-		
-		// 등록 프로세스 관련 구역 및 버튼 hide
-		$('div #stage0').find('button').hide();
-		$('#stage0Helper').hide();
-		$('div #stage2').find('button').hide();
-		$('#stage2Helper').hide();
-		$('div.insertWord').hide();
-		//버튼 관리
-		if(type == "revival"){
-			$("#modal #revivalButton").show();
-        	$("#modal #deleteButton").hide();
-			$("#modal #updateButton").hide();
-		}
-		else{
-			$("#modal #revivalButton").hide();
-        	$("#modal #deleteButton").show();
-			$("#modal #updateButton").show();
-		}
-        $("#modal #saveButton").hide();
-        $("#modal .modal-title").html('단어 상세보기');
-        $("#insert_form input[name=wordSeq]").val(wordSeq);
-		
-		// 비활성화
-		$("#wordNm").attr('readonly', true).addClass('valid');
-		$("#wordEngNm").attr('readonly', true).addClass('valid');
-		$("#wordAbbr").attr('readonly', true).addClass('valid');
-		
-		// 인풋 길이
-		$('#wordEngNm').removeClass('input-short');
-		$('#wordAbbr').removeClass('input-short');
-
-        let sendData = {
-            "wordSeq" : wordSeq
+// 복원 여부 Confirm 메세지
+function revivalConfirm() {
+    if (!insertValidation()){
+        return;
     }
-        
-
-        $.ajax({
-            url : contextPath +"/term/search",
-            contentType : "application/json",
-            type : "GET",
-            data : sendData,
-            async : false,
-            success : function(data){
-                $("#insert_form #wordSeq").val(data.data.wordSeq);
-                $("#insert_form #wordNm").val(data.data.wordNm);
-                $("#insert_form #wordAbbr").val(data.data.wordAbbr);
-                $("#insert_form #wordEngNm").val(data.data.wordEngNm);
-                if(data.wordDscrpt != null) {
-					$("#insert_form #wordDscrpt").val(data.data.wordDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
-				}
-                $("#insert_form #synmList").val(data.data.synmList);
-            }
-        });
-    }
+	checkConfirm('단어 복원', '단어를 재사용하시겠습니까??', 'revivalWord();');
 }
+
+
+// 복원 기능 추가
+function revivalWord() {
+
+    let sendData = {
+        "termSeq" : $("#termSeq").val(),
+        "synmList" : $("#synmList").val(),
+        "wordDscrpt" : $("#wordDscrpt").val()
+    };
+    let dataTable = $("#wordTable").DataTable();   
+
+    $.ajax({
+        url : contextPath +"/word/revival",
+        contentType : "application/json",
+        type : "POST",
+        data : JSON.stringify(sendData),
+        success : function(data){
+            if(data.data==1) {
+                alertMessage("성공!","단어 복원이 완료되었습니다.","success");
+                $("#cancelButton").click();
+                dataTable.destroy();
+                searchList('','',0);
+            } else {
+                alertMessage("경고!","실패하였습니다. 관리자에게 문의해주세요.","danger");
+                $("#cancelButton").click();
+            }
+        }
+    });
+}
+
