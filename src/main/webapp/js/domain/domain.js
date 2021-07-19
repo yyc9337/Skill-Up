@@ -327,15 +327,20 @@ function openModal(type, domainSeq) {
     $("#modal .modal-title").html(modalRegistHeader);
   } else if (type == "update" || type == "revival") {
     $("#modal #saveButton").hide();
-    $("#modal .modal-title").html(modalUpdateHeader);
+    
     if (type == "update") {
+	  $("#modal .modal-title").html(modalUpdateHeader);
       $("#modal #revivalButton").hide();
       $("#modal #updateButton").show();
       $("#modal #deleteButton").show();
     } else {
+	  $("#modal .modal-title").html("도메인 복원");
       $("#modal #revivalButton").show();
       $("#modal #deleteButton").hide();
       $("#modal #updateButton").hide();
+      $("#insert_form input[name=domainTypeNm]").attr("readonly", true);
+      $("#insert_form select[name=dataType]").attr("readonly", true);
+      $("#insert_form textarea[name=domainDscrpt]").attr("readonly", true);
     }
     
     $("#insert_form input[name=domainSeq]").val(domainSeq);
@@ -762,7 +767,7 @@ function revivalDomain() {
 function showList() {
 	let dataTable = $("#domainTable").DataTable();
   dataTable.destroy();
-  searchList();
+  searchList("","",7);
   $("#revivalButton").show();
   $("#listButton").hide();
 }
