@@ -133,24 +133,15 @@ function dataTypeSelect() {
  * @param keyword 검색어
  * @param orderNumber 정렬순서
  */
-function searchList(searchType, keyword, orderNumber = 1) {
+function searchList(searchType, keyword, orderNumber) {
   //Sorting 하기 위한 컬럼들 서버로 가지고감
   let columns = [ "DOMAIN_SEQ", "DOMAIN_NM", "DOMAIN_TYPE_NM", "DATA_TYPE", "DATA_LEN", "DCML_LEN","DOMAIN_DSCRPT","UPD_DT",];
-  //let order = 'asc';
-  order = orderNumber == 1 ? "asc" : "desc";
-
-  /*	orderNumber의 기본값 정해줌. 파라미터에 기본값 넣어서 전달하게 수정
-	if(orderNumber == undefined) {
-		orderNumber = 1;
+ 
+  if(orderNumber == undefined) {
+	  orderNumber = 1;
 	}
-	*/
+   let order = orderNumber == 1 ? "asc" : "desc";
 
-  /*	삼항조건연산자로 수정
-	if(orderNumber == 1) {
-		order = 'asc';
-	} else {
-		order = 'desc'
-	}*/
 
   //sAjaxSource 를 사용하면 기본적인 DataTable에 사용되는 옵션들을 객체로 가지고 감. 서버의 DomainVO 객체 확인하기
   $("#domainTable").DataTable({
@@ -354,7 +345,7 @@ function openModal(type, domainSeq) {
         readOnlyOption(dataType);
       },
     });
-  }
+  } 
 
   // 데이터 타입 변경시 변경된 데이터 타입에 맞게 readOnlyOption 함수 재실행
   // NUMBER일 경우 소수점 길이 활성화
@@ -691,4 +682,11 @@ function excelDownload_exerd() {
   let serviceName = "domainListExcelDownload";
   let fileName = "DOMAIN_LIST_EXERD";
   apiRequestExcel(serviceName, fileName, $("#search_form"));
+}
+
+// 삭제 기록 조회
+function Delete_History() {
+	let dataTable = $("#domainTable").DataTable();
+	dataTable.destroy();
+	//searchList("DeleteList");
 }
