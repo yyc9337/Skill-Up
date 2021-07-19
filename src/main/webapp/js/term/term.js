@@ -444,7 +444,7 @@ function createTerm() {
 		}
 	});
 }
-function modalOn(isCreated = true, termData = null,type = null){//modalOn(false,rowData);
+function modalOn(isCreated = true, termData = null){//modalOn(false,rowData);
 	toggleInputStatus(false);
 	clearFormData();
 	$("#wordSelectTag").val(null).trigger("change");
@@ -603,9 +603,9 @@ function revivalWord() {
     let sendData = {
         "termSeq" : $("#termSeq").val(),
         "synmList" : $("#synmList").val(),
-        "wordDscrpt" : $("#wordDscrpt").val()
+        "wordDscrpt" : $("#termDscrpt").val()
     };
-    let dataTable = $("#wordTable").DataTable();   
+    let dataTable = $("#termTable").DataTable();   
 
     $.ajax({
         url : contextPath +"/term/revival",
@@ -617,7 +617,7 @@ function revivalWord() {
                 alertMessage("성공!","단어 복원이 완료되었습니다.","success");
                 $("#cancelButton").click();
                 dataTable.destroy();
-                searchList('','',0);
+                searchListwd('','',0);
             } else {
                 alertMessage("경고!","실패하였습니다. 관리자에게 문의해주세요.","danger");
                 $("#cancelButton").click();
@@ -626,7 +626,7 @@ function revivalWord() {
     });
 }
 
-function searchList(searchType, keyword, orderNumber) {
+function searchListwd(searchType, keyword, orderNumber) {
 
     let order = 'asc';
 	//병합
@@ -638,7 +638,7 @@ function searchList(searchType, keyword, orderNumber) {
     }
     
     //Sorting 하기 위한 컬럼들 서버로 가지고감
-    var columns = ['WORD_SEQ','WORD_NM','WORD_ABBR','WORD_ENG_NM', 'WORD_DSCRPT', 'SYNM_LIST'];
+    var columns = ['TERM_SEQ','TERM_NM','TERM_ABBR','DOMAIN_NM', 'TERM_DSCRPT', 'SYNM_LIST'];
 	//입력 파라미터
     var param = {
 			"searchType" : searchType,
@@ -646,59 +646,50 @@ function searchList(searchType, keyword, orderNumber) {
 			}
 
     //sAjaxSource 를 사용하면 기본적인 DataTable에 사용되는 옵션들을 객체로 가지고 감.
-    $("#wordTable").DataTable({
+    $("#termTable").DataTable({
 	  	processing: true, 
 	  	serverSide: true,
         responsive: true,
         autoWidth: true,
-        sAjaxSource : contextPath + '/word/list?columns='+columns +'&keyword=' + keyword + '&searchType=' + searchType,
+        sAjaxSource : contextPath + '/term/list?columns='+columns +'&keyword=' + keyword + '&searchType=' + searchType,
         sServerMethod: "POST",
 		"drawCallback": function (settings, json) {
 			//$('[data-toggle="tooltip"]').tooltip('update');
 			$('[data-toggle="popover"]').popover('update');
 		},
 		columns: [
-          { data: 'wordSeq', width: "10%"},
-          { data: 'wordNm' },
-          { data: 'wordAbbr' },
-          { data: 'wordEngNm' },
-          { data: 'summaryWordDscrpt' }, //summaryWordDscrpt
-          { data: 'synmList' }
+		    { data: 'termSeq', width: "10%"},
+			{ data: 'termNm'},
+			{ data: 'termAbbr'},
+	      	{ data: 'domainNm'},
+	      	{ data: 'summaryTermDscrpt'},
+			{ data: 'updDt'}
        ],
-       columnDefs: [
+		columnDefs: [  //목록들을(targets은 위에있는 data들) title로 한글로 변경
 			{ targets:[0], title: 'ID' },
-			{ targets:[1], title: '단어명' },
-			{ targets:[2], title: '단어 영문 약어명' },
-			{ targets:[3], title: '단어 영문명' },
-			{ targets:[4], title: '단어 설명' },
-			{ targets:[5], title: '이음동의어' }
+			{ targets:[1], title: '용어명' },
+			{ targets:[2], title: '용어 영문 약어명' },
+			{ targets:[3], title: '도메인명' },
+			{ targets:[4], title: '용어 설명' },
+			{ targets:[5], title: '수정 날짜', visible: false }
 		],
         // order: [[orderNumber, 'asc']]
         order: [[orderNumber, order]],
 
 		createdRow: function (row, data, dataIndex) {
-			// $(row).find('td:eq(4)').attr('data-toggle', "tooltip");
-
-			//$(row).find('td:eq(4)').attr('title', data["wordSeq"]);
-			// body속성 부여
 			$(row).find('td:eq(4)').attr('data-container', 'body');
-			// wordDscrpt 내용 채우기 - 해당 태그에 속성 부여
-			$(row).find('td:eq(4)').attr('data-content', data["wordDscrpt"]);
-			// $(row).find('td:eq(4)').attr('data-placement', "bottom");
-			// pop업창 띄우기 -  해당 태그에 속성 부여
+			$(row).find('td:eq(4)').attr('data-content', data["termDscrpt"]);
 			$(row).find('td:eq(4)').attr('data-toggle', "popover");
-			//마우스 포인팅작업  - 해당 태그에 속성 부여
 			$(row).find('td:eq(4)').attr('data-trigger', "hover");
-			
 			// 각 행에 대한 하이라이트 작업 공간
 			
 		}
 	});
 
-	// tr요소를 더블클릭했을 때 wordTable 생성
-    $('#wordTable tbody').on('dblclick', 'tr', function () {
+	// tr요소를 더블클릭했을 때 termTable 생성
+    $('#termTable tbody').on('dblclick', 'tr', function () {
 		// table을 DataTable로 생성
-        let table = $("#wordTable").DataTable();
+        let table = $("#termTable").DataTable();
 		// table
         var rowData = table.row( this ).data();
 
@@ -709,9 +700,9 @@ function searchList(searchType, keyword, orderNumber) {
         	if(searchType == "DeleteList") {
 				openModal('revival', rowData.wordSeq);
 			}
-				else {
-					openModal('update', rowData.wordSeq);
-				}
+			else {
+				openModal('update', rowData.wordSeq);
+			}
         	
         
         }
@@ -725,3 +716,67 @@ function searchList(searchType, keyword, orderNumber) {
 	dataTableHeight.style.minHeight = '580px';
 }
 
+
+
+
+function openModal(type, termSeq) {
+    clearFormData();
+    if (type == 'update' || type == "revival"){
+		$('div.modal-body').children().show();
+		
+		// 등록 프로세스 관련 구역 및 버튼 hide
+		$('div #stage0').find('button').hide();
+		$('#stage0Helper').hide();
+		$('div #stage2').find('button').hide();
+		$('#stage2Helper').hide();
+		$('div.insertTerm').hide();
+		
+		//[민년] 복원 기능 추가
+		//버튼 관리
+		if(type == "revival"){
+			$("#modal #revivalButton").show();
+        	$("#modal #deleteButton").hide();
+			$("#modal #modalUpdateButton").hide();
+		}
+		else{
+			$("#modal #revivalButton").hide();
+        	$("#modal #deleteButton").show();
+			$("#modal #modalUpdateButton").show();
+		}
+        $("#modal #modalConfirmButton").hide();
+        $("#modal .modal-title").html('용어 상세보기');
+        $("#insert_form input[name=termSeq]").val(termSeq);
+		
+		// 비활성화
+		$("#termNm").attr('readonly', true).addClass('valid');
+		$("#termEngNm").attr('readonly', true).addClass('valid');
+		$("#termAbbr").attr('readonly', true).addClass('valid');
+		
+		// 인풋 길이
+		$('#termEngNm').removeClass('input-short');
+		$('#termAbbr').removeClass('input-short');
+
+        let sendData = {
+            "termSeq" : termSeq
+    }
+        
+
+        $.ajax({
+            url : contextPath +"/term/search",
+            contentType : "application/json",
+            type : "GET",
+            data : sendData,
+            async : false,
+            success : function(data){
+                //$("#insert_form #termSeq").val(data.data.termSeq);
+                $("#insert_form #termNm").val(data.data.termNm);
+                $("#insert_form #termAbbr").val(data.data.termAbbr);
+                $("#insert_form #termEngNm").val(data.data.termEngNm);
+                if(data.termDscrpt != null) {
+					$("#insert_form #termDscrpt").val(data.data.termDscrpt.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n'));
+				}
+                $("#insert_form #synmList").val(data.data.synmList);
+            }
+        });
+    }
+}
