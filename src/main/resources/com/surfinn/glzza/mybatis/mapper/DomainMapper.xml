@@ -20,6 +20,14 @@
 		FROM
 			TB_DOMAIN
 		<where>
+		<choose>
+        <when test="domainVO.searchType eq 'DeleteList'">
+        	AND USE_YN = 'N'
+        </when>
+        <otherwise>
+            AND USE_YN = 'Y'
+        </otherwise>
+        </choose>
 			<if test="domainVO.searchType eq 'all'">
 				AND (DOMAIN_TYPE_NM LIKE CONCAT('%', #{domainVO.keyword}, '%')
 				OR	DOMAIN_DSCRPT LIKE CONCAT('%', #{domainVO.keyword}, '%')
@@ -37,8 +45,8 @@
 			<if test="domainVO.domainSeq != null">
 				AND DOMAIN_SEQ != #{domainVO.domainSeq}
 			</if>		
-				AND USE_YN = 'Y'
-		</where>
+				
+		
 		<if test="domainVO.sorting != null">
              ORDER BY ${domainVO.sorting}  
         </if>
@@ -47,7 +55,8 @@
         </if>
 		<if test="domainVO.iDisplayStart != null and domainVO.iDisplayLength != null">
              LIMIT ${domainVO.iDisplayStart} , ${domainVO.iDisplayLength}
-        </if>		
+        </if>	
+        </where>
 	</sql>
     
     <select id="selectTotalCountDomain" parameterType="com.surfinn.glzza.vo.DomainVO" resultType="Integer">

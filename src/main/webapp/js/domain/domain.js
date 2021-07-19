@@ -204,8 +204,14 @@ function searchList(searchType, keyword, orderNumber) {
     let rowData = table.row(this).data();
 
     if (rowData != undefined) {
-      $("#newButton").click();
-      openModal("update", rowData.domainSeq);
+       $("#newButton").click();
+      
+      if(searchType == "DeleteList") {
+		openModal('revival', rowData.wordSeq);
+		} else {
+			openModal("update", rowData.domainSeq);
+		}
+      	
     }
   });
 
@@ -311,18 +317,28 @@ function openModal(type, domainSeq) {
     $("#modal #updateButton").hide();
     $("#modal #deleteButton").hide();
     $("#modal .modal-title").html(modalRegistHeader);
-  } else if (type == "update") {
-    $("#modal #saveButton").hide();
+  } else if (type == "update" || type == "revival") {
+	$("#modal #saveButton").hide();
+	if (type == "update") {
+    	$("#modal #updateButton").show();
+    	$("#modal #deleteButton").show();
+    	$("#modal .modal-title").html(modalUpdateHeader);
+	} else {
+		$("#modal #revivalButton").show();
+        $("#modal #deleteButton").hide();
+		$("#modal #updateButton").hide();
+	}
+/*    $("#modal #saveButton").hide();
     $("#modal #updateButton").show();
     $("#modal #deleteButton").show();
-    $("#modal .modal-title").html(modalUpdateHeader);
+    $("#modal .modal-title").html(modalUpdateHeader);*/
 
     $("#insert_form input[name=domainSeq]").val(domainSeq);
-
+	
     let sendData = {
-      domainSeq: domainSeq,
+      "domainSeq": domainSeq,
     };
-
+	
     // domain/select에 넘겨준 domainSeq로 선택한 도메인 정보를 불러와 화면에 뿌려줌
     $.ajax({
       url: contextPath + "/domain/select",
@@ -688,5 +704,5 @@ function excelDownload_exerd() {
 function Delete_History() {
 	let dataTable = $("#domainTable").DataTable();
 	dataTable.destroy();
-	//searchList("DeleteList");
+	searchList("DeleteList");
 }
