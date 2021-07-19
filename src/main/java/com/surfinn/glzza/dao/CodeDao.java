@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.surfinn.glzza.mybatis.mapper.CodeMapper;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.DomainCodeVO;
-import com.surfinn.glzza.vo.Paging;
 
 @Repository
 public class CodeDao {
@@ -15,8 +15,8 @@ public class CodeDao {
 	@Autowired
 	private CodeMapper codeMapper;
 
-	public List<DomainCodeVO> selectDomainCodeList(DomainCodeVO domainCodeVO, Paging paging) {
-		return codeMapper.selectDomainCodeList(domainCodeVO, paging);
+	public List<DomainCodeVO> selectDomainCodeList(DomainCodeVO domainCodeVO, BaseVO baseVO) {
+		return codeMapper.selectDomainCodeList(domainCodeVO, baseVO);
 	}
 
 	public Integer selectDomainCodeListCount(DomainCodeVO domainCodeVO) {

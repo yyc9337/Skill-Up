@@ -3,7 +3,6 @@ package com.surfinn.glzza.controller;
 import com.surfinn.glzza.service.TermService;
 import com.surfinn.glzza.utility.SuccessResponse;
 import com.surfinn.glzza.vo.BaseVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +31,7 @@ public class TermController {
 //    public SuccessResponse<List<TermVO>> selectTermList(@RequestBody TermVO termVO, Paging paging){
 //        return new SuccessResponse<>(termService.selectTermList(termVO, paging));
 //    }
+    ///유영찬 커밋 테스트
 
     //카테고리 타입 검색 후 리스트로 반환
     @GetMapping("/searchType")
@@ -42,12 +42,15 @@ public class TermController {
     //용어 생성
     @PostMapping("/create")
     public SuccessResponse<Boolean> insertTerm(@RequestBody TermVO termVO){
+        System.out.println(termVO.getTermNm()+"create controll");
         return new SuccessResponse<>(termService.insertTerm(termVO));
+        
     }
 
     //유효성 검사
     @PostMapping("/duplicateCheck")
     public SuccessResponse<Boolean> duplicateCheck(@RequestBody TermVO termVO){
+        System.out.println(termVO.getTermNm()+"duple ctrl");
         return new SuccessResponse<>(termService.duplicateCheck(termVO));
     }
 

@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.surfinn.glzza.vo.BaseVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
 @Mapper
@@ -28,5 +27,5 @@ public interface TermMapper {
 
     int recycleTerm(TermVO termVO); //입력된 데이터를 기준으로 재활용(기존에 삭제됐던 용어 부활), select 성공시 1 return
 
-    TermVO recycleCheck(TermVO termVO); //입력된 데이터가 기존에 작성되고 삭제된 적이 있는지 확인 =
+    TermVO recycleCheck(TermVO termVO); //입력된 데이터가 기존에 작성되고 삭제된 적이 있는지 확인
 }

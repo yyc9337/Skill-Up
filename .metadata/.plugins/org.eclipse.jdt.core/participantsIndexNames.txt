@@ -1,0 +1,17 @@
+INDEX VERSION 1.131
+C:\Users\inp05\git\glzzapractice\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2279591822.index
+\innerwave_Web\src\main\java
+C:\Users\inp05\git\glzzapractice\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2418504881.index
+\innerwave_Web\src\main\java
+C:\Users\inp05\git\glzzapractice\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\806821983.index
+\innerwave_Web\src\main\java
+C:\Users\inp05\git\glzzapractice\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\402135683.index
+\innerwave_Web\src\main\java
+C:\Users\inp05\git\glzzapractice\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\132574564.index
+\innerwave_Web\src\main\java
+C:\Users\inp05\git\glzzapractice\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\4075735582.index
+\innerwave_Web\src\main\java
+C:\Users\inp05\git\glzzapractice\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2229475475.index
+\innerwave_Web\src\main\java
+C:\Users\inp05\git\glzzapractice\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\299761019.index
+\innerwave_Web\src\main\java

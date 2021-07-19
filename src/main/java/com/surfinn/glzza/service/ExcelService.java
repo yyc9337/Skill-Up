@@ -14,9 +14,9 @@ import com.surfinn.glzza.utility.CommonUtil;
 import com.surfinn.glzza.utility.MapToModelUtil;
 import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.DomainVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 import com.surfinn.glzza.vo.WordVO;
+import com.surfinn.glzza.vo.BaseVO;
 
 @Service
 public class ExcelService {
@@ -105,16 +105,17 @@ public class ExcelService {
 		String fileNameSplit [] = fileName.split("_");
 		String fileType = fileNameSplit[2];
 		
-		Paging paging = new Paging();
+		// Paging paging = new Paging();
 		DomainVO domainVO = (DomainVO) MapToModelUtil.convertMapToObject(map, new DomainVO());
+		BaseVO baseVO = new BaseVO();
 		
 		domainVO.setIDisplayStart(null);
 		domainVO.setIDisplayLength(null);
 		domainVO.setSearchType(null);
 		domainVO.setKeyword(null);
+
+		List<DomainVO> list = domainDao.selectDomainList(domainVO, baseVO);
 		
-		
-		List<DomainVO> list = domainDao.selectDomainList(domainVO, paging);
 		StringBuffer sbData = new StringBuffer();
 		StringBuffer sbHeader = new StringBuffer();
 		
@@ -191,15 +192,15 @@ public class ExcelService {
 		String fileNameSplit [] = fileName.split("_");
 		String fileType = fileNameSplit[2];
 		
-		Paging paging = new Paging();
 		WordVO wordVO = (WordVO) MapToModelUtil.convertMapToObject(map, new WordVO());
 		
 		wordVO.setIDisplayStart(null);
 		wordVO.setIDisplayLength(null);
 		wordVO.setSearchType(null);
 		wordVO.setKeyword(null);
+		BaseVO base = null;
 		
-		List<WordVO> list = wordDao.selectWordList(wordVO, paging);
+		List<WordVO> list = wordDao.selectWordList(wordVO, base);
 		StringBuffer sbData = new StringBuffer();
 		StringBuffer sbHeader = new StringBuffer();
 		

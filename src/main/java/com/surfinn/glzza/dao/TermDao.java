@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.surfinn.glzza.mybatis.mapper.TermMapper;
 import com.surfinn.glzza.vo.BaseVO;
-import com.surfinn.glzza.vo.Paging;
 import com.surfinn.glzza.vo.TermVO;
 
 @Repository("termDao")
@@ -30,11 +29,13 @@ public class TermDao {
 
     //용어 생성
     public int insertTerm(TermVO termVO){
+        System.out.print(termVO.getTermNm()+"insert dao");
         return termMapper.insertTerm(termVO);
     }
 
     //유효성 검사
     public int duplicateCheck(TermVO termVO){
+        System.out.print(termVO.getTermNm()+"duplecate dao");
         return termMapper.duplicateCheck(termVO);
     }
 

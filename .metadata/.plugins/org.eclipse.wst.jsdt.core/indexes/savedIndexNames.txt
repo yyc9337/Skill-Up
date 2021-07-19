@@ -1,0 +1,6 @@
+INDEX VERSION 1.4+C:\Users\inp05\git\glzzapractice\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+1287300328.index
+3288127860.index
+4070437149.index
+959423712.index
+2767190273.index

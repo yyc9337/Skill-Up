@@ -6,12 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.surfinn.glzza.controller.ConnectionController;
 import com.surfinn.glzza.core.CommonConst;
 import com.surfinn.glzza.dao.CodeDao;
 import com.surfinn.glzza.utility.CommonUtil;
+import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.DomainCodeVO;
-import com.surfinn.glzza.vo.Paging;
 
 @Service
 public class CodeService {
@@ -19,13 +18,13 @@ public class CodeService {
 	@Autowired
 	private CodeDao codeDao;
 
-	public Paging selectDomainCodeList(DomainCodeVO domainCodeVO, Paging paging) {
+	public BaseVO selectDomainCodeList(DomainCodeVO domainCodeVO, BaseVO baseVO) {
 		
 		if(domainCodeVO.getColumns() != null) {
 			domainCodeVO.setSorting(domainCodeVO.getColumns()[domainCodeVO.getISortCol_0()]);
 		}
 		
-		List<DomainCodeVO> list = codeDao.selectDomainCodeList(domainCodeVO, paging);
+		List<DomainCodeVO> list = codeDao.selectDomainCodeList(domainCodeVO, baseVO);
 		
 		for(int i = 0; i < list.size(); i++) {
 			if(!StringUtils.isEmpty(list.get(i).getCdDscrpt())) {
@@ -34,10 +33,10 @@ public class CodeService {
 				list.get(i).setSummaryCdDscrpt("-");
 			}
 		}
-		paging.setRecordsTotal(codeDao.selectDomainCodeListCount(domainCodeVO));
-		paging.setRecordsFiltered(list.size());
-		paging.setData(list);
-		return paging;
+		baseVO.setRecordsTotal(codeDao.selectDomainCodeListCount(domainCodeVO));
+		baseVO.setRecordsFiltered(list.size());
+		baseVO.setData(list);
+		return baseVO;
 	}
 
 	public List<DomainCodeVO> searchTypeDomainCode() {
