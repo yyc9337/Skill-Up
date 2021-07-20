@@ -43,6 +43,8 @@
     var dataLengthLang = "<spring:message code='domain.dataLength'/>";
     var decimalLengthLang = "<spring:message code='domain.decimalLength'/>";
     var domainDescriptionLang = "<spring:message code='domain.domainDescription'/>";
+    var modalRevivalHeader = "<spring:message code='domain.modalRevivalHeader'/>";
+    
 </script>
 <script src="${pageContext.request.contextPath}/js/table/inputPage.js"></script>
 <script src="${pageContext.request.contextPath}/js/table/pageListBox.js"></script>

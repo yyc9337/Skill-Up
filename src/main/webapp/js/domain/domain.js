@@ -93,6 +93,20 @@ function readOnlyOption(dataType) {
   }
 }
 
+// domain_type_name -> domainTypeName 으로 변환 
+function ChangeSnaketoCamel (Snakewords){
+	
+	var Snakeword = Snakewords.toLowerCase();
+	var count = Snakeword.match(/_/g) == null ? 0 : Snakeword.match(/_/g).length+1;
+	for(var i = 0; i< count-1 ; i++){
+		var index = Snakeword.indexOf("_");
+		var Snakeword = Snakeword.substring(0,index) + Snakeword.toUpperCase().charAt(index+1) + Snakeword.substring(index+2);
+	}
+	return Snakeword
+}
+
+
+
 //도메인 검색시 사용할 카테고리 목록(셀렉트 박스) 불러오기
 function categorySelect() {
   $.ajax({
@@ -100,9 +114,10 @@ function categorySelect() {
     contentType: "application/json",
     type: "GET",
     success: function (data) {
-      for (let i in data.data) {
-        let option = $("<option>");
-        $(option).val("domainNm").text(data.data[i].columnComment);
+      for (let i in data.data) {        
+        var ColumnNameOpt = ChangeSnaketoCamel(data.data[i].columnName);
+				var option  = $("<option>");
+        $(option).val(ColumnNameOpt).text(data.data[i].columnComment);
         $("#searchType").append($(option));
       }
     },
@@ -134,6 +149,7 @@ function dataTypeSelect() {
  * @param orderNumber 정렬순서
  */
 function searchList(searchType, keyword, orderNumber) {
+  
   //Sorting 하기 위한 컬럼들 서버로 가지고감
   let columns = [
     "DOMAIN_SEQ",
@@ -150,7 +166,7 @@ function searchList(searchType, keyword, orderNumber) {
     orderNumber = 1;
   }
   let order = orderNumber == 1 ? "asc" : "desc";
-
+  
   //sAjaxSource 를 사용하면 기본적인 DataTable에 사용되는 옵션들을 객체로 가지고 감. 서버의 DomainVO 객체 확인하기
   $("#domainTable").DataTable({
     processing: true,
@@ -334,13 +350,14 @@ function openModal(type, domainSeq) {
       $("#modal #updateButton").show();
       $("#modal #deleteButton").show();
     } else {
-	  $("#modal .modal-title").html("도메인 복원");
+	  $("#modal .modal-title").html(modalRevivalHeader);
       $("#modal #revivalButton").show();
       $("#modal #deleteButton").hide();
       $("#modal #updateButton").hide();
       $("#insert_form input[name=domainTypeNm]").attr("readonly", true);
       $("#insert_form select[name=dataType]").attr("readonly", true);
       $("#insert_form textarea[name=domainDscrpt]").attr("readonly", true);
+      
     }
     
     $("#insert_form input[name=domainSeq]").val(domainSeq);
@@ -718,6 +735,7 @@ function excelDownload_exerd() {
   apiRequestExcel(serviceName, fileName, $("#search_form"));
 }
 
+
 // 삭제 기록 조회
 function Delete_History() {
   let dataTable = $("#domainTable").DataTable();
@@ -725,6 +743,7 @@ function Delete_History() {
   searchList("DeleteList","",7); // 가장 최근에 삭제된 도메인이 맨 위로 오게 정렬
   $("#revivalButton").hide();
   $("#listButton").show();
+  $("#newButton").hide();
 }
 
 // 복원 여부 확인
@@ -738,7 +757,6 @@ function revivalConfirm() {
 // 복원 기능
 function revivalDomain() {
   let sendData = $("#insert_form").serializeObjectCustom();
-  let dataTable = $("#domainTable").DataTable();
 
   $.ajax({
     url: contextPath + "/domain/revival",
@@ -770,4 +788,5 @@ function showList() {
   searchList("","",7);
   $("#revivalButton").show();
   $("#listButton").hide();
+  $("#newButton").show();
 }
