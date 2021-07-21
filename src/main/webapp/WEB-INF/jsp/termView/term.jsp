@@ -120,8 +120,8 @@ td{
 						</div>
 					</div>
 					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="excelDown" onclick="excelDownload_doc();" style="margin-left: auto; margin-right: 5px;"><spring:message code="common.excelButton"/></button>
-					<!--<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="exerdDown" onclick="excelDownload_exerd();" style="margin-right: 5px;"><spring:message code="common.exerdButton"/></button>-->
-						<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="historyButton" onclick="Delete_History();" style="margin-right: 5px;"><spring:message code="word.wordDeleteList"/></button>
+					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="exerdDown" onclick="excelDownload_exerd();" style="margin-right: 5px;"><spring:message code="common.exerdButton"/></button>
+					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="historyButton" onclick="Delete_History();" style="margin-right: 5px;"><spring:message code="word.wordDeleteList"/></button>
 					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" onclick="modalOn();" id="insertButton" style="margin-right:30px;">신규 등록</button>
 					<!--  -->
 			</div>
@@ -211,6 +211,7 @@ td{
 						<button type="button" class="btn bg-teal" id="modalUpdateButton" onclick="updateTerm();"><spring:message code="common.modalUpdate"/></button>
                         <button type="button" id="revivalButton" class="btn bg-teal" onclick="revivalConfirm();"><spring:message code="word.wordrevival"/></button>
 						<button type="button" class="btn bg-teal" id="modalConfirmButton" onclick="saveConfirm();"><spring:message code="common.modalSave"/></button>
+						 <button type="button" id="revivalButton" class="btn bg-teal" onclick="revivalConfirm();"><spring:message code="word.wordrevival"/></button>
 						<button type="button" class="btn btn-outline" id="modalCancelButton" onclick="modalOff();"><spring:message code="common.modalCancel"/></button>
 					</div>
 			</div>

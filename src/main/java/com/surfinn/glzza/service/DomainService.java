@@ -10,6 +10,7 @@ import com.surfinn.glzza.core.CommonConst;
 import com.surfinn.glzza.dao.DomainDao;
 import com.surfinn.glzza.utility.CommonUtil;
 import com.surfinn.glzza.vo.DomainVO;
+import com.surfinn.glzza.vo.WordVO;
 import com.surfinn.glzza.vo.BaseVO;
 
 @Service
@@ -130,5 +131,11 @@ public class DomainService {
 	public List<DomainVO> selectAll(){
 		return domainDao.selectAll();
 	}
+	
+	// 도메인 복원
+    public int revivalDomain(DomainVO domainVO){
+    	domainVO.setUpdId(CommonConst.UPD_ID);
+        return domainDao.revivalDomain(domainVO);
+    }
 
 }

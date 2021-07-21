@@ -71,12 +71,13 @@ public class TermController {
         return new SuccessResponse<>(termService.updateTerm(termVO));
     }
     
-    //용어 부활
+    //부활
     @PostMapping("/revival")
     @ResponseBody
     public SuccessResponse<Integer> revivalTerm(@RequestBody TermVO termVO) {
     	return new SuccessResponse<>(termService.revivalTerm(termVO));
     }
+
 
 
 }

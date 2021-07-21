@@ -52,6 +52,9 @@ public class TermDao {
 
     //용어 업데이트, 수정버튼 클릭시
     public int updateTerm(TermVO termVO) { return termMapper.updateTerm(termVO);}
+    
+    public int revivalTerm(TermVO termVO){ return termMapper.revivalTerm(termVO);}
+
 
     //입력된 데이터를 기준으로 재활용(기존에 삭제됐던 용어 부활), select 성공시 1 return
     public int recycleTerm(TermVO termVO) { return termMapper.recycleTerm(termVO);}

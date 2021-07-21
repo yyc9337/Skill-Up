@@ -65,4 +65,9 @@ public class DomainDao {
 	public List<DomainVO> selectAll(){
 		return domainMapper.selectAll();
 	}
+	
+	// 도메인 복원
+	public int revivalDomain(DomainVO domainVO) {
+		return domainMapper.revivalDomain(domainVO);
+	}
 }

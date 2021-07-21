@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.surfinn.glzza.vo.DomainVO;
+import com.surfinn.glzza.vo.WordVO;
 import com.surfinn.glzza.vo.BaseVO;
 
 @Mapper
@@ -27,6 +28,8 @@ public interface DomainMapper {
 	DomainVO selectDomainDomainName(DomainVO domainVO);
 
 	int updateUseYn(DomainVO domainVO);
-
+	
+	int revivalDomain(DomainVO domainVO);
+	
 	List<DomainVO> selectAll();
 }
