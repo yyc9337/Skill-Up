@@ -95,14 +95,10 @@ function readOnlyOption(dataType) {
 
 // domain_type_name -> domainTypeName 으로 변환 
 function ChangeSnaketoCamel (Snakewords){
-	
-	var Snakeword = Snakewords.toLowerCase();
-	var count = Snakeword.match(/_/g) == null ? 0 : Snakeword.match(/_/g).length+1;
-	for(var i = 0; i< count-1 ; i++){
-		var index = Snakeword.indexOf("_");
-		var Snakeword = Snakeword.substring(0,index) + Snakeword.toUpperCase().charAt(index+1) + Snakeword.substring(index+2);
-	}
-	return Snakeword
+	let Snakeword = Snakewords.toLowerCase().replace(/_[a-z]/g, (str) => 
+		str[1].toUpperCase()
+	)
+	return Snakeword;
 }
 
 
@@ -355,6 +351,7 @@ function openModal(type, domainSeq) {
       $("#modal #deleteButton").hide();
       $("#modal #updateButton").hide();
       $("#insert_form input[name=domainTypeNm]").attr("readonly", true);
+      $("#insert_form input[type=number]").attr("readonly", true);
       $("#insert_form select[name=dataType]").attr("readonly", true);
       $("#insert_form textarea[name=domainDscrpt]").attr("readonly", true);
       
