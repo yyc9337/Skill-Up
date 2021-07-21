@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.surfinn.glzza.service.CodeService;
 import com.surfinn.glzza.vo.BaseVO;
 import com.surfinn.glzza.vo.DomainCodeVO;
-
+////머지테스 
 @RestController
 @RequestMapping("/code")
 //코드테이블 데이터 통신 컨트롤러 
