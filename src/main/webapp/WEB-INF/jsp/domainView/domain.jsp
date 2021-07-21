@@ -43,6 +43,8 @@
     var dataLengthLang = "<spring:message code='domain.dataLength'/>";
     var decimalLengthLang = "<spring:message code='domain.decimalLength'/>";
     var domainDescriptionLang = "<spring:message code='domain.domainDescription'/>";
+    var modalRevivalHeader = "<spring:message code='domain.modalRevivalHeader'/>";
+    
 </script>
 <script src="${pageContext.request.contextPath}/js/table/inputPage.js"></script>
 <script src="${pageContext.request.contextPath}/js/table/pageListBox.js"></script>
@@ -143,7 +145,10 @@ td{
 					</div>
 					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="excelDown" onclick="excelDownload_doc();" style="margin-left: auto; margin-right: 5px;"><spring:message code="common.excelButton"/></button>
 					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="exerdDown" onclick="excelDownload_exerd();" style="margin-right: 5px;"><spring:message code="common.exerdButton"/></button>
+					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="listButton" onclick="showList();" style="margin-right: 5px; display: none; "><spring:message code="common.list"/></button>
+					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" id="revivalButton" onclick="Delete_History();" style="margin-right: 5px;"><spring:message code="common.history"/></button>
 					<button class="btn btn-outline bg-slate-600 text-slate-600 border-slate-600 font-size-xs" type="button" data-toggle="modal" data-target="#modal" id="newButton" onclick="openModal('add');" style="margin-right: 30px;"><spring:message code="common.newInsert"/></button>
+					
 					<!--  -->
 				</div>
 				</form>
@@ -230,6 +235,7 @@ td{
 						<button type="button" id="saveButton" class="btn bg-teal" onclick="checkDoaminTypeNameConfirm('1');"><spring:message code="common.modalSave"/></button>
 						<button type="button" id="updateButton" class="btn bg-teal" onclick="checkDoaminTypeNameConfirm('2');"><spring:message code="common.modalUpdate"/></button>
 						<button type="button" id="domainTypeButton" class="btn bg-teal" onclick="searchList2();"data-toggle="modal" data-target="#modal2" style="display: none;">도메인분류명 리스트</button>
+						<button type="button" id="revivalButton" class="btn bg-teal" onclick="revivalConfirm();"><spring:message code="common.wordRevival"/></button>
 						<button type="button" id="deleteButton" class="btn btn-danger" onclick="deleteConfirm();"><spring:message code="common.modalDelete"/></button>
 						<button type="button" id="cancelButton" class="btn btn-outline" data-dismiss="modal"><spring:message code="common.modalCancel"/></button>
 					</div>

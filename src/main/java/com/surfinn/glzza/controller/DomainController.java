@@ -94,6 +94,13 @@ public class DomainController {
     public SuccessResponse<List<DomainVO>> selectAll() {
 	    return new SuccessResponse<>(domainService.selectAll());
     }
-
+    
+    // 단어 복원
+    @PostMapping("/revival")
+    @ResponseBody
+    public SuccessResponse<Integer> revivalDomain(@RequestBody DomainVO domainVO) {
+    	return new SuccessResponse<>(domainService.revivalDomain(domainVO));
+    }
+    
    
 }

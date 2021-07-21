@@ -93,6 +93,18 @@ function readOnlyOption(dataType) {
   }
 }
 
+// domain_type_name -> domainTypeName 으로 변환 
+function ChangeSnaketoCamel (Snakewords){
+	
+	// 받아온 문자열을 전부 소문자로 변환한 후, '_' 다음에 나오는 영문자를 대문자로 바꿔줌
+	let Snakeword = Snakewords.toLowerCase().replace(/_[a-z]/g, (str) => 
+		str[1].toUpperCase()
+	)
+	return Snakeword;
+}
+
+
+
 //도메인 검색시 사용할 카테고리 목록(셀렉트 박스) 불러오기
 function categorySelect() {
   $.ajax({
@@ -100,9 +112,10 @@ function categorySelect() {
     contentType: "application/json",
     type: "GET",
     success: function (data) {
-      for (let i in data.data) {
-        let option = $("<option>");
-        $(option).val("domainNm").text(data.data[i].columnComment);
+      for (let i in data.data) {        
+        var ColumnNameOpt = ChangeSnaketoCamel(data.data[i].columnName);
+				var option  = $("<option>");
+        $(option).val(ColumnNameOpt).text(data.data[i].columnComment);
         $("#searchType").append($(option));
       }
     },
@@ -133,25 +146,25 @@ function dataTypeSelect() {
  * @param keyword 검색어
  * @param orderNumber 정렬순서
  */
-function searchList(searchType, keyword, orderNumber = 1) {
+function searchList(searchType, keyword, orderNumber) {
+  
   //Sorting 하기 위한 컬럼들 서버로 가지고감
-  let columns = [ "DOMAIN_SEQ", "DOMAIN_NM", "DOMAIN_TYPE_NM", "DATA_TYPE", "DATA_LEN", "DCML_LEN","DOMAIN_DSCRPT","UPD_DT",];
-  //let order = 'asc';
-  order = orderNumber == 1 ? "asc" : "desc";
+  let columns = [
+    "DOMAIN_SEQ",
+    "DOMAIN_NM",
+    "DOMAIN_TYPE_NM",
+    "DATA_TYPE",
+    "DATA_LEN",
+    "DCML_LEN",
+    "DOMAIN_DSCRPT",
+    "UPD_DT",
+  ];
 
-  /*	orderNumber의 기본값 정해줌. 파라미터에 기본값 넣어서 전달하게 수정
-	if(orderNumber == undefined) {
-		orderNumber = 1;
-	}
-	*/
-
-  /*	삼항조건연산자로 수정
-	if(orderNumber == 1) {
-		order = 'asc';
-	} else {
-		order = 'desc'
-	}*/
-
+  if (orderNumber == undefined) {
+    orderNumber = 1;
+  }
+  let order = orderNumber == 1 ? "asc" : "desc";
+  
   //sAjaxSource 를 사용하면 기본적인 DataTable에 사용되는 옵션들을 객체로 가지고 감. 서버의 DomainVO 객체 확인하기
   $("#domainTable").DataTable({
     processing: true,
@@ -214,7 +227,12 @@ function searchList(searchType, keyword, orderNumber = 1) {
 
     if (rowData != undefined) {
       $("#newButton").click();
-      openModal("update", rowData.domainSeq);
+
+      if (searchType == "DeleteList") {
+        openModal("revival", rowData.domainSeq);
+      } else {
+        openModal("update", rowData.domainSeq);
+      }
     }
   });
 
@@ -314,18 +332,33 @@ function openModal(type, domainSeq) {
   clearFormData(); // form안에 입력 내용을 비워줌 (common.js)
   readOnlyOption(""); // 데이터 타입이 선택되지 않았으므로 데이터 길이 및 소수점 길이 입력 불가
 
-  //add = 신규등록 , update = 상세보기
+  //add = 신규등록 , update = 상세보기, revival = 단어 복원
   if (type == "add") {
     $("#modal #saveButton").show();
     $("#modal #updateButton").hide();
     $("#modal #deleteButton").hide();
+    $("#modal #revivalButton").hide();
     $("#modal .modal-title").html(modalRegistHeader);
-  } else if (type == "update") {
+  } else if (type == "update" || type == "revival") {
     $("#modal #saveButton").hide();
-    $("#modal #updateButton").show();
-    $("#modal #deleteButton").show();
-    $("#modal .modal-title").html(modalUpdateHeader);
-
+    
+    if (type == "update") {
+	  $("#modal .modal-title").html(modalUpdateHeader);
+      $("#modal #revivalButton").hide();
+      $("#modal #updateButton").show();
+      $("#modal #deleteButton").show();
+    } else {
+	  $("#modal .modal-title").html(modalRevivalHeader);
+      $("#modal #revivalButton").show();
+      $("#modal #deleteButton").hide();
+      $("#modal #updateButton").hide();
+      $("#insert_form input[name=domainTypeNm]").attr("readonly", true);
+      $("#insert_form input[type=number]").attr("readonly", true);
+      $("#insert_form select[name=dataType]").attr("readonly", true);
+      $("#insert_form textarea[name=domainDscrpt]").attr("readonly", true);
+      
+    }
+    
     $("#insert_form input[name=domainSeq]").val(domainSeq);
 
     let sendData = {
@@ -340,7 +373,14 @@ function openModal(type, domainSeq) {
       data: sendData,
       async: false,
       success: function (data) {
-        const { domainTypeNm, domainNm, dataType, dataLen, domainDscrpt, dcmlLen, } = data.data;
+        const {
+          domainTypeNm,
+          domainNm,
+          dataType,
+          dataLen,
+          domainDscrpt,
+          dcmlLen,
+        } = data.data;
         $("#insert_form input[name=domainTypeNm]").val(domainTypeNm);
         $("#insert_form input[name=domainNm]").val(domainNm);
         $("#insert_form #dataType").val(dataType);
@@ -666,11 +706,12 @@ function domainNameAutoCreate(domainTypeNm, dataType, dataLen, dcmlLen) {
   }
 
   if (dataLen == "" && dcmlLen == "") {
-    $("#modal #domainNm").val(`${domainTypeNm.trim()}${dataType}`
-	);
+    $("#modal #domainNm").val(`${domainTypeNm.trim()}${dataType}`);
   } else if (dcmlLen != "") {
     $("#modal #domainNm").val(
-      `${domainTypeNm.trim()}${dataType}(${dataLen.trim()},${$("#dcmlLen").val().trim()})`
+      `${domainTypeNm.trim()}${dataType}(${dataLen.trim()},${$("#dcmlLen")
+        .val()
+        .trim()})`
     );
   } else {
     $("#modal #domainNm").val(
@@ -691,4 +732,60 @@ function excelDownload_exerd() {
   let serviceName = "domainListExcelDownload";
   let fileName = "DOMAIN_LIST_EXERD";
   apiRequestExcel(serviceName, fileName, $("#search_form"));
+}
+
+
+// 삭제 기록 조회
+function Delete_History() {
+  let dataTable = $("#domainTable").DataTable();
+  dataTable.destroy();
+  searchList("DeleteList","",7); // 가장 최근에 삭제된 도메인이 맨 위로 오게 정렬
+  $("#revivalButton").hide();
+  $("#listButton").show();
+  $("#newButton").hide();
+}
+
+// 복원 여부 확인
+function revivalConfirm() {
+  if (!insertValidation()) {
+    return;
+  }
+  checkConfirm("단어 복원", "단어를 재사용하시겠습니까?", "revivalDomain();");
+}
+
+// 복원 기능
+function revivalDomain() {
+  let sendData = $("#insert_form").serializeObjectCustom();
+
+  $.ajax({
+    url: contextPath + "/domain/revival",
+    contentType: "application/json",
+    type: "POST",
+    data: JSON.stringify(sendData),
+    async: false,
+    success: function (data) {
+      if (data.data == 1) {
+        alertMessage("성공!", "단어 복원이 완료되었습니다.", "success");
+        $("#cancelButton").click();
+        Delete_History();
+      } else {
+        alertMessage(
+          "경고!",
+          "실패하였습니다. 관리자에게 문의해주세요.",
+          "danger"
+        );
+        $("#cancelButton").click();
+      }
+    },
+  });
+}
+
+// 원래 목록 보기
+function showList() {
+	let dataTable = $("#domainTable").DataTable();
+  dataTable.destroy();
+  searchList("","",7);
+  $("#revivalButton").show();
+  $("#listButton").hide();
+  $("#newButton").show();
 }
