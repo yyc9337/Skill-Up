@@ -95,6 +95,8 @@ function readOnlyOption(dataType) {
 
 // domain_type_name -> domainTypeName 으로 변환 
 function ChangeSnaketoCamel (Snakewords){
+	
+	// 받아온 문자열을 전부 소문자로 변환한 후, '_' 다음에 나오는 영문자를 대문자로 바꿔줌
 	let Snakeword = Snakewords.toLowerCase().replace(/_[a-z]/g, (str) => 
 		str[1].toUpperCase()
 	)
