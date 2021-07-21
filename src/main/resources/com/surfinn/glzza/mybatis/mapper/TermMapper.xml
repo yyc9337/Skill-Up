@@ -3,190 +3,173 @@
 
 <mapper namespace="com.surfinn.glzza.mybatis.mapper.TermMapper">
 
-	<sql id="selectTermListSql">
-		SELECT
-			A.TERM_SEQ,
-		    A.DOMAIN_SEQ,
-		    A.TERM_NM,
-			A.TERM_DSCRPT,
-		    A.TERM_ABBR,
-		    B.DOMAIN_NM,
-			A.REG_ID,
-			A.REG_DT,
-			A.UPD_ID,
-			A.UPD_DT,
-		    A.USE_YN
-		FROM
-			TB_TERM A
-		INNER JOIN TB_DOMAIN B
-		ON A.DOMAIN_SEQ = B.DOMAIN_SEQ
-		<where>
-		 <choose>
-        <when test="TermVO.searchType eq 'DeleteList'">
-        	AND USE_YN = 'N'
-        </when>
-        <otherwise>
-			AND A.USE_YN = 'Y'
-		</otherwise>
-        </choose>
-			
-			
-			<!-- 전체 -->
-			<if test="termVO.searchType eq 'all'">
-				AND (A.TERM_ABBR LIKE CONCAT('%', #{termVO.keyword}, '%')
-				OR	A.TERM_NM LIKE CONCAT('%', #{termVO.keyword}, '%')
-				OR	A.TERM_DSCRPT LIKE CONCAT('%', #{termVO.keyword}, '%'))
-			</if>
-			<if test="termVO.searchType eq 'termAbbr'">
-				AND TERM_ABBR LIKE CONCAT('%', #{termVO.keyword}, '%')
-			</if>
-			<if test="termVO.searchType eq 'termNm'">
-				AND TERM_NM LIKE CONCAT('%', #{termVO.keyword}, '%')
-			</if>
-			<if test="termVO.searchType eq 'termDscrpt'">
-				AND TERM_DSCRPT LIKE CONCAT('%', #{termVO.keyword}, '%')
-			</if>
-			<if test="baseVO.sorting != null">
-				ORDER BY ${baseVO.sorting}
-			</if>
-			<if test = "baseVO.sorting != null and baseVO.sSortDir_0 != null" >
-				${baseVO.sSortDir_0}
-			</if>
-			<if test="baseVO.iDisplayStart != null and baseVO.iDisplayLength != null">
-				LIMIT ${baseVO.iDisplayStart} , ${baseVO.iDisplayLength}
-			</if>
-		</where>
-		
-	</sql>
+   <sql id="selectTermListSql">
+  SELECT
+         A.TERM_SEQ,
+          A.DOMAIN_SEQ,
+          A.TERM_NM,
+         A.TERM_DSCRPT,
+          A.TERM_ABBR,
+         IFNULL(B.DOMAIN_NM, '연결된 도메인 없음') AS domainNm,
+         A.REG_ID,
+         A.REG_DT,
+         A.UPD_ID,
+         A.UPD_DT,
+          A.USE_YN
+      FROM
+         TB_TERM A
+      LEFT OUTER JOIN TB_DOMAIN B
+      ON A.DOMAIN_SEQ = B.DOMAIN_SEQ      
+      <where>
+           AND A.USE_YN = #{termVO.useYn}
+         	
+         <if test="termVO.searchType eq 'all'">
+            AND (A.TERM_ABBR LIKE CONCAT('%', #{termVO.keyword}, '%')
+            OR   A.TERM_NM LIKE CONCAT('%', #{termVO.keyword}, '%')
+            OR   A.TERM_DSCRPT LIKE CONCAT('%', #{termVO.keyword}, '%'))
+         </if>
+         <if test="termVO.searchType eq 'termAbbr'">
+            AND TERM_ABBR LIKE CONCAT('%', #{termVO.keyword}, '%')
+         </if>
+         <if test="termVO.searchType eq 'termNm'">
+            AND TERM_NM LIKE CONCAT('%', #{termVO.keyword}, '%')
+         </if>
+         <if test="termVO.searchType eq 'termDscrpt'">
+            AND TERM_DSCRPT LIKE CONCAT('%', #{termVO.keyword}, '%')
+         </if>
+         <if test="baseVO.sorting != null">
+            ORDER BY ${baseVO.sorting}
+         </if>
+         <if test = "baseVO.sorting != null and baseVO.sSortDir_0 != null" >
+            ${baseVO.sSortDir_0}
+         </if>
+         <if test="baseVO.iDisplayStart != null and baseVO.iDisplayLength != null">
+            LIMIT ${baseVO.iDisplayStart} , ${baseVO.iDisplayLength}
+         </if>
+      </where>
+      
+   </sql>
     
     
     <select id="selectTotalCountTerm" parameterType="com.surfinn.glzza.vo.TermVO" resultType="Integer">
-		SELECT COUNT(*) AS TOTAL_COUNT FROM TB_TERM
-		<where>
-			<if test="searchType eq 'all'">
-				AND TERM_ABBR LIKE CONCAT('%', #{keyword}, '%')
-				OR	TERM_NM LIKE CONCAT('%', #{keyword}, '%')
-				OR	TERM_DSCRPT LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-			<if test="searchType eq 'termAbbr'">
-				AND TERM_ABBR LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-			<if test="searchType eq 'termNm'">
-				AND TERM_NM LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-			<if test="searchType eq 'termDscrpt'">
-				AND TERM_DSCRPT LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-			<choose>
-	    	<when test="searchType eq 'DeleteList'">
-        		AND USE_YN = 'N'
-        	</when>
-      		<otherwise>
-        	    AND USE_YN = 'Y'
-        	</otherwise>
-	    	</choose>    
-			
-		</where>
-	</select>
+      SELECT COUNT(*) AS TOTAL_COUNT FROM TB_TERM
+      <where>
+         <if test="searchType eq 'all'">
+            AND TERM_ABBR LIKE CONCAT('%', #{keyword}, '%')
+            OR   TERM_NM LIKE CONCAT('%', #{keyword}, '%')
+            OR   TERM_DSCRPT LIKE CONCAT('%', #{keyword}, '%')
+         </if>
+         <if test="searchType eq 'termAbbr'">
+            AND TERM_ABBR LIKE CONCAT('%', #{keyword}, '%')
+         </if>
+         <if test="searchType eq 'termNm'">
+            AND TERM_NM LIKE CONCAT('%', #{keyword}, '%')
+         </if>
+         <if test="searchType eq 'termDscrpt'">
+            AND TERM_DSCRPT LIKE CONCAT('%', #{keyword}, '%')
+         </if>
+           AND USE_YN = #{useYn}
+         
+      </where>
+   </select>
     
     
 
-	<select id="selectTermList" parameterType="com.surfinn.glzza.vo.TermVO" resultType="com.surfinn.glzza.vo.TermVO">
-		<include refid="selectTermListSql"></include>
-	</select>
-	
-	<select id="selectDomainListCount" parameterType="com.surfinn.glzza.vo.TermVO" resultType="int">
-		SELECT COUNT(*) FROM (
-	  		<include refid="selectTermListSql"></include>
-	  	) A
-	</select>
-	
-	<select id="selectSearchType" parameterType="com.surfinn.glzza.vo.TermVO" resultType="com.surfinn.glzza.vo.TermVO">
-		SELECT
-    		COLUMN_NAME,
-    		COLUMN_COMMENT 
-		FROM
-    		information_schema.columns
-		WHERE
-    		table_schema = 'GLZZA' AND table_name = 'TB_TERM' AND COLUMN_COMMENT LIKE '용어%';   <!--AND COLUMN_COMMENT LIKE '용어%';을 추가하여 로딩속도와 쿼리 처리속도를 향상 되게함 --> 
-	</select>
+   <select id="selectTermList" parameterType="com.surfinn.glzza.vo.TermVO" resultType="com.surfinn.glzza.vo.TermVO">
+      <include refid="selectTermListSql"></include>
+   </select>
+   
+   <select id="selectDomainListCount" parameterType="com.surfinn.glzza.vo.TermVO" resultType="int">
+      SELECT COUNT(*) FROM (
+           <include refid="selectTermListSql"></include>
+        ) A
+   </select>
+   
+   <select id="selectSearchType" parameterType="com.surfinn.glzza.vo.TermVO" resultType="com.surfinn.glzza.vo.TermVO">
+      SELECT
+          COLUMN_NAME,
+          COLUMN_COMMENT 
+      FROM
+          information_schema.columns
+      WHERE
+          table_schema = 'GLZZA' AND table_name = 'TB_TERM';
+   </select>
 
-	<insert id="insertTerm" parameterType="com.surfinn.glzza.vo.TermVO">
-		INSERT INTO TB_TERM VALUES(
-		                           DEFAULT
-		                        , #{termNm}
-		                        , #{termDscrpt}
-		                        , #{termAbbr}
-		                        , #{domainSeq}
-		                        , NOW()
-		                        , 'ADMIN'
-								, NOW()
-								, 'ADMIN'
-								, #{useYn})
-	</insert>
+   <insert id="insertTerm" parameterType="com.surfinn.glzza.vo.TermVO">
+      INSERT INTO TB_TERM VALUES(
+                                 DEFAULT
+                              , #{termNm}
+                              , #{termDscrpt}
+                              , #{termAbbr}
+                              , #{domainSeq}
+                              , NOW()
+                              , 'ADMIN'
+                        , NOW()
+                        , 'ADMIN'
+                        , #{useYn})
+   </insert>
 
-	<select id="duplicateCheck" parameterType="com.surfinn.glzza.vo.TermVO" resultType="int">
-		SELECT COUNT(*) FROM TB_TERM
-		    <where>
-				<if test='termNm != null and termNm != ""'>
-					AND TERM_NM = #{termNm}
-				</if>
-				<if test='domainSeq != 0'>
-					AND DOMAIN_SEQ = #{domainSeq}
-				</if>
-				<if test='useYn != null and useYn != ""'>
-					AND USE_YN = #{useYn}
-				</if>
-				<if test='termAbbr != null and termAbbr != ""'>
-					AND TERM_ABBR = #{termAbbr}
-				</if>
-			</where>
-	</select>
+   <select id="duplicateCheck" parameterType="com.surfinn.glzza.vo.TermVO" resultType="int">
+      SELECT COUNT(*) FROM TB_TERM
+          <where>
+            <if test='termNm != null and termNm != ""'>
+               AND TERM_NM = #{termNm}
+            </if>
+            <if test='domainSeq != 0'>
+               AND DOMAIN_SEQ = #{domainSeq}
+            </if>
+            <if test='useYn != null and useYn != ""'>
+               AND USE_YN = #{useYn}
+            </if>
+            <if test='termAbbr != null and termAbbr != ""'>
+               AND TERM_ABBR = #{termAbbr}
+            </if>
+         </where>
+   </select>
 
-	<select id="recycleCheck" parameterType="com.surfinn.glzza.vo.TermVO" resultType="com.surfinn.glzza.vo.TermVO">
-		SELECT * FROM TB_TERM
-		<where>
-			<if test='termNm != null and termNm != ""'>
-				AND TERM_NM = #{termNm}
-			</if>
-			<if test='domainSeq != 0'>
-				AND DOMAIN_SEQ = #{domainSeq}
-			</if>
-			<if test='useYn != null and useYn != ""'>
-				AND USE_YN = #{useYn}
-			</if>
-			<if test='termAbbr != null and termAbbr != ""'>
-				AND TERM_ABBR = #{termAbbr}
-			</if>
-		</where>
-	</select>
+   <select id="recycleCheck" parameterType="com.surfinn.glzza.vo.TermVO" resultType="com.surfinn.glzza.vo.TermVO">
+      SELECT * FROM TB_TERM
+      <where>
+         <if test='termNm != null and termNm != ""'>
+            AND TERM_NM = #{termNm}
+         </if>
+         <if test='domainSeq != 0'>
+            AND DOMAIN_SEQ = #{domainSeq}
+         </if>
+         <if test='useYn != null and useYn != ""'>
+            AND USE_YN = #{useYn}
+         </if>
+         <if test='termAbbr != null and termAbbr != ""'>
+            AND TERM_ABBR = #{termAbbr}
+         </if>
+      </where>
+   </select>
 
-	<select id="searchTermBySeq" parameterType="com.surfinn.glzza.vo.TermVO" resultType="com.surfinn.glzza.vo.TermVO">
-		SELECT * FROM TB_TERM WHERE TERM_SEQ = #{termSeq}
-	</select>
+   <select id="searchTermBySeq" parameterType="com.surfinn.glzza.vo.TermVO" resultType="com.surfinn.glzza.vo.TermVO">
+      SELECT * FROM TB_TERM WHERE TERM_SEQ = #{termSeq}
+   </select>
 
-	<update id="deleteTerm" parameterType="com.surfinn.glzza.vo.TermVO">
-		UPDATE TB_TERM SET USE_YN = 'N', UPD_DT = NOW() WHERE TERM_SEQ = #{termSeq}
-	</update>
+   <update id="deleteTerm" parameterType="com.surfinn.glzza.vo.TermVO">
+      UPDATE TB_TERM SET USE_YN = 'N', UPD_DT = NOW() WHERE TERM_SEQ = #{termSeq}
+   </update>
 
-	<update id="updateTerm" parameterType="com.surfinn.glzza.vo.TermVO">
-		UPDATE TB_TERM SET TERM_DSCRPT = #{termDscrpt}, DOMAIN_SEQ=#{domainSeq}, UPD_DT = NOW() WHERE TERM_SEQ = #{termSeq}
-	</update>
+   <update id="updateTerm" parameterType="com.surfinn.glzza.vo.TermVO">
+      UPDATE TB_TERM SET TERM_DSCRPT = #{termDscrpt}, DOMAIN_SEQ=#{domainSeq}, UPD_DT = NOW() WHERE TERM_SEQ = #{termSeq}
+   </update>
 
-	<update id="recycleTerm" parameterType="com.surfinn.glzza.vo.TermVO">
-		UPDATE TB_TERM SET USE_YN = "Y", UPD_DT = NOW() WHERE TERM_SEQ = #{termSeq}
-	</update>
-	<update id="revivalTerm" parameterType="com.surfinn.glzza.vo.TermVO">
+   <update id="recycleTerm" parameterType="com.surfinn.glzza.vo.TermVO">
+      UPDATE TB_TERM SET USE_YN = "Y", UPD_DT = NOW() WHERE TERM_SEQ = #{termSeq}
+   </update>
+   <update id="revivalTerm" parameterType="com.surfinn.glzza.vo.TermVO">
         UPDATE TB_TERM
         SET
             USE_YN = 'Y',
             UPD_ID = #{updId},
-            UPD_DT = NOW()
-            SYNM_LIST = #{synmList},
-			TERM_DSCRPT = #{termDscrpt},		
+            UPD_DT = NOW(),
+         TERM_DSCRPT = #{termDscrpt}   
         WHERE
             TERM_SEQ = #{termSeq}
     </update>
-	
-	
+   
+   
 </mapper>
