@@ -1,0 +1,15 @@
+---
+title: "ROC커브"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+install.packages("pROC")
+library(pROC)
+roc1 <- roc(CHD~Age, data=dat)
+plot(roc1)
+auc(roc1)
+ci(roc1)
+coords(roc1, "best", ret=c("threshold", "specificity", 
+"sensitivity"))
+```
