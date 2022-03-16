@@ -1,0 +1,95 @@
+# WDBC 데이터셋의 diagnosis 진단 변수는 목표변수(반응변수, 종속변수, Output 변수)로서 
+# 2개의 class (악성 Malignant, 양성 Benign)를 가진 범주형 자료로서, 30개의 연속형 설명변수를 
+# 사용해서 2개의 class (악성, 양성 여부)를 분류(classification) 하는 해야합니다. 
+# 30개의 설명변수를 사용하여 유방암 악성(Malignant)에 속할 0~1 사이의 확률값을 계산하여 진단하는 분류/예측 모델을 만들어보겠습니다.
+# https://www.kaggle.com/uciml/breast-cancer-wisconsin-data    데이터 주소
+data <- read.csv("C:/Users/inp032/Desktop/회사자료/Ai 프로젝트/data.csv")
+
+data
+head(data)
+data.frame(data)
+str(data)
+summary(data)
+
+
+
+
+
+
+
+VIF(lm(radius_mean ~ .,data=data))
+VIF(lm(texture_mean ~ .,data=data))
+
+require(fmsb)
+vif_func <- function(in_frame,thresh=10, trace=F,...){
+  require(fmsb)
+  if(class(in_frame) != 'data.frame') in_frame<-data.frame(in_frame)
+  vif_init <- vector('list', length = ncol(in_frame))
+  names(vif_init) <- names(in_frame)
+  var_names <- names(in_frame)
+  
+  for(val in var_names){
+    regressors <- var_names[-which(var_names == val)]
+    form <- paste(regressors, collapse = '+')
+    form_in <- formula(paste(val,' ~ .'))
+    vif_init[[val]] <- VIF(lm(form_in,data=in_frame,...))
+  }
+  vif_max<-max(unlist(vif_init))
+  
+  if(vif_max < thresh){
+    
+    if(trace==T){ #print output of each iteration
+      prmatrix(vif_init,collab=c('var','vif'),rowlab=rep('', times = nrow(vif_init) ),quote=F)
+      cat('\n')
+      cat(paste('All variables have VIF < ', thresh,', max VIF ',round(vif_max,2), sep=''),'\n\n')
+    }
+    return(names(in_frame))
+  }
+  else{
+    in_dat<-in_frame
+    #backwards selection of explanatory variables, stops when all VIF values are below 'thresh'
+    while(vif_max >= thresh){
+      
+      vif_vals <- vector('list', length = ncol(in_dat))
+      names(vif_vals) <- names(in_dat)
+      var_names <- names(in_dat)
+      
+      for(val in var_names){
+        regressors <- var_names[-which(var_names == val)]
+        form <- paste(regressors, collapse = '+')
+        form_in <- formula(paste(val,' ~ .'))
+        vif_add <- VIF(lm(form_in,data=in_dat,...))
+        vif_vals[[val]] <- vif_add
+      }
+      max_row <- which.max(vif_vals)
+      
+      #max_row <- which( as.vector(vif_vals) == max(as.vector(vif_vals)) )
+      vif_max<-vif_vals[max_row]
+      
+      if(vif_max<thresh) break
+      
+      if(trace==T){ #print output of each iteration
+        vif_vals <- do.call('rbind', vif_vals)
+        vif_vals
+        prmatrix(vif_vals,collab='vif',rowlab=row.names(vif_vals),quote=F)
+        cat('\n')
+        cat('removed: ', names(vif_max),unlist(vif_max),'\n\n')
+        flush.console()
+      }
+      in_dat<-in_dat[,!names(in_dat) %in% names(vif_max)]
+    }
+    return(names(in_dat))
+  }
+}
+
+
+#다중공선성이 높은 컬럼 지워주기
+data_custom <- vif_func(X, thresh=10, trace=T) 
+#남은 데이터 갯수 확인하기
+length(data_custom)
+
+X_2 <- X[, data_custom]
+
+
+
+

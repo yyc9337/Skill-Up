@@ -1,0 +1,56 @@
+---
+title: "T-Test"
+author: "youngchan"
+date: '2021 9 7~2021 9 27'
+editor_options:
+  chunk_output_type: console
+---
+
+
+
+# WDBC 데이터셋의 diagnosis 진단 변수는 목표변수(반응변수, 종속변수, Output 변수)로서 
+# 2개의 class (악성 Malignant, 양성 Benign)를 가진 범주형 자료로서, 30개의 연속형 설명변수를 
+# 사용해서 2개의 class (악성, 양성 여부)를 분류(classification) 하는 해야합니다. 
+# 30개의 설명변수를 사용하여 유방암 악성(Malignant)에 속할 0~1 사이의 확률값을 계산하여 진단하는 분류/예측 모델을 만들어보겠습니다.
+# https://www.kaggle.com/uciml/breast-cancer-wisconsin-data    데이터 주소
+data <- read.csv("C:/Users/inp032/Desktop/회사자료/Ai 프로젝트/data.csv")
+
+data
+head(data)
+data.frame(data)
+str(data)
+summary(data)
+
+
+
+## T-test를 이용하여 p-value값을 비교하고 효용성이 없는 설명변수를 제거 하도록 하겠습니다.
+
+```{r , echo=FALSE}
+X_names <- names(data.frame(data))
+X_names
+t.test_p.value_df <- data.frame()
+
+for (i in 1:length(X_names)) { 
+  t.test_p.value <- t.test(data[,X_names[i]] ~ data$diagnosis, var.equal = TRUE)$p.value
+  t.test_p.value_df[i,1] <- X_names[i]
+  t.test_p.value_df[i,2] <- t.test_p.value}
+  
+colnames(t.test_p.value_df) <- c("x_var_name", "p.value")
+t.test_p.value_df
+
+```
+
+
+```{r, echo=FALSE}
+## 17개의 변수들을 오름차순으로 정렬하였습니다.
+## 정렬된 변수들 중에p-value가 0.05 보다 큰 값을 가지는 설명변수인 'symmetry_se', 'texture_se', 'fractal_dimension_mean', 'smoothness_se', 'fractal_dimension_se' 의 5개 설명변수는 1차로 제거하고, 나머지 12개 설명변수만 로지스틱 회귀모형 적합하는데 사용하도록 하겠습니다.
+arrange(t.test_p.value_df, p.value)
+
+t.test_filtered <- t.test_p.value_df$p.value < 0.05
+X_names_filtered <- X_names[t.test_filtered]
+X_4 <- data.frame(X_3[, X_names_filtered])
+X_4
+length(X_4)
+```
+
+
